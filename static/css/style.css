@@ -61,7 +61,7 @@ body {
   line-height: 1.5;
   color: #6B6A75;
   text-align: left;
-  background-color:  #172538;
+  background-color: #FFFFFF;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -9969,7 +9969,7 @@ h6,
 
 .headerZetone{
   align-items: center;
-  background-color:  #172538;
+  background-color: #073d69;
 }
 
 .logoInicio {
@@ -9977,24 +9977,17 @@ h6,
   text-align: center;
 }
 
-.fechasZetone{
+.form-group{
   max-width: 200px;
 }
 
 .formZetone{
-  background-color: #73a027;
-  border-radius: 5px;
+  background-color: black;
   padding-left: 20px;
   padding-top: 15px;
   padding-right: 20px;
   margin-left: 20px;
   margin-right: 20px;
-
-  /******* PARA CENTRAR DIV PADRE********/
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /******* PARA CENTRAR DIV PADRE********/
 }
 
 .table{
@@ -10010,16 +10003,5 @@ h6,
   margin-right: 20px;
   margin-top: 15px;
   margin-bottom: 15px;
-
-  height: 28em;
-  line-height: 1em;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  border: 2px solid #73a027;
-}
-
-.roeZetone{
-  padding: 10px;
-  color: white;
 }
 
