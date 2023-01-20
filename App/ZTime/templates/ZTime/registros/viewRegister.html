@@ -1,0 +1,73 @@
+{% extends "ZTime/inicio/index.html" %}
+
+{% load static %}
+
+{% block content %}
+  <div class="formZetone">
+    <div class="centroZetone">
+      <form action="" method="POST">{% csrf_token %}
+        <div class="row">
+          <div class="roeZetone">
+            <label>Legajo:</label>
+            <input style="width: 6rem;" maxlength="6" type="number" id="legajo" name="legajo" class="fechasZetone" placeholder="000000">
+          </div>
+          <div class="roeZetone">
+            <select class="" type="checkbox" id="departamento" name="departamento">
+              <option value="Seleccione">Seleccione</option>
+              <option value="Todos">Todos</option>
+              <option value="Calidad">Calidad</option>
+              <option value="Empaque">Empaque</option>
+              <option value="Frío">Frío</option>
+              <option value="Maquinistas">Maquinistas</option>
+              <option value="Portería">Portería</option>
+              <option value="Taller">Taller</option>
+            </select>
+          </div>
+          <div class="roeZetone">
+            <label for="desde">Desde:</label>
+            <input type="date" id="desde" name="desde" class="fechasZetone" required>
+          </div>
+          <div class="roeZetone">
+            <label for="hasta">Hasta:</label>
+            <input type="date" id="hasta" name="hasta" class="fechasZetone" required>
+          </div>
+          <div class="roeZetone">
+            <button type="submit" class="">BUSCAR</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="tablaZetone">
+      <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Legajo</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Día</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Entrada</th>
+              <th scope="col">Salida</th>
+              <th scope="col">Entrada</th>
+              <th scope="col">Salida</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if registroHtml%}
+              {% for i in registroHtml %}
+              <tr>
+                <th scope="row">{{i.legajo}}</th>
+                <td>{{i.nombre}}</td>
+                <td>{{i.dia}}</td>
+                <td>{{i.fecha}}</td>
+                <td>{{i.f1}}</td>
+                <td>{{i.f2}}</td>
+                <td>{{i.f3}}</td>
+                <td>{{i.f4}}</td>
+              </tr>
+              {% endfor %}
+            {% endif %}            
+          </tbody>
+        </table>
+  </div>
+  {% endblock %}
