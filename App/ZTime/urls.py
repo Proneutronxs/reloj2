@@ -3,5 +3,6 @@ from App.ZTime import views
 
 urlpatterns = [
 path('', views.index, name="index"),
+path('registros/calculo', views.calcRegistros, name="calcRegistros"),
 path('registros/ver', views.verRegistros, name="verRegistros"),
 ]
