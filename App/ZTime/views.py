@@ -47,26 +47,24 @@ def verRegistros(request):
             soloDiaHasta = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d")
             mesAñoHasta = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%m/%Y")
 
-            print(soloDiaDesde)
-            print(mesAñoDesde)
-            print(soloDiaHasta)
-            print(mesAñoHasta)
-            print(legajo)
-            print(departamento)
-            print(desdeSql)
-            print(hastaSql)
-
-
+            #print(soloDiaDesde)
+            #print(mesAñoDesde)
+            #print(soloDiaHasta)
+            #print(mesAñoHasta)
+            #print(legajo)
+            #print(departamento)
+            #print(desdeSql)
+            #print(hastaSql)
             try:
+                registro = []
                 ZT = ZetoneTime()
                 cursorZT = ZT.cursor()
-                sql4 = ("SELECT Legajo, Nombre, Fecha, F1, F2, F3,F4\n" +
+                sql4 = ("SELECT Legajo, Nombre, Fecha, F1, F2, F3, F4, HorasF1F2, HorasF3F4, HorasDeMas\n" +
                         "FROM TemporalHoras\n" +
-                        "WHERE Legajo = '" + str(legajo) + "' AND (CONVERT(varchar(10), FechaHora, 103) >= '"+ str(desdeSql) +"') AND (CONVERT(varchar(10), FechaHora, 103) <= '"+ str(hastaSql) +"')")
+                        "WHERE Legajo = '" + str(legajo) + "' AND Fecha >= '"+ str(desdeSql) +"' AND Fecha <= '"+ str(hastaSql) +"'")
                 cursorZT.execute(sql4)
                 consultaZT = cursorZT.fetchall()
                 if consultaZT:
-                    registro = []
                     for i in consultaZT:
                         dia = fechaNombre(str(i[2]))
                         if i[3] == None:
@@ -77,11 +75,20 @@ def verRegistros(request):
                             i[5] = "-"
                         if i[6] == None:
                             i[6] = "-"
-                        resultado = {'legajo': i[0], 'nombre': i[1], 'fecha': i[2], 'f1': i[3], 'f2': i[4], 'f3': i[5], 'f4': i[6], 'dia': dia}
+                        if i[7] == None:
+                            i[7] = "-"
+                        if i[8] == None:
+                            i[8] = "-"
+                        if i[9] == None:
+                            i[9] = "-"
+                        resultado = {'legajo': i[0], 'nombre': i[1], 'fecha': i[2], 'f1': i[3], 'f2': i[4], 'f3': i[5], 'f4': i[6], 'dia': dia, 'hm':i[7], 'ht': i[8], 'ex': i[9]}
                         registro.append(resultado)
-                    print(registro)
+                    #print(registro)
                     print("hola?")
-                return render (request, 'ZTime/registros/viewRegister.html', {'registroHtml': registro})
+                    return render (request, 'ZTime/registros/viewRegister.html', {'registroHtml': registro})
+                else:
+                    print("no hay nada")
+                    return render (request, 'ZTime/registros/viewRegister.html')
             except Exception as e:
                 print("Error")
                 print(e)
@@ -104,7 +111,7 @@ def verRegistros(request):
             print("No validó?")
 
             if departamento == "Todos":
-
+                registro = []
                 try:
                     ZT = ZetoneTime()
                     cursorZT = ZT.cursor()
@@ -115,7 +122,6 @@ def verRegistros(request):
                     cursorZT.execute(sql4)
                     consultaZT = cursorZT.fetchall()
                     if consultaZT:
-                        registro = []
                         for i in consultaZT:
                             dia = fechaNombre(str(i[2]))
                             if i[3] == None:

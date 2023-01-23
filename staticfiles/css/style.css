@@ -9982,26 +9982,39 @@ h6,
 }
 
 .formZetone{
-  background-color: black;
-  padding-left: 20px;
+  background-color: #579f27;
   padding-top: 15px;
-  padding-right: 20px;
+  color: white;
   margin-left: 20px;
   margin-right: 20px;
+  border-radius: 4px;
+}
+
+.roeZetone{
+  padding: 6px;
 }
 
 .table{
   color: white;
+  height:500px;
 }
 
 .tablaZetone{
-  padding-left: 20px;
   padding-top: 15px;
+  padding-left: 20px;
   padding-right: 20px;
-  padding-bottom: 15px;
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  height: 32em;
+  line-height: 1em;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  width: 100%;
+  border: 1px solid #579f27;
+}
+
+.centroZetone{
+/******* CENTRAR LOS DIVS DEL DIV HIJO ********/
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
