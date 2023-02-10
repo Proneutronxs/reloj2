@@ -1,6 +1,6 @@
 import pyodbc
 
-server3 = "10.32.26.34"
+server3 = "191.97.47.105"
 db3 = "ZetoneTime"
 user3 = "sa"
 psw3 = "Sideswipe348"

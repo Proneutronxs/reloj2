@@ -79,7 +79,7 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'ZetoneTime',
         'USER': 'sa',
-        'HOST': '10.32.26.34',
+        'HOST': '191.97.47.105',
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
@@ -128,3 +128,17 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
+
+
+
+#CSRF_COOKIE_SAMESITE = 'Lax'
+#SESSION_COOKIE_SAMESITE = 'Lax'
+# CSRF_COOKIE_HTTPONLY = True
+# SESSION_COOKIE_HTTPONLY = True
+
+# PROD ONLY
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+
+#CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+#CORS_ALLOW_CREDENTIALS = True

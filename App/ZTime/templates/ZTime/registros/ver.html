@@ -5,22 +5,22 @@
 {% block content %}
   <div class="formZetone">
     <div class="centroZetone">
-      <form action="" method="POST">{% csrf_token %}
+      <form id="formHorasSinProceso" action="" method="POST">{% csrf_token %}
         <div class="row">
           <div class="roeZetone">
             <label>Legajo:</label>
-            <input style="width: 6rem;" maxlength="6" type="number" id="legajo" name="legajo" class="fechasZetone" placeholder="000000">
+            <input style="width: 6rem;" maxlength="6" type="number" id="legajo" name="legajo" class="fechasZetone" placeholder="000000" required>
           </div>
           <div class="roeZetone">
             <select class="" type="checkbox" id="departamento" name="departamento">
               <option value="Seleccione">Seleccione</option>
               <option value="Todos">Todos</option>
-              <!--<option value="Calidad">Calidad</option>-->
-              <!--<option value="Empaque">Empaque</option>-->
-              <!--<option value="Frío">Frío</option>-->
+              <option value="Calidad">Calidad</option>
+              <option value="Empaque">Empaque</option>
+              <option value="Frío">Frío</option>
               <!--<option value="Maquinistas">Maquinistas</option>-->
               <!--<option value="Portería">Portería</option>-->
-              <!--<option value="Taller">Taller</option>-->
+              <option value="Taller">Taller</option>
             </select>
           </div>
           <div class="roeZetone">
@@ -32,7 +32,22 @@
             <input type="date" id="hasta" name="hasta" class="fechasZetone" required>
           </div>
           <div class="roeZetone">
-            <button type="submit" class="">BUSCAR</button>
+            <button type="submit" class="" id="buscar_sinProceso">BUSCAR</button>
+          </div>
+          <div class="roeZetone" style="margin-left: 100px;" >
+            <select class="" type="checkbox" id="export" name="export">
+              <option value="Exportar">Exportar </option>
+              <option value="EXCEL">EXCEL</option>
+              <option value="PDF">PDF</option>
+            </select>
+          </div>
+          <div class="roeZetone">
+            <button class="button" id="exportRegister">Exportar</button>
+          </div>
+          <div class="roeZetone">
+            <div class="download">
+              <button class="button"  onclick="no_Disponible()"><a href="#">Descargar</a></button>
+            </div>
           </div>
         </div>
       </form>
@@ -49,19 +64,22 @@
               <th scope="col">Hora</th>
             </tr>
           </thead>
-          <tbody>
-            {% if registroHtml%}
-              {% for i in registroHtml %}
-              <tr>
-                <th scope="row">{{i.legajo}}</th>
-                <td>{{i.nombre}}</td>
-                <td>{{i.dia}}</td>
-                <td>{{i.fecha}}</td>
-                <td>{{i.hora}}</td>
-              </tr>
-              {% endfor %}
-            {% endif %}            
+          <tbody id="tablasSinProceso">         
           </tbody>
         </table>
   </div>
+  <script>
+    window.onload = function(){
+    var fecha = new Date(); //Fecha actual
+    var mes = fecha.getMonth()+1; //obteniendo mes
+    var dia = fecha.getDate(); //obteniendo dia
+    var ano = fecha.getFullYear(); //obteniendo año
+    if(dia<10)
+      dia='0'+dia; //agrega cero si el menor de 10
+    if(mes<10)
+      mes='0'+mes //agrega cero si el menor de 10
+    document.getElementById('desde').value=ano+"-"+mes+"-"+dia;
+    document.getElementById('hasta').value=ano+"-"+mes+"-"+dia;
+    }
+  </script>
   {% endblock %}

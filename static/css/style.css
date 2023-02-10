@@ -61,7 +61,7 @@ body {
   line-height: 1.5;
   color: #6B6A75;
   text-align: left;
-  background-color: #FFFFFF;
+  background-color: #011327;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -9969,7 +9969,6 @@ h6,
 
 .headerZetone{
   align-items: center;
-  background-color: #073d69;
 }
 
 .logoInicio {
