@@ -8,6 +8,11 @@ import json
 import pandas as pd
 import mimetypes
 import os
+from django.http import HttpResponse, Http404
+from wsgiref.util import FileWrapper
+from openpyxl import Workbook
+from openpyxl.styles import Font, Border, Side
+from openpyxl.drawing.image import Image
 
 # Create your views here.
 
@@ -36,232 +41,6 @@ def renderCalcHoras(resquest):
 def renderVerRegistros(resquest):
     return render (resquest, 'ZTime/registros/ver.html')
 
-# def calcRegistros(request):
-#     if request.method == 'POST':
-#         form = form_ver_registros(request.POST)
-#         legajo = request.POST.get('legajo', 1)
-#         print(legajo)
-#         if form.is_valid():
-#             print("validó?")
-#             legajo = form.cleaned_data['legajo']
-#             departamento = form.cleaned_data['departamento']
-#             desde = form.cleaned_data['desde']
-#             hasta = form.cleaned_data['hasta']
-#             desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
-#             soloDiaDesde = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d")
-#             mesAñoDesde = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%m/%Y")
-#             hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
-#             soloDiaHasta = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d")
-#             mesAñoHasta = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%m/%Y")
-#             try:
-#                 registro = []
-#                 ZT = ZetoneTime()
-#                 cursorZT = ZT.cursor()
-#                 sql4 = ("SELECT Legajo, Nombre, Fecha, F1, F2, F3, F4, HorasF1F2, HorasF3F4, HorasDeMas\n" +
-#                         "FROM TemporalHoras\n" +
-#                         "WHERE Legajo = '" + str(legajo) + "' AND Fecha >= '"+ str(desdeSql) +"' AND Fecha <= '"+ str(hastaSql) +"'")
-#                 cursorZT.execute(sql4)
-#                 consultaZT = cursorZT.fetchall()
-#                 if consultaZT:
-#                     for i in consultaZT:
-#                         dia = fechaNombre(str(i[2]))
-#                         if i[3] == None:
-#                             i[3] = "-"
-#                         if i[4] == None:
-#                             i[4] = "-"
-#                         if i[5] == None:
-#                             i[5] = "-"
-#                         if i[6] == None:
-#                             i[6] = "-"
-#                         if i[7] == None:
-#                             i[7] = "-"
-#                         if i[8] == None:
-#                             i[8] = "-"
-#                         if i[9] == None:
-#                             i[9] = "-"
-#                         resultado = {'legajo': str(i[0]), 'nombre': i[1], 'fecha': i[2], 'f1': i[3], 'f2': i[4], 'f3': i[5], 'f4': i[6], 'dia': dia, 'hm':i[7], 'ht': i[8], 'ex': i[9]}
-#                         registro.append(resultado)
-#                     jsonList = json.dumps(registro)
-#                     print(jsonList)
-#                     print("hola?")
-#                     return render (request, 'ZTime/registros/viewRegister.html', {'registroHtml': registro})
-#                 else:
-#                     print("no hay nada")
-#                     return render (request, 'ZTime/registros/viewRegister.html')
-#             except Exception as e:
-#                 print("Error")
-#                 print(e)
-            
-#         else:
-#             departamento = form.cleaned_data['departamento']
-#             desde = form.cleaned_data['desde']
-#             hasta = form.cleaned_data['hasta']
-#             desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
-#             soloDiaDesde = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d")
-#             hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
-#             soloDiaHasta = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d")
-
-#             print(soloDiaDesde)
-#             print(soloDiaHasta)
-#             print(legajo)
-#             print(departamento)
-#             print(desdeSql)
-#             print(hastaSql)
-#             print("No validó?")
-
-
-#             if departamento == "Todos":
-#                 registro = []
-#                 try:
-#                     ZT = ZetoneTime()
-#                     cursorZT = ZT.cursor()
-#                     sql4 = ("SELECT Legajo, Nombre, Fecha, F1, F2, F3,F4, HorasF1F2, HorasF3F4, HorasDeMas\n" +
-#                             "FROM TemporalHoras\n" +
-#                             "WHERE Fecha >= '"+ str(desdeSql) +"' AND Fecha <= '"+ str(hastaSql) +"'\n" +
-#                             "ORDER BY Legajo, Fecha , Nombre")
-#                     cursorZT.execute(sql4)
-#                     consultaZT = cursorZT.fetchall()
-#                     if consultaZT:
-#                         for i in consultaZT:
-#                             dia = fechaNombre(str(i[2]))
-#                             if i[3] == None:
-#                                 i[3] = "-"
-#                             if i[4] == None:
-#                                 i[4] = "-"
-#                             if i[5] == None:
-#                                 i[5] = "-"
-#                             if i[6] == None:
-#                                 i[6] = "-"
-#                             if i[7] == None:
-#                                 i[7] = "-"
-#                             if i[8] == None:
-#                                 i[8] = "-"
-#                             if i[9] == None:
-#                                 i[9] = "-"
-#                             resultado = {'legajo': i[0], 'nombre': i[1], 'fecha': i[2], 'f1': i[3], 'f2': i[4], 'f3': i[5], 'f4': i[6], 'dia': dia, 'hm':i[7], 'ht': i[8], 'ex': i[9]}
-#                             registro.append(resultado)
-#                         #print(registro)
-#                         print("hola?")
-#                     return render (request, 'ZTime/registros/viewRegister.html', {'registroHtml': registro})
-#                 except Exception as e:
-#                     print("Error")
-#                     print(e)
-#             else:
-#                 return render (request, 'ZTime/registros/viewRegister.html')
-#     else:
-#         print("renderiza")
-#         return render (request, 'ZTime/registros/viewRegister.html')
-
-
-# def verRegistros(request):
-#     if request.method == 'POST':
-#         form = form_ver_registros(request.POST)
-#         legajo = request.POST.get('legajo', 1)
-#         print(legajo)
-#         if form.is_valid():
-#             print("validó?")
-#             legajo = form.cleaned_data['legajo']
-#             departamento = form.cleaned_data['departamento']
-#             desde = form.cleaned_data['desde']
-#             hasta = form.cleaned_data['hasta']
-#             desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
-#             hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
-#             try:
-#                 registro = []
-#                 ZT = ZetoneTime()
-#                 cursorZT = ZT.cursor()
-#                 sql4 = ("SELECT DISTINCT\n" +
-#                                         "LEFT(CONVERT(varchar, iclock_transaction_1.punch_time, 108), 2) AS soloHora, iclock_transaction_1.emp_code AS Legajo, LEFT(Legajos.Nombre, 28) AS Nombre, CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) AS Fecha, \n" +
-#                                         "CONVERT(varchar, iclock_transaction_1.punch_time, 108) AS Hora, iclock_transaction_1.punch_time AS FechaHora\n" +
-#                         "FROM            servidordb.zkbiotime.dbo.iclock_transaction AS iclock_transaction_1 INNER JOIN\n" +
-#                                                 "Legajos ON iclock_transaction_1.emp_code = Legajos.Legajos\n" +
-#                         "WHERE      iclock_transaction_1.emp_code = '"+str(legajo)+"' AND (CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) >= '"+str(desdeSql)+"') AND (CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) <= '"+str(hastaSql)+"') AND \n" +
-#                                                     "(iclock_transaction_1.emp_code > '100099')\n" +
-#                         "ORDER BY Legajo, FechaHora")
-#                 cursorZT.execute(sql4)
-#                 consultaZT = cursorZT.fetchall()
-#                 if consultaZT:
-#                     for i in consultaZT:
-#                         dia = fechaNombre(str(i[3]))
-#                         resultado = {'legajo': i[1], 'nombre': i[2], 'fecha': i[3], 'hora': i[4], 'dia': dia}
-#                         registro.append(resultado)
-#                     #print(registro)
-#                     print("hola?")
-#                     return render (request, 'ZTime/registros/ver.html', {'registroHtml': registro})
-#                 else:
-#                     print("no hay nada")
-#                     return render (request, 'ZTime/registros/ver.html')
-#             except Exception as e:
-#                 print("Error")
-#                 print(e)
-#         else:
-#             departamento = form.cleaned_data['departamento']
-#             desde = form.cleaned_data['desde']
-#             hasta = form.cleaned_data['hasta']
-#             desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
-#             hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
-#             print("no valido")
-#             if departamento == "Todos":
-#                 print("")
-#                 try:
-#                     registro = []
-#                     ZT = ZetoneTime()
-#                     cursorZT = ZT.cursor()
-#                     sql4 = ("SELECT DISTINCT\n" +
-#                                             "LEFT(CONVERT(varchar, iclock_transaction_1.punch_time, 108), 2) AS soloHora, iclock_transaction_1.emp_code AS Legajo, LEFT(Legajos.Nombre, 28) AS Nombre, CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) AS Fecha, \n" +
-#                                             "CONVERT(varchar, iclock_transaction_1.punch_time, 108) AS Hora, iclock_transaction_1.punch_time AS FechaHora\n" +
-#                             "FROM            servidordb.zkbiotime.dbo.iclock_transaction AS iclock_transaction_1 INNER JOIN\n" +
-#                                                     "Legajos ON iclock_transaction_1.emp_code = Legajos.Legajos\n" +
-#                             "WHERE      (CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) >= '"+str(desdeSql)+"') AND (CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) <= '"+str(hastaSql)+"') AND \n" +
-#                                                         "(iclock_transaction_1.emp_code > '100099')\n" +
-#                             "ORDER BY Legajo, FechaHora")
-#                     cursorZT.execute(sql4)
-#                     consultaZT = cursorZT.fetchall()
-#                     if consultaZT:
-#                         for i in consultaZT:
-#                             dia = fechaNombre(str(i[3]))
-#                             resultado = {'legajo': i[1], 'nombre': i[2], 'fecha': i[3], 'hora': i[4], 'dia': dia}
-#                             registro.append(resultado)
-#                         #print(registro)
-#                         print("hola?")
-#                         return render (request, 'ZTime/registros/ver.html', {'registroHtml': registro})
-#                     else:
-#                         print("no hay nada")
-#                         return render (request, 'ZTime/registros/ver.html')
-#                 except Exception as e:
-#                     print("Error")
-#                     print(e)
-#             elif departamento == "Empaque":
-#                 print("")
-#                 try:
-#                     registro = []
-#                     ZT = ZetoneTime()
-#                     cursorZT = ZT.cursor()
-#                     sql4 = ("SELECT DISTINCT \n" +
-#                                                     "LEFT(CONVERT(varchar, iclock_transaction_1.punch_time, 108), 2) AS soloHora, iclock_transaction_1.emp_code AS Legajo, LEFT(Legajos.Nombre, 28) AS Nombre, CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) \n" +
-#                                                     "AS Fecha, CONVERT(varchar, iclock_transaction_1.punch_time, 108) AS Hora, iclock_transaction_1.punch_time AS FechaHora, Legajos_1.Clase\n" +
-#                             "FROM            servidordb.zkbiotime.dbo.iclock_transaction AS iclock_transaction_1 INNER JOIN\n" +
-#                                                     "Legajos ON iclock_transaction_1.emp_code = Legajos.Legajos INNER JOIN\n" +
-#                                                     "Legajos AS Legajos_1 ON iclock_transaction_1.emp_code = Legajos_1.Legajos\n" +
-#                             "WHERE        (CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) >= '"+str(desdeSql)+"') AND (CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) <= '"+str(hastaSql)+"') AND (iclock_transaction_1.emp_code > '100099') AND Legajos.Clase = 'Galpon'\n" +
-#                             "ORDER BY Legajo, FechaHora")
-#                     cursorZT.execute(sql4)
-#                     consultaZT = cursorZT.fetchall()
-#                     if consultaZT:
-#                         for i in consultaZT:
-#                             dia = fechaNombre(str(i[3]))
-#                             resultado = {'legajo': i[1], 'nombre': i[2], 'fecha': i[3], 'hora': i[4], 'dia': dia}
-#                             registro.append(resultado)
-#                         #print(registro)
-#                         #print("hola?")
-#                         return render (request, 'ZTime/registros/ver.html', {'registroHtml': registro})
-#                     else:
-#                         #print("no hay nada")
-#                         return render (request, 'ZTime/registros/ver.html')
-#                 except Exception as e:
-#                     print("Error")
-#                     print(e)
-#     return render (request, 'ZTime/registros/ver.html')
 
 def pruebaHTML(request):
     return render (request, 'prueba/prueba.html')
@@ -299,10 +78,6 @@ def calculoHorasJson(request):
         departamento = form.cleaned_data['departamento']
         desde = form.cleaned_data['desde']
         hasta = form.cleaned_data['hasta']
-        print(legajo)
-        print(departamento)
-        print(desde)
-        print(hasta)
         desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
         hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
         try:
@@ -311,36 +86,465 @@ def calculoHorasJson(request):
             cursorZT = ZT.cursor()
             sql4 = ("SELECT Legajo, Nombre, Fecha, F1, F2, F3, F4, HorasF1F2, HorasF3F4, HorasDeMas\n" +
                     "FROM TemporalHoras\n" +
-                    "WHERE Legajo = '" + str(legajo) + "' AND Fecha >= '"+ str(desdeSql) +"' AND Fecha <= '"+ str(hastaSql) +"'")
+                    "WHERE Legajo = '" + str(legajo) + "' AND FechaHora >= '"+ str(desdeSql) +"' AND FechaHora <= '"+ str(hastaSql) +"'\n"+
+                    "ORDER BY FechaHora")
             cursorZT.execute(sql4)
             consultaZT = cursorZT.fetchall()
             if consultaZT:
                 for i in consultaZT:
                     dia = fechaNombre(str(i[2]))
-                    if i[3] == None:
-                        i[3] = "-"
-                    if i[4] == None:
-                        i[4] = "-"
-                    if i[5] == None:
-                        i[5] = "-"
-                    if i[6] == None:
-                        i[6] = "-"
-                    if i[7] == None:
-                        i[7] = "-"
-                    if i[8] == None:
-                        i[8] = "-"
-                    if i[9] == None:
-                        i[9] = "-"
-                    resultado = {'legajo': str(i[0]), 'nombre': i[1], 'dia': dia, 'fecha': i[2], 'f1': i[3], 'f2': i[4], 'f3': i[5], 'f4': i[6], 'hm':i[7], 'ht': i[8], 'ex': i[9]}
+                    resultado = {'legajo': str(i[0]), 'nombre': i[1], 'dia': dia, 'fecha': i[2], 'f1': i[3] or "-", 'f2': i[4] or "-", 'f3': i[5] or "-", 'f4': i[6] or "-", 'hm':i[7] or "-", 'ht': i[8] or "-", 'ex': i[9] or "-"}
                     registro.append(resultado)
 
-                cursorZT.close()
-                ZT.close()
                 jsonList = json.dumps({'message': 'Success', 'registros':registro}) 
                 return JsonResponse(jsonList, safe=False)
             else:
+                jsonList = json.dumps({'message':'No se encontraron fichadas'}) 
+                return JsonResponse(jsonList, safe=False)
+        except Exception as e:
+            print("Error")
+            print(e)
+            data = [{'info': 'error'}]
+            return JsonResponse(data, safe=False)
+        finally:
+            cursorZT.close()
+            ZT.close()
+    else:
+        departamento = form.cleaned_data['departamento']
+        desde = form.cleaned_data['desde']
+        hasta = form.cleaned_data['hasta']
+        desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
+        hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
+        if departamento == "Todos":
+            try:
+                registro = []
+                ZT = ZetoneTime()
+                cursorZT = ZT.cursor()
+                sql4 = ("SELECT Legajo, Nombre, Fecha, F1, F2, F3, F4, HorasF1F2, HorasF3F4, HorasDeMas\n" +
+                        "FROM TemporalHoras\n" +
+                        "WHERE FechaHora >= '"+ str(desdeSql) +"' AND FechaHora <= '"+ str(hastaSql) +"'\n"+
+                        "ORDER BY FechaHora")
+                cursorZT.execute(sql4)
+                consultaZT = cursorZT.fetchall()
+                if consultaZT:
+                    for i in consultaZT:
+                        dia = fechaNombre(str(i[2]))
+                        resultado = {'legajo': str(i[0]), 'nombre': i[1], 'dia': dia, 'fecha': i[2], 'f1': i[3] or "-", 'f2': i[4] or "-", 'f3': i[5] or "-", 'f4': i[6] or "-", 'hm':i[7] or "-", 'ht': i[8] or "-", 'ex': i[9] or "-"}
+                        registro.append(resultado)
+
+                    jsonList = json.dumps({'message': 'Success', 'registros':registro}) 
+                    return JsonResponse(jsonList, safe=False)
+                else:
+                    jsonList = json.dumps({'message':'No se encontraron fichadas'}) 
+                    return JsonResponse(jsonList, safe=False)
+            except Exception as e:
+                print("Error")
+                print(e)
+                data = [{'info': 'error'}]
+                return JsonResponse(data, safe=False)
+            finally:
                 cursorZT.close()
                 ZT.close()
+        else:
+            jsonList = json.dumps({'message':'Debe seleccionar un Departamento'}) 
+            return JsonResponse(jsonList, safe=False)
+
+@csrf_exempt
+def ver_registros_sin_proceso(request):
+    form = form_ver_registros(request.POST)
+    if form.is_valid():
+        departamento = form.cleaned_data['departamento']
+        legajo = form.cleaned_data['legajo']
+        desde = form.cleaned_data['desde']
+        hasta = form.cleaned_data['hasta']
+        desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
+        hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
+        try:
+            registro = []
+            ZT = ZetoneTime()
+            cursorZT = ZT.cursor()
+            sql_consulta = ("SELECT DISTINCT\n" +
+                                         "LEFT(CONVERT(varchar, iclock_transaction_1.punch_time, 108), 2) AS soloHora, iclock_transaction_1.emp_code AS Legajo, LEFT(Legajos.Nombre, 28) AS Nombre, CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) AS Fecha, \n" +
+                                         "CONVERT(varchar, iclock_transaction_1.punch_time, 108) AS Hora, iclock_transaction_1.punch_time AS FechaHora\n" +
+                         "FROM            servidordb.zkbiotime.dbo.iclock_transaction AS iclock_transaction_1 INNER JOIN\n" +
+                                                 "Legajos ON iclock_transaction_1.emp_code = Legajos.Legajos\n" +
+                         "WHERE      iclock_transaction_1.emp_code = '"+str(legajo)+"' AND iclock_transaction_1.punch_time >= '"+str(desdeSql)+"' AND iclock_transaction_1.punch_time <= '"+str(hastaSql)+"' AND \n" +
+                                                     "(iclock_transaction_1.emp_code > '100099')\n" +
+                         "ORDER BY Legajo, iclock_transaction_1.punch_time")
+            cursorZT.execute(sql_consulta)
+            consulta = cursorZT.fetchall()
+            if consulta:
+                for i in consulta:
+                    dia = fechaNombre(str(i[3]))
+                    resultado = {'legajo': str(i[1]), 'nombre': str(i[2]), 'dia': dia, 'fecha':str(i[3]), 'hora': str(i[4])}
+                    registro.append(resultado)
+                #print(registro)
+                jsonList = json.dumps({'message':'Success', 'registros': registro}) 
+                return JsonResponse(jsonList, safe=False)
+            else:
+                jsonList = json.dumps({'message':'Not Found'}) 
+                return JsonResponse(jsonList, safe=False)
+        except Exception as e:
+            jsonList = json.dumps({'message':'error'}) 
+            return JsonResponse(jsonList, safe=False)
+        finally:
+            cursorZT.close()
+            ZT.close()
+    else:
+        departamento = form.cleaned_data['departamento']
+        if departamento == "Todos":
+            #legajo = form.cleaned_data['legajo',0]
+            desde = form.cleaned_data['desde']
+            hasta = form.cleaned_data['hasta']
+            desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
+            hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
+            try:
+                registro = []
+                ZT = ZetoneTime()
+                cursorZT = ZT.cursor()
+                sql_consulta = ("SELECT DISTINCT\n" +
+                                            "LEFT(CONVERT(varchar, iclock_transaction_1.punch_time, 108), 2) AS soloHora, iclock_transaction_1.emp_code AS Legajo, LEFT(Legajos.Nombre, 28) AS Nombre, CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) AS Fecha, \n" +
+                                            "CONVERT(varchar, iclock_transaction_1.punch_time, 108) AS Hora, iclock_transaction_1.punch_time AS FechaHora\n" +
+                            "FROM            servidordb.zkbiotime.dbo.iclock_transaction AS iclock_transaction_1 INNER JOIN\n" +
+                                                    "Legajos ON iclock_transaction_1.emp_code = Legajos.Legajos\n" +
+                            "WHERE      iclock_transaction_1.punch_time >= '"+str(desdeSql)+"' AND iclock_transaction_1.punch_time <= '"+str(hastaSql)+"' AND \n" +
+                                                        "(iclock_transaction_1.emp_code > '100099')\n" +
+                            "ORDER BY Legajo, iclock_transaction_1.punch_time")
+                cursorZT.execute(sql_consulta)
+                consulta = cursorZT.fetchall()
+                if consulta:
+                    for i in consulta:
+                        dia = fechaNombre(str(i[3]))
+                        resultado = {'legajo': str(i[1]), 'nombre': str(i[2]), 'dia': dia, 'fecha':str(i[3]), 'hora': str(i[4])}
+                        registro.append(resultado)
+                    #print(registro)
+                    jsonList = json.dumps({'message':'Success', 'registros': registro}) 
+                    return JsonResponse(jsonList, safe=False)
+                else:
+                    jsonList = json.dumps({'message':'No se encontraron Fichadas'}) 
+                    return JsonResponse(jsonList, safe=False)
+            except Exception as e:
+                print(e)
+                jsonList = json.dumps({'message':'error'}) 
+                return JsonResponse(jsonList, safe=False)
+            finally:
+                cursorZT.close()
+                ZT.close()
+        else:
+            jsonList = json.dumps({'message':'Debe seleccionar un Departamento'}) 
+            return JsonResponse(jsonList, safe=False)
+
+@csrf_exempt
+def excelCreateRegistros(request):
+    form = form_ver_registros(request.POST)
+    if form.is_valid():
+        departamento = form.cleaned_data['departamento']
+        legajo = form.cleaned_data['legajo']
+        desde = form.cleaned_data['desde']
+        hasta = form.cleaned_data['hasta']
+        desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
+        hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
+        try:
+            ZT = ZetoneTime()
+            cursorZT = ZT.cursor()
+            sql_consulta = ("SELECT DISTINCT\n" +
+                                         "LEFT(CONVERT(varchar, iclock_transaction_1.punch_time, 108), 2) AS soloHora, iclock_transaction_1.emp_code AS Legajo, LEFT(Legajos.Nombre, 28) AS Nombre, CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) AS Fecha, \n" +
+                                         "CONVERT(varchar, iclock_transaction_1.punch_time, 108) AS Hora, iclock_transaction_1.punch_time AS FechaHora\n" +
+                         "FROM            servidordb.zkbiotime.dbo.iclock_transaction AS iclock_transaction_1 INNER JOIN\n" +
+                                                 "Legajos ON iclock_transaction_1.emp_code = Legajos.Legajos\n" +
+                         "WHERE      iclock_transaction_1.emp_code = '"+str(legajo)+"' AND iclock_transaction_1.punch_time >= '"+str(desdeSql)+"' AND iclock_transaction_1.punch_time <= '"+str(hastaSql)+"' AND \n" +
+                                                     "(iclock_transaction_1.emp_code > '100099')\n" +
+                         "ORDER BY Legajo, iclock_transaction_1.punch_time")
+            cursorZT.execute(sql_consulta)
+            consulta = cursorZT.fetchall()
+            if consulta:
+                legajos = []
+                nombres = []
+                dias = []
+                fechas = []
+                horas = []
+                fechaHoras = []
+                for i in consulta:
+                    dia = fechaNombre(str(i[3]))
+                    legajos.append(i[1])
+                    nombres.append(i[2])
+                    dias.append(dia)
+                    fechas.append(i[3])
+                    horas.append(i[4])
+                    fechaHoras.append(i[5])
+                cantidad = int (len(legajos))
+                book = Workbook()
+                sheet = book.active
+                borde = Side(border_style='thin', color='000000')
+                bordes = Border(top=borde, left=borde, bottom=borde, right=borde)
+                logo = Image('App/ZTime/data/logos/Zetone.png')
+                sheet.add_image(logo, 'B1')
+                sheet['B4'] = "Legajo"
+                sheet['B4'].font = Font(bold=True)
+                sheet['B4'].border = bordes
+                sheet['C4'] = "Nombre y Apellido"
+                sheet['C4'].font = Font(bold=True)
+                sheet['C4'].border = bordes
+                sheet['D4'] = "Día"
+                sheet['D4'].font = Font(bold=True)
+                sheet['D4'].border = bordes
+                sheet['E4'] = "Fecha"
+                sheet['E4'].font = Font(bold=True)
+                sheet['E4'].border = bordes
+                sheet['F4'] = "Hora"
+                sheet['F4'].font = Font(bold=True)
+                sheet['F4'].border = bordes
+                sheet['G4'] = "Fecha y Hora"
+                sheet['G4'].font = Font(bold=True)
+                sheet['G4'].border = bordes
+                numero = 0
+                for j in range (5,(cantidad + 5)):
+                    sheet[f'B{j}'] = legajos[numero]
+                    sheet[f'B{j}'].border = bordes
+                    sheet[f'C{j}'] = nombres[numero]
+                    sheet[f'C{j}'].border = bordes
+                    sheet[f'D{j}'] = dias[numero]
+                    sheet[f'D{j}'].border = bordes
+                    sheet[f'E{j}'] = fechas[numero]
+                    sheet[f'E{j}'].border = bordes
+                    sheet[f'F{j}'] = str(horas[numero]) + " Hs."
+                    sheet[f'F{j}'].border = bordes
+                    sheet[f'G{j}'] = fechaHoras[numero]
+                    sheet[f'G{j}'].border = bordes
+                    numero = numero + 1
+                now = datetime.now().time()
+                nowHour = str(now.hour) + "_" + str(now.minute) + "_" + str(now.second)
+                nombre_excel ="Reporte_Registros_Legajo_" + str(legajos[0]) + "_" + str(desde) + "_" + str(hasta) + "_" + nowHour + ".xlsx"
+                book.save('App/ZTime/data/excel/' + nombre_excel)
+                jsonList = json.dumps({'message':'Success', 'excel': nombre_excel}) 
+                return JsonResponse(jsonList, safe=False)
+            else:
+                jsonList = json.dumps({'message':'Not Found'}) 
+                return JsonResponse(jsonList, safe=False)
+        except Exception as e:
+            print(e)
+            error = 'Error: ' + str(e)
+            jsonList = json.dumps({'message':error}) 
+            return JsonResponse(jsonList, safe=False)
+        finally:
+            cursorZT.close()
+            ZT.close()
+    else:
+        departamento = form.cleaned_data['departamento']
+        if departamento == "Todos":
+            #legajo = form.cleaned_data['legajo',0]
+            desde = form.cleaned_data['desde']
+            hasta = form.cleaned_data['hasta']
+            desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
+            hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
+            try:
+                dbZetoneTime = ZetoneTime()
+                cursorZTime = dbZetoneTime.cursor()
+                consultaSql = ("SELECT DISTINCT \n" +
+                                                "LEFT(CONVERT(varchar, iclock_transaction_1.punch_time, 108), 2) AS soloHora, iclock_transaction_1.emp_code AS Legajo, LEFT(Legajos.Nombre, 28) AS Nombre, CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) AS Fecha,\n" +
+                                                "CONVERT(varchar, iclock_transaction_1.punch_time, 108) AS Hora, iclock_transaction_1.punch_time AS FechaHora\n" +
+                        "FROM            servidordb.zkbiotime.dbo.iclock_transaction AS iclock_transaction_1 INNER JOIN\n" +
+                                                "Legajos ON iclock_transaction_1.emp_code = Legajos.Legajos\n" +
+                        "WHERE      iclock_transaction_1.punch_time >= '"+ desdeSql +"' AND iclock_transaction_1.punch_time <= '"+ hastaSql +"' AND \n" +
+                                                "(iclock_transaction_1.emp_code > '100099')\n" +
+                        "ORDER BY Legajo, iclock_transaction_1.punch_time")
+                cursorZTime.execute(consultaSql)
+                consulta = cursorZTime.fetchall()
+                if consulta:
+                    legajos = []
+                    nombres = []
+                    dias = []
+                    fechas = []
+                    horas = []
+                    fechaHoras = []
+                    for i in consulta:
+                        dia = fechaNombre(str(i[3]))
+                        legajos.append(i[1])
+                        nombres.append(i[2])
+                        dias.append(dia)
+                        fechas.append(i[3])
+                        horas.append(i[4])
+                        fechaHoras.append(i[5])
+                    
+                ##CREO LAS FUNCIONES  CREAR UN EXCEL 
+                    cantidad = int (len(legajos))
+                    book = Workbook()
+                    sheet = book.active
+                    borde = Side(border_style='thin', color='000000')
+                    bordes = Border(top=borde, left=borde, bottom=borde, right=borde)
+                    logo = Image('App/ZTime/data/logos/Zetone.png')
+                    sheet.add_image(logo, 'B1')
+                    sheet['B4'] = "Legajo"
+                    sheet['B4'].font = Font(bold=True)
+                    sheet['B4'].border = bordes
+                    sheet['C4'] = "Nombre y Apellido"
+                    sheet['C4'].font = Font(bold=True)
+                    sheet['C4'].border = bordes
+                    sheet['D4'] = "Día"
+                    sheet['D4'].font = Font(bold=True)
+                    sheet['D4'].border = bordes
+                    sheet['E4'] = "Fecha"
+                    sheet['E4'].font = Font(bold=True)
+                    sheet['E4'].border = bordes
+                    sheet['F4'] = "Hora"
+                    sheet['F4'].font = Font(bold=True)
+                    sheet['F4'].border = bordes
+                    sheet['G4'] = "Fecha y Hora"
+                    sheet['G4'].font = Font(bold=True)
+                    sheet['G4'].border = bordes
+                    numero = 0
+                    for j in range (5,(cantidad + 5)):
+                        #print (numero)
+                        sheet[f'B{j}'] = legajos[numero]
+                        sheet[f'B{j}'].border = bordes
+                        sheet[f'C{j}'] = nombres[numero]
+                        sheet[f'C{j}'].border = bordes
+                        sheet[f'D{j}'] = dias[numero]
+                        sheet[f'D{j}'].border = bordes
+                        sheet[f'E{j}'] = fechas[numero]
+                        sheet[f'E{j}'].border = bordes
+                        sheet[f'F{j}'] = str(horas[numero]) + " Hs."
+                        sheet[f'F{j}'].border = bordes
+                        sheet[f'G{j}'] = fechaHoras[numero]
+                        sheet[f'G{j}'].border = bordes
+                        numero = numero + 1
+                    now = datetime.now().time()
+                    nowHour = str(now.hour) + "_" + str(now.minute) + "_" + str(now.second)
+                    nombre_excel ="Reporte_Registros_" + str(desde) + "_" + str(hasta) + "_" + nowHour + ".xlsx"
+                    book.save('App/ZTime/data/excel/' + nombre_excel)
+                    jsonList = json.dumps({'message':'Success', 'excel': nombre_excel}) 
+                    return JsonResponse(jsonList, safe=False)
+            except Exception as e:
+                print(e)
+                jsonList = json.dumps({'message':'Error'}) 
+                return JsonResponse(jsonList, safe=False)
+            finally:
+                cursorZTime.close()
+                dbZetoneTime.close()
+        else:
+            jsonList = json.dumps({'message':'Debe Seleccionar un Grupo'}) 
+            return JsonResponse(jsonList, safe=False)
+
+##CREACION DE EXCEL CACLCULO DE HORAS
+@csrf_exempt
+def createExcelCalculo(request):
+    form = form_ver_registros(request.POST)
+    if form.is_valid():
+        legajo = form.cleaned_data['legajo']
+        departamento = form.cleaned_data['departamento']
+        desde = form.cleaned_data['desde']
+        hasta = form.cleaned_data['hasta']
+        desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
+        hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
+        try:
+            ZT = ZetoneTime()
+            cursorZT = ZT.cursor()
+            sql4 = ("SELECT Legajo, Nombre, Fecha, F1, F2, F3, F4, HorasF1F2, HorasF3F4, HorasDeMas\n" +
+                    "FROM TemporalHoras\n" +
+                    "WHERE Legajo = '" + str(legajo) + "' AND FechaHora >= '"+ str(desdeSql) +"' AND FechaHora <= '"+ str(hastaSql) +"'\n"+
+                    "ORDER BY FechaHora")
+            cursorZT.execute(sql4)
+            consultaZT = cursorZT.fetchall()
+            if consultaZT:
+                #LISTAS
+                legajos = []
+                nombres = []
+                dias = []
+                fechas = []
+                f1 = []
+                f2 = []
+                f3 = []
+                f4 = []
+                hm = []
+                ht = []
+                ex = []
+                for i in consultaZT:
+                    dia = fechaNombre(str(i[2]))
+                    legajos.append(i[0])
+                    nombres.append(i[1])
+                    dias.append(dia)
+                    fechas.append(i[2])
+                    f1.append(i[3] or "-")
+                    f2.append(i[4] or "-")
+                    f3.append(i[5] or "-")
+                    f4.append(i[6] or "-")
+                    hm.append(i[7] or "-")
+                    ht.append(i[8] or "-")
+                    ex.append(i[9] or "-")
+
+                cantidad = int (len(legajos))
+                book = Workbook()
+                sheet = book.active
+                borde = Side(border_style='thin', color='000000')
+                bordes = Border(top=borde, left=borde, bottom=borde, right=borde)
+                logo = Image('App/ZTime/data/logos/Zetone.png')
+                sheet.add_image(logo, 'B1')
+                sheet['B4'] = "Legajo"
+                sheet['B4'].font = Font(bold=True)
+                sheet['B4'].border = bordes
+                sheet['C4'] = "Nombre y Apellido"
+                sheet['C4'].font = Font(bold=True)
+                sheet['C4'].border = bordes
+                sheet['D4'] = "Día"
+                sheet['D4'].font = Font(bold=True)
+                sheet['D4'].border = bordes
+                sheet['E4'] = "Fecha"
+                sheet['E4'].font = Font(bold=True)
+                sheet['E4'].border = bordes
+                sheet['F4'] = "Entrada"
+                sheet['F4'].font = Font(bold=True)
+                sheet['F4'].border = bordes
+                sheet['G4'] = "Salida"
+                sheet['G4'].font = Font(bold=True)
+                sheet['G4'].border = bordes
+                sheet['H4'] = "Entrada"
+                sheet['H4'].font = Font(bold=True)
+                sheet['H4'].border = bordes
+                sheet['I4'] = "Salida"
+                sheet['I4'].font = Font(bold=True)
+                sheet['I4'].border = bordes
+                sheet['J4'] = "Hs. Mañana"
+                sheet['J4'].font = Font(bold=True)
+                sheet['J4'].border = bordes
+                sheet['K4'] = "Hs. Tarde"
+                sheet['K4'].font = Font(bold=True)
+                sheet['K4'].border = bordes
+                sheet['L4'] = "Hs. Extra"
+                sheet['L4'].font = Font(bold=True)
+                sheet['L4'].border = bordes
+                numero = 0
+                for j in range (5,(cantidad + 5)):
+                    sheet[f'B{j}'] = legajos[numero]
+                    sheet[f'B{j}'].border = bordes
+                    sheet[f'C{j}'] = nombres[numero]
+                    sheet[f'C{j}'].border = bordes
+                    sheet[f'D{j}'] = dias[numero]
+                    sheet[f'D{j}'].border = bordes
+                    sheet[f'E{j}'] = fechas[numero]
+                    sheet[f'E{j}'].border = bordes
+
+                    sheet[f'F{j}'] = str(f1[numero])
+                    sheet[f'F{j}'].border = bordes
+                    sheet[f'G{j}'] = str(f2[numero])
+                    sheet[f'G{j}'].border = bordes
+                    sheet[f'H{j}'] = str(f3[numero])
+                    sheet[f'H{j}'].border = bordes
+                    sheet[f'I{j}'] = str(f4[numero])
+                    sheet[f'I{j}'].border = bordes
+                    sheet[f'J{j}'] = str(hm[numero])
+                    sheet[f'J{j}'].border = bordes
+                    sheet[f'K{j}'] = str(ht[numero])
+                    sheet[f'K{j}'].border = bordes
+                    sheet[f'L{j}'] = str(ex[numero])
+                    sheet[f'L{j}'].border = bordes
+                    numero = numero + 1
+                now = datetime.now().time()
+                nowHour = str(now.hour) + "_" + str(now.minute) + "_" + str(now.second)
+                nombre_excel ="Reporte_Registros_Calculo_Legajo_" + str(legajos[0]) + "_" + str(desde) + "_" + str(hasta) + "_" + nowHour + ".xlsx"
+                book.save('App/ZTime/data/excel/' + nombre_excel)
+                jsonList = json.dumps({'message':'Success', 'excel': nombre_excel}) 
+                return JsonResponse(jsonList, safe=False)
+            else:
                 print("no hay nada")
                 jsonList = json.dumps({'message':'Not Found'}) 
                 return JsonResponse(jsonList, safe=False)
@@ -349,100 +553,162 @@ def calculoHorasJson(request):
             print(e)
             data = [{'info': 'error'}]
             return JsonResponse(data, safe=False)
+        finally:
+            cursorZT.close()
+            ZT.close()
     else:
         departamento = form.cleaned_data['departamento']
-        if departamento == "Seleccione":
-            data = [{'info': 'error'}]
-            return JsonResponse(data, safe=False)
-
-def downloadRegister(request):
-    form = form_export_registros(request.POST)
-    
-    if form.is_valid():
-        legajo = form.cleaned_data['legajo']
-        departamento = form.cleaned_data['departamento']
-        desde = form.cleaned_data['desde']
-        hasta = form.cleaned_data['hasta']
-        export = form.cleaned_data['export']
-        desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
-        hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
-        print(legajo)
-        print(departamento)
-        print(desdeSql)
-        print(hastaSql)
-        print(export)
-        try:
-            Asistencia = ZetoneTime()
-            cursor_asis = Asistencia.cursor()
-            querySQL = ("SELECT        Temporal.Legajo AS Legajo, DetalleLegajos.Nombre AS Nombre, Temporal.EM AS EntradaMañana, Temporal.SM AS SalidaMañana, Temporal.ET AS EntradaTarde, Temporal.ST AS SalidaTarde, DetalleLegajos.Clase AS Clase, DetalleLegajos.Categoria AS Categoria\n" +
-                        "FROM            Temporal INNER JOIN\n" +
-                                                "DetalleLegajos ON Temporal.Legajo = DetalleLegajos.Legajo\n" +
-                        "ORDER BY DetalleLegajos.Nombre")
-            cursor_asis.execute(querySQL)
-            consulta_asis = cursor_asis.fetchall()
-            if consulta_asis:
-                listaLegajo = []
-                listaNombre = []
-                entradaMañana = []
-                salidaMañana = []
-                entradaTarde = []
-                salidaTarde = []
-                listaClase = []
-                listaCategoria = []
-                for i in consulta_asis:
-                    listaLegajo.append(str(i[0]))
-                    listaNombre.append(str(i[1]))
-                    entradaMañana.append(str(i[2]))
-                    salidaMañana.append(str(i[3]))
-                    entradaTarde.append(str(i[4]))
-                    salidaTarde.append(str(i[5]))
-                    listaClase.append(str(i[6]))
-                    listaCategoria.append(str(i[7]))
-                
-                #print(listaHora)
-
-                data_null = {}
-                def_null = pd.DataFrame(data_null)
-                def_null.to_excel('Reporte_Asistencia_'+ desde +'.xlsx')
-
-                write = pd.ExcelWriter('Reporte_Asistencia_'+ desde +'.xlsx')
-
-                Columnas = {'Legajo': listaLegajo, 'Nombre y Apellido': listaNombre, 'Entrada Mañana': entradaMañana, 'Salida Mañana': salidaMañana, 'Entrada Tarde': entradaTarde, 'Salida Tarde': salidaTarde, 'Sector': listaClase, 'Categoría': listaCategoria}
-                df_Columnas = pd.DataFrame(Columnas)
-
-                df_Columnas.to_excel(write, 'Asistencia', index=False)
-                write.save()
-                write.close()
-                Asistencia.close()
-
-        except Exception as e:
-            print(e)
-
-        data = [{'info': 'sin Datos'}]
-        return JsonResponse(data, safe=False)
-    else:
-        departamento = form.cleaned_data['departamento']
-        if departamento == "Seleccione":
+        if departamento == "Todos":
+            departamento = form.cleaned_data['departamento']
             desde = form.cleaned_data['desde']
             hasta = form.cleaned_data['hasta']
-            export = form.cleaned_data['export']
             desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
             hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
-            print(departamento)
-            print(desdeSql)
-            print(hastaSql)
-            print(export)
-            Asistencia.close()
+            try:
+                ZT = ZetoneTime()
+                cursorZT = ZT.cursor()
+                sql4 = ("SELECT Legajo, Nombre, Fecha, F1, F2, F3, F4, HorasF1F2, HorasF3F4, HorasDeMas\n" +
+                        "FROM TemporalHoras\n" +
+                        "WHERE FechaHora >= '"+ str(desdeSql) +"' AND FechaHora <= '"+ str(hastaSql) +"'\n"+
+                        "ORDER BY Legajo")
+                cursorZT.execute(sql4)
+                consultaZT = cursorZT.fetchall()
+                if consultaZT:
+                    #LISTAS
+                    legajos = []
+                    nombres = []
+                    dias = []
+                    fechas = []
+                    f1 = []
+                    f2 = []
+                    f3 = []
+                    f4 = []
+                    hm = []
+                    ht = []
+                    ex = []
+                    for i in consultaZT:
+                        dia = fechaNombre(str(i[2]))
+                        legajos.append(i[0])
+                        nombres.append(i[1])
+                        dias.append(dia)
+                        fechas.append(i[2])
+                        f1.append(i[3] or "-")
+                        f2.append(i[4] or "-")
+                        f3.append(i[5] or "-")
+                        f4.append(i[6] or "-")
+                        hm.append(i[7] or "-")
+                        ht.append(i[8] or "-")
+                        ex.append(i[9] or "-")
 
-            data = [{'info': 'sin Datos'}]
-            return JsonResponse(data, safe=False)
+                    cantidad = int (len(legajos))
+                    book = Workbook()
+                    sheet = book.active
+                    borde = Side(border_style='thin', color='000000')
+                    bordes = Border(top=borde, left=borde, bottom=borde, right=borde)
+                    logo = Image('App/ZTime/data/logos/Zetone.png')
+                    sheet.add_image(logo, 'B1')
+                    sheet['B4'] = "Legajo"
+                    sheet['B4'].font = Font(bold=True)
+                    sheet['B4'].border = bordes
+                    sheet['C4'] = "Nombre y Apellido"
+                    sheet['C4'].font = Font(bold=True)
+                    sheet['C4'].border = bordes
+                    sheet['D4'] = "Día"
+                    sheet['D4'].font = Font(bold=True)
+                    sheet['D4'].border = bordes
+                    sheet['E4'] = "Fecha"
+                    sheet['E4'].font = Font(bold=True)
+                    sheet['E4'].border = bordes
+                    sheet['F4'] = "Entrada"
+                    sheet['F4'].font = Font(bold=True)
+                    sheet['F4'].border = bordes
+                    sheet['G4'] = "Salida"
+                    sheet['G4'].font = Font(bold=True)
+                    sheet['G4'].border = bordes
+                    sheet['H4'] = "Entrada"
+                    sheet['H4'].font = Font(bold=True)
+                    sheet['H4'].border = bordes
+                    sheet['I4'] = "Salida"
+                    sheet['I4'].font = Font(bold=True)
+                    sheet['I4'].border = bordes
+                    sheet['J4'] = "Hs. Mañana"
+                    sheet['J4'].font = Font(bold=True)
+                    sheet['J4'].border = bordes
+                    sheet['K4'] = "Hs. Tarde"
+                    sheet['K4'].font = Font(bold=True)
+                    sheet['K4'].border = bordes
+                    sheet['L4'] = "Hs. Extra"
+                    sheet['L4'].font = Font(bold=True)
+                    sheet['L4'].border = bordes
+                    numero = 0
+                    for j in range (5,(cantidad + 5)):
+                        sheet[f'B{j}'] = legajos[numero]
+                        sheet[f'B{j}'].border = bordes
+                        sheet[f'C{j}'] = nombres[numero]
+                        sheet[f'C{j}'].border = bordes
+                        sheet[f'D{j}'] = dias[numero]
+                        sheet[f'D{j}'].border = bordes
+                        sheet[f'E{j}'] = fechas[numero]
+                        sheet[f'E{j}'].border = bordes
 
-    data = [{'info': 'sin Datos'}]
-    return JsonResponse(data, safe=False)
+                        sheet[f'F{j}'] = str(f1[numero])
+                        sheet[f'F{j}'].border = bordes
+                        sheet[f'G{j}'] = str(f2[numero])
+                        sheet[f'G{j}'].border = bordes
+                        sheet[f'H{j}'] = str(f3[numero])
+                        sheet[f'H{j}'].border = bordes
+                        sheet[f'I{j}'] = str(f4[numero])
+                        sheet[f'I{j}'].border = bordes
+                        sheet[f'J{j}'] = str(hm[numero])
+                        sheet[f'J{j}'].border = bordes
+                        sheet[f'K{j}'] = str(ht[numero])
+                        sheet[f'K{j}'].border = bordes
+                        sheet[f'L{j}'] = str(ex[numero])
+                        sheet[f'L{j}'].border = bordes
+                        numero = numero + 1
+                    now = datetime.now().time()
+                    nowHour = str(now.hour) + "_" + str(now.minute) + "_" + str(now.second)
+                    nombre_excel ="Reporte_Registros_Calculo" + str(desde) + "_" + str(hasta) + "_" + nowHour + ".xlsx"
+                    book.save('App/ZTime/data/excel/' + nombre_excel)
+                    jsonList = json.dumps({'message':'Success', 'excel': nombre_excel}) 
+                    return JsonResponse(jsonList, safe=False)
+                else:
+                    jsonList = json.dumps({'message':'Not Found'}) 
+                    return JsonResponse(jsonList, safe=False)
+            except Exception as e:
+                print("Error")
+                print(e)
+                data = [{'info': 'error'}]
+                return JsonResponse(data, safe=False)
+            finally:
+                cursorZT.close()
+                ZT.close()
+        else:
+            jsonList = json.dumps({'message':'Seleccione que un departamento.'}) 
+            return JsonResponse(jsonList, safe=False)
 
+def download_excel(request, file_path):
+    file_path = 'App/ZTime/data/excel/' + file_path
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as excel:
+            mime_type, _ = mimetypes.guess_type(file_path)
+            response = HttpResponse(FileWrapper(excel), content_type=mime_type)
+            response['Content-Disposition'] = f"attachment; filename={os.path.basename(file_path)}"
+            return response
+    raise Http404
+
+def delete_xlsx_files(request):
+    try:
+        for filename in os.listdir('App/ZTime/data/excel/'):
+            if filename.endswith(".xlsx"):
+                os.remove(os.path.join('App/ZTime/data/excel/', filename))
+        jsonList = json.dumps({'message':'Se Borraron todos los archivos.'}) 
+        return JsonResponse(jsonList, safe=False)
+    except Exception as e:
+        jsonList = json.dumps({'message':'Se produjo un error al borrar los archivos.'}) 
+        return JsonResponse(jsonList, safe=False)
 
 def download_Excel(self):
-
     try:
         f = open('App/ZTime/data/excel/prueba.xlsx', 'rb')
         response = HttpResponse(content=f)
@@ -475,47 +741,20 @@ def descargar_archivo(request):
 
 
 @csrf_exempt
-def ver_registros_sin_proceso(request):
-    form = form_ver_registros(request.POST)
-    if form.is_valid():
-        legajo = form.cleaned_data['legajo']
-        departamento = form.cleaned_data['departamento']
-        desde = form.cleaned_data['desde']
-        hasta = form.cleaned_data['hasta']
-        print(legajo)
-        print(departamento)
-        print(desde)
-        print(hasta)
-        desdeSql = datetime.strptime(str(desde), "%Y-%m-%d").strftime("%d/%m/%Y")
-        hastaSql = datetime.strptime(str(hasta), "%Y-%m-%d").strftime("%d/%m/%Y")
-        try:
-            registro = []
-            ZT = ZetoneTime()
-            cursorZT = ZT.cursor()
-            sql_consulta = ("SELECT DISTINCT\n" +
-                                         "LEFT(CONVERT(varchar, iclock_transaction_1.punch_time, 108), 2) AS soloHora, iclock_transaction_1.emp_code AS Legajo, LEFT(Legajos.Nombre, 28) AS Nombre, CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) AS Fecha, \n" +
-                                         "CONVERT(varchar, iclock_transaction_1.punch_time, 108) AS Hora, iclock_transaction_1.punch_time AS FechaHora\n" +
-                         "FROM            servidordb.zkbiotime.dbo.iclock_transaction AS iclock_transaction_1 INNER JOIN\n" +
-                                                 "Legajos ON iclock_transaction_1.emp_code = Legajos.Legajos\n" +
-                         "WHERE      iclock_transaction_1.emp_code = '"+str(legajo)+"' AND (CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) >= '"+str(desdeSql)+"') AND (CONVERT(varchar(10), iclock_transaction_1.punch_time, 103) <= '"+str(hastaSql)+"') AND \n" +
-                                                     "(iclock_transaction_1.emp_code > '100099')\n" +
-                         "ORDER BY Legajo, FechaHora")
-            cursorZT.execute(sql_consulta)
-            consulta = cursorZT.fetchall()
-            if consulta:
-                for i in consulta:
-                    dia = fechaNombre(str(i[3]))
-                    resultado = {'legajo': str(i[1]), 'nombre': str(i[2]), 'dia': dia, 'fecha':str(i[3]), 'hora': str(i[4])}
-                    registro.append(resultado)
-                print(registro)
-                jsonList = json.dumps({'message':'Success', 'registros': registro}) 
-                return JsonResponse(jsonList, safe=False)
-            else:
-                jsonList = json.dumps({'message':'Not Found'}) 
-                return JsonResponse(jsonList, safe=False)
-        except Exception as e:
-            jsonList = json.dumps({'message':'error'}) 
-            return JsonResponse(jsonList, safe=False)
-        finally:
-            cursorZT.close()
-            ZT.close()
+def post_recive_data(request):
+    if request.method == 'POST':
+        data = request.POST
+        data = json.loads(request.body)
+        fecha = data['Fecha']
+        empresa = data['Empresa']
+        accion = data['Accion']
+        # aquí puedes procesar los datos recibidos
+        print(fecha)
+        print(empresa)
+        print(accion)
+        
+        registro = [{"lote": "49255 / LAS ACACIAS", "bins": "38", "hora": "08:12"}, {"lote": "49260 / LAS ACACIAS", "bins": "43", "hora": "08:56"}]
+        listado = [{"nombre": "josue", "segundo": "ruben", "apellido": "chambi"}, {"nombre": "gabriela", "segundo": "lidia", "apellido": "astrada"}, {"nombre": "persona x", "segundo": "x", "apellido": "xxx"}]
+        return JsonResponse({"message": "ok", "data": listado})
+    else:
+        return JsonResponse({'message': 'Not found'})

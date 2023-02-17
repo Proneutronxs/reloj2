@@ -9,14 +9,14 @@
         <div class="row">
           <div class="roeZetone">
             <label>Legajo:</label>
-            <input style="width: 6rem;" maxlength="6" type="number" id="legajo" name="legajo" class="fechasZetone" placeholder="000000" required>
+            <input style="width: 6rem;" maxlength="6" type="number" id="legajo" name="legajo" class="fechasZetone" placeholder="000000" >
           </div>
           <div class="roeZetone">
             <select class="" type="checkbox" id="departamento" name="departamento">
               <option value="Seleccione">Seleccione</option>
               <option value="Todos">Todos</option>
-              <option value="Calidad">Calidad</option>
-              <!--<option value="Empaque">Empaque</option>-->
+              <!--<option value="Calidad">Calidad</option>
+              <option value="Empaque">Empaque</option>-->
               <!--<option value="Frío">Frío</option>-->
               <!--<option value="Maquinistas">Maquinistas</option>-->
               <!--<option value="Portería">Portería</option>-->
@@ -36,17 +36,16 @@
           </div>
           <div class="roeZetone" style="margin-left: 100px;" >
             <select class="" type="checkbox" id="export" name="export">
-              <option value="Exportar">Exportar </option>
-              <option value="EXCEL">EXCEL</option>
-              <option value="PDF">PDF</option>
+              <option value="EXCEL">EXCEL </option>
+              <!--<option value="EXCEL">EXCEL</option>
+              <option value="PDF">PDF</option>-->
             </select>
           </div>
           <div class="roeZetone">
-            <button class="button" id="exportRegister">Exportar</button>
+            <button class="button" id="exportCalculo">Exportar</button>
           </div>
           <div class="roeZetone">
-            <div class="download">
-              <button class="button" onclick="no_Disponible()"><a href="#">Descargar</a></button>
+            <div class="download" id="descargaCalculo">
             </div>
           </div>
         </div>

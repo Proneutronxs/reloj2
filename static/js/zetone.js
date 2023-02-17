@@ -39,7 +39,7 @@ function listadoCalcHoras(){
 
 function verCalculoHoras() {
   var formCalchoras = new FormData(document.getElementById('formCalcHoras'));
-  fetch("/json", {
+  fetch("/resgistros/calculo/horas", {
     method: "POST",
     body: formCalchoras,
     headers: {
@@ -51,11 +51,11 @@ function verCalculoHoras() {
     }
   ).then(
     function(data){
-      console.log(data)
+      //console.log(data)
       try {
         let arrayData = JSON.parse(data);//CONVIERTE EL JSON en ARRAY
         if(arrayData.message == "Success"){
-          console.log(arrayData.registros)
+          //console.log(arrayData.registros)
           let listaregistros = ``;
             arrayData.registros.forEach((registros) =>{
                 listaregistros += `
@@ -75,7 +75,7 @@ function verCalculoHoras() {
             });
             document.getElementById('tableCalHoras').innerHTML = listaregistros;
         }else{
-          alert("No se encontraron fichadas");
+          alert(arrayData.message);
         }
       }catch(error){
         console.log(error);
@@ -104,7 +104,7 @@ $("#buscar_sinProceso").on("click",function(event){
       try {
         let arrayData = JSON.parse(data);//CONVIERTE EL JSON en ARRAY
         if(arrayData.message == "Success"){
-          console.log(arrayData.registros)
+          //console.log(arrayData.registros)
           let listaregistros = ``;
             arrayData.registros.forEach((registros) =>{
                 listaregistros += `
@@ -119,7 +119,7 @@ $("#buscar_sinProceso").on("click",function(event){
             document.getElementById('tablasSinProceso').innerHTML = listaregistros;
          
         }else{
-          alert("No se encontraron fichadas");
+          alert(arrayData.message);
         }
       }catch(error){
         console.log(error);
@@ -128,15 +128,82 @@ $("#buscar_sinProceso").on("click",function(event){
   ); 
 });
 
+$("#exportRegister").on("click",function(event){
+  event.preventDefault();
+  // resto de tu codigo
+  var formHorasSinProceso = new FormData(document.getElementById('formHorasSinProceso'));
+  fetch("/create/excel/registros", {
+    method: "POST",
+    body: formHorasSinProceso,
+    headers: {
+      "X-CSRFToken": getCookie('csrftoken'),
+    }
+  }).then(
+    function(response){
+      return response.json();      
+    }
+  ).then(
+    function(data){
+      //console.log(data)
+      try {
+        let arrayData = JSON.parse(data);//CONVIERTE EL JSON en ARRAY
+        if(arrayData.message == "Success"){
+          //console.log(arrayData.excel)
+          let descarga =  `<button class="button" onclick="hideButton()" id="descargaExcel"><a href="http://10.32.26.35/download-excel/${arrayData.excel}">Descargar</a></button>`;
+          document.getElementById('descargaRegisros').innerHTML = descarga;
+          //hideButton();
+        }else{
+          alert(arrayData.message);
+        }
+      }catch(error){
+        console.log(error);
+      }
+    }
+  ); 
+});
+
+$("#exportCalculo").on("click",function(event){
+  event.preventDefault();
+  // resto de tu codigo
+  var formHorasCalculo = new FormData(document.getElementById('formCalcHoras'));
+  fetch("/create/excel/calculo", {
+    method: "POST",
+    body: formHorasCalculo,
+    headers: {
+      "X-CSRFToken": getCookie('csrftoken'),
+    }
+  }).then(
+    function(response){
+      return response.json();      
+    }
+  ).then(
+    function(data){
+      //console.log(data)
+      try {
+        let arrayData = JSON.parse(data);//CONVIERTE EL JSON en ARRAY
+        if(arrayData.message == "Success"){
+          //console.log(arrayData.excel)
+          let descarga =  `<button class="button" onclick="hideButton()" id="descargaExcel"><a href="http://10.32.26.35/download-excel/${arrayData.excel}">Descargar</a></button>`;
+          document.getElementById('descargaCalculo').innerHTML = descarga;
+        }else{
+          alert(arrayData.message);
+        }
+      }catch(error){
+        console.log(error);
+      }
+    }
+  ); 
+});
+
+function hideButton() {
+  var button = document.getElementById("descargaExcel");
+  button.style.display = "none";
+}
+
 $("#mostraCalcHoras").on("click",function(event){
   event.preventDefault();
   // resto de tu codigo
   verCalculoHoras();
-});
-
-$("#exportRegister").on("click",function(event){
-  event.preventDefault();
-  no_Disponible();
 });
 
 
