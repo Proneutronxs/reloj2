@@ -5,7 +5,7 @@
 {% block content %}
   <div class="formZetone">
     <div class="centroZetone">
-      <form id="formHorasSinProceso" action="" method="POST">
+      <form id="formHorasSinProceso" action="" method="POST">{% csrf_token %}
         <div class="row">
           <div class="roeZetone">
             <label>Legajo:</label>

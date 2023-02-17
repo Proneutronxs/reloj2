@@ -38,6 +38,7 @@ function listadoCalcHoras(){
 //}
 
 function verCalculoHoras() {
+
   var formCalchoras = new FormData(document.getElementById('formCalcHoras'));
   fetch("/resgistros/calculo/horas", {
     method: "POST",
@@ -130,6 +131,9 @@ $("#buscar_sinProceso").on("click",function(event){
 
 $("#exportRegister").on("click",function(event){
   event.preventDefault();
+
+  let progressBar = `<div class="loaderZeto" id="progressBar"></div>`
+  document.getElementById('descargaRegisros').innerHTML = progressBar;
   // resto de tu codigo
   var formHorasSinProceso = new FormData(document.getElementById('formHorasSinProceso'));
   fetch("/create/excel/registros", {
@@ -148,6 +152,7 @@ $("#exportRegister").on("click",function(event){
       try {
         let arrayData = JSON.parse(data);//CONVIERTE EL JSON en ARRAY
         if(arrayData.message == "Success"){
+          hideProgessBar();
           //console.log(arrayData.excel)
           let descarga =  `<button class="button" onclick="hideButton()" id="descargaExcel"><a href="http://10.32.26.35/download-excel/${arrayData.excel}">Descargar</a></button>`;
           document.getElementById('descargaRegisros').innerHTML = descarga;
@@ -163,6 +168,8 @@ $("#exportRegister").on("click",function(event){
 });
 
 $("#exportCalculo").on("click",function(event){
+  let progressBar = `<div class="loaderZeto" id="progressBar"></div>`
+  document.getElementById('descargaCalculo').innerHTML = progressBar;
   event.preventDefault();
   // resto de tu codigo
   var formHorasCalculo = new FormData(document.getElementById('formCalcHoras'));
@@ -183,6 +190,7 @@ $("#exportCalculo").on("click",function(event){
         let arrayData = JSON.parse(data);//CONVIERTE EL JSON en ARRAY
         if(arrayData.message == "Success"){
           //console.log(arrayData.excel)
+          hideProgessBar();
           let descarga =  `<button class="button" onclick="hideButton()" id="descargaExcel"><a href="http://10.32.26.35/download-excel/${arrayData.excel}">Descargar</a></button>`;
           document.getElementById('descargaCalculo').innerHTML = descarga;
         }else{
@@ -197,6 +205,11 @@ $("#exportCalculo").on("click",function(event){
 
 function hideButton() {
   var button = document.getElementById("descargaExcel");
+  button.style.display = "none";
+}
+
+function hideProgessBar() {
+  var button = document.getElementById("progressBar");
   button.style.display = "none";
 }
 

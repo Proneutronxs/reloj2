@@ -30,7 +30,4 @@ path('download-excel/<str:file_path>', views.download_excel, name='download_exce
 ## ELIMINAR ARCHIVOS
 path('delete/file/excel', views.delete_xlsx_files, name='delete_file'),
 
-
-
-
 ]
