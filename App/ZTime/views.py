@@ -319,7 +319,7 @@ def excelCreateRegistros(request):
                 jsonList = json.dumps({'message':'Success', 'excel': nombre_excel}) 
                 return JsonResponse(jsonList, safe=False)
             else:
-                jsonList = json.dumps({'message':'Not Found'}) 
+                jsonList = json.dumps({'message':'No se encontraron'}) 
                 return JsonResponse(jsonList, safe=False)
         except Exception as e:
             print(e)
@@ -416,7 +416,8 @@ def excelCreateRegistros(request):
                     return JsonResponse(jsonList, safe=False)
             except Exception as e:
                 print(e)
-                jsonList = json.dumps({'message':'Error'}) 
+                error = 'Error: ' + str(e)
+                jsonList = json.dumps({'message':error}) 
                 return JsonResponse(jsonList, safe=False)
             finally:
                 cursorZTime.close()
@@ -549,10 +550,10 @@ def createExcelCalculo(request):
                 jsonList = json.dumps({'message':'Not Found'}) 
                 return JsonResponse(jsonList, safe=False)
         except Exception as e:
-            print("Error")
             print(e)
-            data = [{'info': 'error'}]
-            return JsonResponse(data, safe=False)
+            error = 'Error: ' + str(e)
+            jsonList = json.dumps({'message':error}) 
+            return JsonResponse(jsonList, safe=False)
         finally:
             cursorZT.close()
             ZT.close()
@@ -676,10 +677,10 @@ def createExcelCalculo(request):
                     jsonList = json.dumps({'message':'Not Found'}) 
                     return JsonResponse(jsonList, safe=False)
             except Exception as e:
-                print("Error")
                 print(e)
-                data = [{'info': 'error'}]
-                return JsonResponse(data, safe=False)
+                error = 'Error: ' + str(e)
+                jsonList = json.dumps({'message':error}) 
+                return JsonResponse(jsonList, safe=False)
             finally:
                 cursorZT.close()
                 ZT.close()
