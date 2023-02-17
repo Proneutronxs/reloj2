@@ -414,6 +414,9 @@ def excelCreateRegistros(request):
                     book.save('App/ZTime/data/excel/' + nombre_excel)
                     jsonList = json.dumps({'message':'Success', 'excel': nombre_excel}) 
                     return JsonResponse(jsonList, safe=False)
+                else:
+                    jsonList = json.dumps({'message':'Not Found'}) 
+                    return JsonResponse(jsonList, safe=False)
             except Exception as e:
                 print(e)
                 error = 'Error: ' + str(e)
