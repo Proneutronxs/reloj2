@@ -4,7 +4,7 @@ from App.ZTime import views
 urlpatterns = [
 
 ### sólo renderizado
-path('', views.index, name="index"),
+path('', views.zetoneTime, name="zetonetime"),
 path('resgistros/calculo', views.renderCalcHoras, name="calculo_horas"),
 path('registros/ver', views.renderVerRegistros, name="ver_registros"),
 

@@ -8,11 +8,11 @@
       <form id="formHorasSinProceso" action="" method="POST">{% csrf_token %}
         <div class="row">
           <div class="roeZetone">
-            <label>Legajo:</label>
-            <input style="width: 6rem;" maxlength="6" type="number" id="legajo" name="legajo" class="fechasZetone" placeholder="000000" >
+            <label class="letras">Legajo:</label>
+            <input style="width: 6rem;" maxlength="6" type="number" id="legajo" name="legajo" class="inputs" placeholder="000000" >
           </div>
           <div class="roeZetone">
-            <select class="" type="checkbox" id="departamento" name="departamento">
+            <select class="selectores" type="checkbox" id="departamento" name="departamento">
               <option value="Seleccione">Seleccione</option>
               <option value="Todos">Todos</option>
               <!--<option value="Calidad">Calidad</option>
@@ -24,23 +24,26 @@
             </select>
           </div>
           <div class="roeZetone">
-            <label for="desde">Desde:</label>
-            <input type="date" id="desde" name="desde" class="fechasZetone" required>
+            <label class="letras" for="desde">Desde:</label>
+            <input type="date" id="desde" name="desde" class="calendar" required>
           </div>
           <div class="roeZetone">
-            <label for="hasta">Hasta:</label>
-            <input type="date" id="hasta" name="hasta" class="fechasZetone" required>
+            <label class="letras" for="hasta">Hasta:</label>
+            <input type="date" id="hasta" name="hasta" class="calendar" required>
           </div>
           <div class="roeZetone">
-            <button type="submit" class="" id="buscar_sinProceso">BUSCAR</button>
+            <button type="" class="button" id="buscar_sinProceso">BUSCAR</button>
           </div>
           <div class="roeZetone" style="margin-left: 100px;" >
-            <select class="" type="checkbox" id="export" name="export">
+            <select class="selectores" type="checkbox" id="export" name="export">
               <option value="EXCEL">EXCEL </option>
               <!--<option value="EXCEL">EXCEL</option>
               <option value="PDF">PDF</option>-->
             </select>
           </div>
+          <!--<div class="roeZetone">
+            <button class="button" id="open-modal-btn">OPEN</button>
+          </div>-->
           <div class="roeZetone">
             <button class="button" id="exportRegister">EXPORTAR</button>
           </div>
@@ -53,6 +56,14 @@
       </form>
     </div>
   </div>
+
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <div class="loaderZetoProgressBar" id="progressBar"></div>
+  </div>
+</div>
+
+  
   <div class="tablaZetone">
       <table class="table">
           <thead>

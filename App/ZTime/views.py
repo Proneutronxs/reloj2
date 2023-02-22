@@ -31,7 +31,7 @@ def fechaNombre(fecha):
 
 ### RENDERIZADO 
 
-def index(request):
+def zetoneTime(request):
     return render (request, 'ZTime/inicio/index.html')
 
 def renderCalcHoras(resquest):
@@ -87,7 +87,7 @@ def calculoHorasJson(request):
             sql4 = ("SELECT Legajo, Nombre, Fecha, F1, F2, F3, F4, HorasF1F2, HorasF3F4, HorasDeMas\n" +
                     "FROM TemporalHoras\n" +
                     "WHERE Legajo = '" + str(legajo) + "' AND FechaHora >= '"+ str(desdeSql) +"' AND FechaHora <= '"+ str(hastaSql) +"'\n"+
-                    "ORDER BY FechaHora")
+                    "ORDER BY Legajo, FechaHora")
             cursorZT.execute(sql4)
             consultaZT = cursorZT.fetchall()
             if consultaZT:
@@ -99,13 +99,13 @@ def calculoHorasJson(request):
                 jsonList = json.dumps({'message': 'Success', 'registros':registro}) 
                 return JsonResponse(jsonList, safe=False)
             else:
-                jsonList = json.dumps({'message':'No se encontraron fichadas'}) 
+                jsonList = json.dumps({'message':'No se encontraron fichadas.'}) 
                 return JsonResponse(jsonList, safe=False)
         except Exception as e:
-            print("Error")
             print(e)
-            data = [{'info': 'error'}]
-            return JsonResponse(data, safe=False)
+            error = 'Error: ' + str(e)
+            jsonList = json.dumps({'message':error}) 
+            return JsonResponse(jsonList, safe=False)
         finally:
             cursorZT.close()
             ZT.close()
@@ -123,7 +123,7 @@ def calculoHorasJson(request):
                 sql4 = ("SELECT Legajo, Nombre, Fecha, F1, F2, F3, F4, HorasF1F2, HorasF3F4, HorasDeMas\n" +
                         "FROM TemporalHoras\n" +
                         "WHERE FechaHora >= '"+ str(desdeSql) +"' AND FechaHora <= '"+ str(hastaSql) +"'\n"+
-                        "ORDER BY FechaHora")
+                        "ORDER BY Legajo, FechaHora")
                 cursorZT.execute(sql4)
                 consultaZT = cursorZT.fetchall()
                 if consultaZT:
@@ -138,10 +138,10 @@ def calculoHorasJson(request):
                     jsonList = json.dumps({'message':'No se encontraron fichadas'}) 
                     return JsonResponse(jsonList, safe=False)
             except Exception as e:
-                print("Error")
                 print(e)
-                data = [{'info': 'error'}]
-                return JsonResponse(data, safe=False)
+                error = 'Error: ' + str(e)
+                jsonList = json.dumps({'message':error}) 
+                return JsonResponse(jsonList, safe=False)
             finally:
                 cursorZT.close()
                 ZT.close()
@@ -182,10 +182,11 @@ def ver_registros_sin_proceso(request):
                 jsonList = json.dumps({'message':'Success', 'registros': registro}) 
                 return JsonResponse(jsonList, safe=False)
             else:
-                jsonList = json.dumps({'message':'Not Found'}) 
+                jsonList = json.dumps({'message':'No se encontraron fichadas.'}) 
                 return JsonResponse(jsonList, safe=False)
         except Exception as e:
-            jsonList = json.dumps({'message':'error'}) 
+            error = 'Error: ' + str(e)
+            jsonList = json.dumps({'message':error}) 
             return JsonResponse(jsonList, safe=False)
         finally:
             cursorZT.close()
@@ -221,11 +222,12 @@ def ver_registros_sin_proceso(request):
                     jsonList = json.dumps({'message':'Success', 'registros': registro}) 
                     return JsonResponse(jsonList, safe=False)
                 else:
-                    jsonList = json.dumps({'message':'No se encontraron Fichadas'}) 
+                    jsonList = json.dumps({'message':'No se encontraron fichadas'}) 
                     return JsonResponse(jsonList, safe=False)
             except Exception as e:
                 print(e)
-                jsonList = json.dumps({'message':'error'}) 
+                error = 'Error: ' + str(e)
+                jsonList = json.dumps({'message':error}) 
                 return JsonResponse(jsonList, safe=False)
             finally:
                 cursorZT.close()
@@ -307,7 +309,7 @@ def excelCreateRegistros(request):
                     sheet[f'D{j}'].border = bordes
                     sheet[f'E{j}'] = fechas[numero]
                     sheet[f'E{j}'].border = bordes
-                    sheet[f'F{j}'] = str(horas[numero]) + " Hs."
+                    sheet[f'F{j}'] = str(horas[numero])
                     sheet[f'F{j}'].border = bordes
                     sheet[f'G{j}'] = fechaHoras[numero]
                     sheet[f'G{j}'].border = bordes
@@ -319,7 +321,7 @@ def excelCreateRegistros(request):
                 jsonList = json.dumps({'message':'Success', 'excel': nombre_excel}) 
                 return JsonResponse(jsonList, safe=False)
             else:
-                jsonList = json.dumps({'message':'No se encontraron'}) 
+                jsonList = json.dumps({'message':'No se encontraron fichadas'}) 
                 return JsonResponse(jsonList, safe=False)
         except Exception as e:
             print(e)
@@ -403,7 +405,7 @@ def excelCreateRegistros(request):
                         sheet[f'D{j}'].border = bordes
                         sheet[f'E{j}'] = fechas[numero]
                         sheet[f'E{j}'].border = bordes
-                        sheet[f'F{j}'] = str(horas[numero]) + " Hs."
+                        sheet[f'F{j}'] = str(horas[numero])
                         sheet[f'F{j}'].border = bordes
                         sheet[f'G{j}'] = fechaHoras[numero]
                         sheet[f'G{j}'].border = bordes
@@ -415,7 +417,7 @@ def excelCreateRegistros(request):
                     jsonList = json.dumps({'message':'Success', 'excel': nombre_excel}) 
                     return JsonResponse(jsonList, safe=False)
                 else:
-                    jsonList = json.dumps({'message':'Not Found'}) 
+                    jsonList = json.dumps({'message':'No se encontraron fichadas'}) 
                     return JsonResponse(jsonList, safe=False)
             except Exception as e:
                 print(e)
@@ -426,7 +428,7 @@ def excelCreateRegistros(request):
                 cursorZTime.close()
                 dbZetoneTime.close()
         else:
-            jsonList = json.dumps({'message':'Debe Seleccionar un Grupo'}) 
+            jsonList = json.dumps({'message':'Debe Seleccionar un Departamento'}) 
             return JsonResponse(jsonList, safe=False)
 
 ##CREACION DE EXCEL CACLCULO DE HORAS
@@ -549,8 +551,7 @@ def createExcelCalculo(request):
                 jsonList = json.dumps({'message':'Success', 'excel': nombre_excel}) 
                 return JsonResponse(jsonList, safe=False)
             else:
-                print("no hay nada")
-                jsonList = json.dumps({'message':'Not Found'}) 
+                jsonList = json.dumps({'message':'No se encontraron fichadas.'}) 
                 return JsonResponse(jsonList, safe=False)
         except Exception as e:
             print(e)
@@ -654,7 +655,6 @@ def createExcelCalculo(request):
                         sheet[f'D{j}'].border = bordes
                         sheet[f'E{j}'] = fechas[numero]
                         sheet[f'E{j}'].border = bordes
-
                         sheet[f'F{j}'] = str(f1[numero])
                         sheet[f'F{j}'].border = bordes
                         sheet[f'G{j}'] = str(f2[numero])
@@ -677,7 +677,7 @@ def createExcelCalculo(request):
                     jsonList = json.dumps({'message':'Success', 'excel': nombre_excel}) 
                     return JsonResponse(jsonList, safe=False)
                 else:
-                    jsonList = json.dumps({'message':'Not Found'}) 
+                    jsonList = json.dumps({'message':'No se encoontraron fichadas.'}) 
                     return JsonResponse(jsonList, safe=False)
             except Exception as e:
                 print(e)
@@ -688,7 +688,7 @@ def createExcelCalculo(request):
                 cursorZT.close()
                 ZT.close()
         else:
-            jsonList = json.dumps({'message':'Seleccione que un departamento.'}) 
+            jsonList = json.dumps({'message':'Seleccione que un Departamento.'}) 
             return JsonResponse(jsonList, safe=False)
 
 def download_excel(request, file_path):

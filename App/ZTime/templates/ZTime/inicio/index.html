@@ -10,7 +10,7 @@
     <meta content="Free HTML Templates" name="description">
 
     <!-- Favicon -->
-    <link href="{%static 'img/logosf.ico' %}" rel="icon">
+    <link href="{%static 'zetonetime/img/logosf.ico' %}" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -20,25 +20,25 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css' %}" rel="stylesheet">-->
 
     <!-- Libraries Stylesheet -->
-    <link href="{%static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{%static 'zetonetime/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="{%static 'css/style.css' %}" rel="stylesheet">
+    <link href="{%static 'zetonetime/css/style.css' %}" rel="stylesheet">
 </head>
 
 <body class="bodyZetone">
     <!-- Navbar Start -->
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
-            <a href="{% url 'index' %}" class="navbar-brand ml-lg-3">
-                <h1 class="text-primary">ZETONE TIME</h1>
+            <a href="{% url 'zetonetime' %}" class="navbar-brand ml-lg-3">
+                <h3 class="text-primary">ZETONE TIME</h3>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mx-auto py-0">
-                    <a href="{% url 'index' %}" class="nav-item nav-link">Inicio</a>
+                    <a href="{% url 'Index' %}" class="nav-item nav-link">Inicio</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Configuración</a>
                         <div class="dropdown-menu m-0">
@@ -85,7 +85,7 @@
     <header class="headerZetone">
         {% block content %}
         <div class="logoInicio">
-            <img src="{%static 'img/logosf.png' %}" alt="">
+            <img src="{%static 'zetonetime/img/logosf.png' %}" alt="">
         </div>
         
         {% endblock %}
@@ -95,14 +95,14 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="{%static 'lib/easing/easing.min.js' %}"></script>
-    <script src="{%static 'lib/waypoints/waypoints.min.js' %}"></script>
-    <script src="{%static 'lib/counterup/counterup.min.js' %}"></script>
-    <script src="{%static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{%static 'zetonetime/lib/easing/easing.min.js' %}"></script>
+    <script src="{%static 'zetonetime/lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{%static 'zetonetime/lib/counterup/counterup.min.js' %}"></script>
+    <script src="{%static 'zetonetime/lib/owlcarousel/owl.carousel.min.js' %}"></script>
 
     <!-- Template Javascript -->
-    <script src="{%static 'js/main.js' %}"></script>
-    <script src="{%static 'js/zetone.js' %}"></script>
+    <script src="{%static 'zetonetime/js/main.js' %}"></script>
+    <script src="{%static 'zetonetime/js/zetone.js' %}"></script>
 </body>
 
 </html>

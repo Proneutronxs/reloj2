@@ -38,9 +38,9 @@ function listadoCalcHoras(){
 //}
 
 function verCalculoHoras() {
-
+  showProgressBar();
   var formCalchoras = new FormData(document.getElementById('formCalcHoras'));
-  fetch("/resgistros/calculo/horas", {
+  fetch("/zetonetime/resgistros/calculo/horas", {
     method: "POST",
     body: formCalchoras,
     headers: {
@@ -75,7 +75,9 @@ function verCalculoHoras() {
                 </tr>`;
             });
             document.getElementById('tableCalHoras').innerHTML = listaregistros;
+            hideProgessBar();
         }else{
+          hideProgessBar();
           alert(arrayData.message);
         }
       }catch(error){
@@ -88,8 +90,10 @@ function verCalculoHoras() {
 $("#buscar_sinProceso").on("click",function(event){
   event.preventDefault();
   // resto de tu codigo
+  showProgressBar();
+
   var formHorasSinProceso = new FormData(document.getElementById('formHorasSinProceso'));
-  fetch("/registros/sin/proceso", {
+  fetch("/zetonetime/registros/sin/proceso", {
     method: "POST",
     body: formHorasSinProceso,
     headers: {
@@ -118,8 +122,9 @@ $("#buscar_sinProceso").on("click",function(event){
               </tr>`;
             });
             document.getElementById('tablasSinProceso').innerHTML = listaregistros;
-         
+            hideProgessBar();
         }else{
+          hideProgessBar();
           alert(arrayData.message);
         }
       }catch(error){
@@ -131,12 +136,12 @@ $("#buscar_sinProceso").on("click",function(event){
 
 $("#exportRegister").on("click",function(event){
   event.preventDefault();
-
-  let progressBar = `<div class="loaderZeto" id="progressBar"></div>`
-  document.getElementById('descargaRegisros').innerHTML = progressBar;
+  showProgressBar();
+  //let progressBar = `<div class="loaderZeto" id="progressBar"></div>`
+  //document.getElementById('descargaRegisros').innerHTML = progressBar;
   // resto de tu codigo
   var formHorasSinProceso = new FormData(document.getElementById('formHorasSinProceso'));
-  fetch("/create/excel/registros", {
+  fetch("/zetonetime/create/excel/registros", {
     method: "POST",
     body: formHorasSinProceso,
     headers: {
@@ -154,10 +159,11 @@ $("#exportRegister").on("click",function(event){
         if(arrayData.message == "Success"){
           hideProgessBar();
           //console.log(arrayData.excel)
-          let descarga =  `<button class="button" onclick="hideButton()" id="descargaExcel"><a href="http://10.32.26.35/download-excel/${arrayData.excel}">Descargar</a></button>`;
+          let descarga =  `<button class="button" onclick="hideButton()" id="descargaExcel"><a href="http://10.32.26.35/zetonetime/download-excel/${arrayData.excel}">Descargar</a></button>`;
           document.getElementById('descargaRegisros').innerHTML = descarga;
           //hideButton();
         }else{
+          hideProgessBar();
           alert(arrayData.message);
         }
       }catch(error){
@@ -168,12 +174,13 @@ $("#exportRegister").on("click",function(event){
 });
 
 $("#exportCalculo").on("click",function(event){
-  let progressBar = `<div class="loaderZeto" id="progressBar"></div>`
-  document.getElementById('descargaCalculo').innerHTML = progressBar;
+  showProgressBar();
+  //let progressBar = `<div class="loaderZeto" id="progressBar"></div>`
+  //document.getElementById('descargaCalculo').innerHTML = progressBar;
   event.preventDefault();
   // resto de tu codigo
   var formHorasCalculo = new FormData(document.getElementById('formCalcHoras'));
-  fetch("/create/excel/calculo", {
+  fetch("/zetonetime/create/excel/calculo", {
     method: "POST",
     body: formHorasCalculo,
     headers: {
@@ -191,9 +198,10 @@ $("#exportCalculo").on("click",function(event){
         if(arrayData.message == "Success"){
           //console.log(arrayData.excel)
           hideProgessBar();
-          let descarga =  `<button class="button" onclick="hideButton()" id="descargaExcel"><a href="http://10.32.26.35/download-excel/${arrayData.excel}">Descargar</a></button>`;
+          let descarga =  `<button class="button" onclick="hideButton()" id="descargaExcel"><a href="http://10.32.26.35/zetonetime/download-excel/${arrayData.excel}">Descargar</a></button>`;
           document.getElementById('descargaCalculo').innerHTML = descarga;
         }else{
+          hideProgessBar();
           alert(arrayData.message);
         }
       }catch(error){
@@ -209,9 +217,15 @@ function hideButton() {
 }
 
 function hideProgessBar() {
-  var button = document.getElementById("progressBar");
-  button.style.display = "none";
+  const modal = document.getElementById('modal');
+  modal.style.display = "none";
 }
+
+function showProgressBar(){
+  modal.style.display = 'block';
+}
+
+
 
 $("#mostraCalcHoras").on("click",function(event){
   event.preventDefault();
@@ -223,4 +237,6 @@ $("#mostraCalcHoras").on("click",function(event){
 function no_Disponible(){
   alert("Función aún no disponible.");
 }
+
+
 
