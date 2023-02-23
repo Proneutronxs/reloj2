@@ -182,8 +182,36 @@ def ver_registros_sin_proceso(request):
                 jsonList = json.dumps({'message':'Success', 'registros': registro}) 
                 return JsonResponse(jsonList, safe=False)
             else:
-                jsonList = json.dumps({'message':'No se encontraron fichadas.'}) 
-                return JsonResponse(jsonList, safe=False)
+                try:
+                    registro = []
+                    ZT2 = ZetoneTime()
+                    cursorZT2 = ZT2.cursor()
+                    sql_consulta = ("SELECT        hr_employee_1.emp_pin AS Legajo, hr_employee_1.emp_lastname + ' ' + hr_employee_1.emp_firstname AS Nombre,CONVERT(varchar(10), att_punches_1.punch_time, 103) AS Fecha, CONVERT(varchar, att_punches_1.punch_time, 108) AS Hora \n" +
+                                    "FROM            servidordb.ZKTime.dbo.att_punches AS att_punches_1 INNER JOIN\n" +
+                                                            "servidordb.ZKTime.dbo.hr_employee AS hr_employee_1 ON att_punches_1.employee_id = hr_employee_1.id\n" +
+                                    "WHERE hr_employee_1.emp_pin = '"+ str(legajo) +"' AND TRY_CONVERT(DATE, att_punches_1.punch_time) >= '"+ str(desdeSql) +"' AND TRY_CONVERT(DATE, att_punches_1.punch_time) <= '"+str(hastaSql)+"'\n" +
+                                    "ORDER BY hr_employee_1.emp_lastname, hr_employee_1.emp_pin, att_punches_1.punch_time")
+                    cursorZT2.execute(sql_consulta)
+                    consulta = cursorZT2.fetchall()
+                    if consulta:
+                        for i in consulta:
+                            dia = fechaNombre(str(i[2]))
+                            resultado = {'legajo': str(i[0]), 'nombre': str(i[1]), 'dia': dia, 'fecha':str(i[2]), 'hora': str(i[3])}
+                            registro.append(resultado)
+                        #print(registro)
+                        jsonList = json.dumps({'message':'Success', 'registros': registro}) 
+                        return JsonResponse(jsonList, safe=False)
+                    else:
+                        jsonList = json.dumps({'message':'No se encontraron fichadas'}) 
+                        return JsonResponse(jsonList, safe=False)
+                except Exception as e:
+                    print(e)
+                    error = 'Error: ' + str(e)
+                    jsonList = json.dumps({'message':error}) 
+                    return JsonResponse(jsonList, safe=False)
+                finally:
+                    cursorZT2.close()
+                    ZT2.close()
         except Exception as e:
             error = 'Error: ' + str(e)
             jsonList = json.dumps({'message':error}) 
