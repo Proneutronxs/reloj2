@@ -137,9 +137,6 @@ $("#buscar_sinProceso").on("click",function(event){
 $("#exportRegister").on("click",function(event){
   event.preventDefault();
   showProgressBar();
-  //let progressBar = `<div class="loaderZeto" id="progressBar"></div>`
-  //document.getElementById('descargaRegisros').innerHTML = progressBar;
-  // resto de tu codigo
   var formHorasSinProceso = new FormData(document.getElementById('formHorasSinProceso'));
   fetch("/zetonetime/create/excel/registros", {
     method: "POST",

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <title>Empaque</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="{%static 'Empaque/img/logosf.ico' %}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css' %}" rel="stylesheet">-->
+
+    <!-- Libraries Stylesheet -->
+    <link href="{%static 'zetonetime/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{%static 'Empaque/css/style.css' %}" rel="stylesheet">
+</head>
+
+<body class="bodyZetone">
+    <!-- Navbar Start -->
+    <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
+            <a href="{% url 'Index_empaque' %}" class="navbar-brand ml-lg-3">
+                <h3 class="text-primary">ZETONE EMPAQUE</h3>
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
+                <div class="navbar-nav mx-auto py-0">
+                    <a href="{% url 'Inicio' %}" class="nav-item nav-link">Inicio</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Reportes</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="#" class="dropdown-item">R. Calidad Cámaras</a>
+                            <!--<a href="#" class="dropdown-item">Ciclos</a>
+                            <a href="#" class="dropdown-item">Asignaciones</a>-->
+                        </div>
+                    </div>
+                    <!--<div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Usuarios</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="#" class="dropdown-item">Buscar Usuario</a>
+                            <a href="feature.html" class="dropdown-item">Our Features</a>
+                            <a href="team.html" class="dropdown-item">Instructors</a>
+                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Registros</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="{% url 'calculo_horas' %}" class="dropdown-item">Calc. Registros</a>
+                            <a href="{% url 'ver_registros' %}" class="dropdown-item">Ver Registros</a>
+                            <a href="team.html" class="dropdown-item">Instructors</a>
+                            <a href="testimonial.html" class="dropdown-item">Testimonial</a> 
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Asistencia</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="#" class="dropdown-item">Ver Asistencia</a>
+                            <a href="feature.html" class="dropdown-item">Exportar E</a>
+                            <a href="team.html" class="dropdown-item">Instructors</a>
+                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar End -->
+
+
+    <!-- Header Start -->
+    <header class="headerZetone">
+        {% block content %}
+        <div class="logoInicio">
+            <img src="{%static 'Empaque/img/logosf.png' %}" alt="">
+        </div>
+        
+        {% endblock %}
+    </header>
+    <!-- Header End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="{%static 'Empaque/lib/easing/easing.min.js' %}"></script>
+    <script src="{%static 'Empaque/lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{%static 'Empaque/lib/counterup/counterup.min.js' %}"></script>
+    <script src="{%static 'Empaque/lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{%static 'Empaque/js/main.js' %}"></script>
+    <script src="{%static 'Empaque/js/zetone.js' %}"></script>
+</body>
+
+</html>
