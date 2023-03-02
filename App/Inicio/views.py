@@ -45,7 +45,6 @@ def json_premissions(request, modulo):
     usuario = str(request.user)
     modulo = str(modulo)
     permiso = user_permissions(usuario,modulo)
-    #print(permiso)
     if permiso == "1":
         jsonList = json.dumps({'message': 'No tiene permisos para acceder a este sector.', 'permiso':permiso}) 
         return JsonResponse(jsonList, safe=False)
