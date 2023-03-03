@@ -14,6 +14,9 @@ from openpyxl import Workbook
 from openpyxl.styles import Font, Border, Side
 from openpyxl.drawing.image import Image
 
+##LOGIN
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 def fechaNombre(fecha):
@@ -30,14 +33,15 @@ def fechaNombre(fecha):
     return diaNombre
 
 ### RENDERIZADO 
-
+@login_required
 def zetoneTime(request):
     return render (request, 'ZTime/inicio/index.html')
 
+@login_required
 def renderCalcHoras(resquest):
     return render (resquest, 'ZTime/registros/viewRegister.html')
 
-
+@login_required
 def renderVerRegistros(resquest):
     return render (resquest, 'ZTime/registros/ver.html')
 
