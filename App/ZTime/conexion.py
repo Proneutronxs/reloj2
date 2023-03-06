@@ -25,3 +25,17 @@ def zkbiotime():
         return Cox
     except Exception as e:
         print(e)
+
+
+serverApp = "191.97.47.105"
+dbApp = "Zetoneapp"
+userApp = "sa"
+pswApp = "Sideswipe348"
+
+def zetoneApp():
+    try:
+        Cox = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server}; SERVER=' + serverApp +'; DATABASE=' + dbApp + '; UID=' + userApp + '; PWD=' + pswApp)
+       #print("Conectado")
+        return Cox
+    except Exception as e:
+        print(e)

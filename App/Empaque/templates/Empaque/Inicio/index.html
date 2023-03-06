@@ -20,7 +20,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css' %}" rel="stylesheet">-->
 
     <!-- Libraries Stylesheet -->
-    <link href="{%static 'zetonetime/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{%static 'Empaque/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{%static 'Empaque/css/style.css' %}" rel="stylesheet">
@@ -40,9 +40,9 @@
                 <div class="navbar-nav mx-auto py-0">
                     <a href="{% url 'Inicio' %}" class="nav-item nav-link">Inicio</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Reportes</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Calidad</a>
                         <div class="dropdown-menu m-0">
-                            <a href="#" class="dropdown-item">R. Calidad Cámaras</a>
+                            <a href="{% url 'reportes_camaras' %}" class="dropdown-item">Reportes Cámaras</a>
                             <!--<a href="#" class="dropdown-item">Ciclos</a>
                             <a href="#" class="dropdown-item">Asignaciones</a>-->
                         </div>
@@ -108,7 +108,7 @@
 
     <!-- Template Javascript -->
     <script src="{%static 'Empaque/js/main.js' %}"></script>
-    <script src="{%static 'Empaque/js/zetone.js' %}"></script>
+    <script src="{%static 'Empaque/js/zetoneEmpaque.js' %}"></script>
 </body>
 
 </html>

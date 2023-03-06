@@ -299,14 +299,6 @@ template {
   display: none !important;
 }
 
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
-  margin-bottom: 0.5rem;
-  font-family: "Jost", sans-serif;
-  font-weight: 500;
-  line-height: 1.2;
-  color: #120F2D;
-}
 
 h1, .h1 {
   font-size: 2.5rem;
@@ -9925,16 +9917,37 @@ h6,
 }
 
 .formZetone{
-  background-color: #4D9C21 ;
-  padding-top: 15px;
+  background-color: #001327 ;
+  margin-top: 100px;
   color: white;
-  margin-left: 20px;
-  margin-right: 20px;
-  border-radius: 4px;
+  padding: 20px;
+  margin-left: 15em;
+  margin-right: 15em;
+  border-radius: 5px;
+  border: 1px solid #01a7e1;
 }
+
+@media (max-width: 999px) {
+  .formZetone {
+    margin-left: 5em;
+    margin-right: 5em;
+  }
+}
+
+.form-buscar{
+  /******* CENTRAR LOS DIVS DEL DIV HIJO ********/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
 
 .roeZetone{
   padding: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .table{
@@ -9971,12 +9984,7 @@ h6,
   background-color: #235daa;
 }
 
-.centroZetone{
-/******* CENTRAR LOS DIVS DEL DIV HIJO ********/
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 
 .loaderZeto {
   border: 4px solid #f3f3f3;
@@ -10009,29 +10017,33 @@ h6,
 
 
 .selectores, .calendar, .inputs {
-  background-color: #011327ce;
-  color: #fff;
+  background-color: #E6ECEF;
+  color: #000;
   padding: 5px 5px;
+  width: 150px;
   border: none;
   border-radius: 5px;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
+  border: 1px solid #01a7e1;
 }
 
 .button{
-  background-color: #011327;
+  border: 1px solid #0bb50c;
+  background-color: #001327;
   color: #fff;
   padding: 5px 5px;
-  border: none;
   border-radius: 5px;
   font-size: 14px;
   font-weight: bold;
+  width: 150px;
   cursor: pointer;
 }
 
 button:hover {
   background-color: #2c3e50;
+  border: 1px solid #01a7e1;
 }
 
 .letras{

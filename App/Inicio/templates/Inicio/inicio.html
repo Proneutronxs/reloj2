@@ -34,13 +34,22 @@
                 <div class="row">
                     <img src="{%static 'img/logosf.png' %}" alt="" height="30px">
                     <h3 class="text-primary">EMPRESA ZETONE</h3>
-                    
                 </div>
             </a>
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" style="color: #011327;" >{{user.username | upper}}</a>
-                <div class="dropdown-menu m-0">
-                    <a href="{% url 'logout' %}" class="dropdown-item">Salir</a>
+            <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
+                <div class="navbar-nav mx-auto py-0">
+                    <div class="nav-item dropdown">
+                        <button onclick="permiso_Zetonetime()" class="button-nav" data-toggle="dropdown" >ZetoneTime</button>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <button onclick="permiso_ZetoneEmpaque()" class="button-nav" data-toggle="dropdown" >Empaque</button>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" style="color: #011327;" >{{user.username}}</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="{% url 'logout' %}" class="dropdown-item">Salir</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -51,23 +60,9 @@
     <!-- Header Start -->
     <header class="headerZetone">
         {% block content %}
-        <div class="container-menu">
-            <div class="card-menu">
-                <button onclick="permiso_Zetonetime()"><div><img src="{%static 'img/logosf.png' %}" alt=""> <br> <h5>ZETONE TIME</h5></div></button>
+            <div class="logoInicio">
+                <img src="{%static 'zetonetime/img/logosf.png' %}" alt="">
             </div>
-            <div class="card-menu">
-                <button onclick="permiso_ZetoneEmpaque()"><div><img src="{%static 'img/logosf.png' %}" alt=""> <br> <h5>EMPAQUE</h5></div></button>
-            </div>
-            <!--<div class="card-menu">
-                <div><img src="{%static 'img/logosf.png' %}" alt=""> <br> <h5>CALIDAD</h5></div>
-            </div>-->
-            <!--<div class="card-menu">
-                <div><img src="{%static 'img/logosf.png' %}" alt=""> <br> <h5>ZETONE TIME</h5></div>
-            </div>
-            <div class="card-menu">
-                <div><img src="{%static 'img/logosf.png' %}" alt=""> <br> <h5>ZETONE TIME</h5></div>
-            </div>-->
-        </div>
         {% endblock %}
     </header>
     <!-- Header End -->
