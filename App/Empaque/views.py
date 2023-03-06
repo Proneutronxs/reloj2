@@ -142,7 +142,7 @@ def post_busqueda_reporte_camaras(request):
                         pdf.image("App/Empaque/data/images/" + name_image, x = valores_x[index], y = valores_y[index], w = 50, h = 82, type = '', link = '')
                         index = index + 1
                     name_pdf = 'Reporte_Cámaras_' + fecha_name + "_" + hora_name + '.pdf'
-                    pdf.output('App/Empaque/data/pdf/' + name_pdf, 'F')
+                    pdf.output('App/Empaque/data/pdf/' + name_pdf  , 'F')
                     jsonList = json.dumps({'message': 'Success', 'pdf': name_pdf}) 
                     return JsonResponse(jsonList, safe=False)
             else:
@@ -160,10 +160,11 @@ def post_busqueda_reporte_camaras(request):
     
 
 def descarga_pdf_control_camaras(request, filename):
+    nombre = filename
     filename = 'App/Empaque/data/pdf/' + filename
     if os.path.exists(filename):
         response = serve(request, os.path.basename(filename), os.path.dirname(filename))
-        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        response['Content-Disposition'] = f'attachment; filename="{nombre}"'
         return response
     else:
         raise Http404
