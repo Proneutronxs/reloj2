@@ -37,7 +37,7 @@ function buscar_reportes_camaras() {
         if(arrayData.message == "Success"){
           hideProgessBar();
           console.log(arrayData.pdf)
-          let descarga =  `<button type="button" class="button" onclick="hideButton()" id="descargaPDF"><a href="http://10.32.26.35/empaque/reportes/donwload/${arrayData.pdf}">Descargar</a></button>`;
+          let descarga =  `<a href="http://10.32.26.35/empaque/reportes/donwload/${arrayData.pdf}"><button type="button" class="button" onclick="hideButton()" id="descargaPDF">Descargar</button></a>`;
           document.getElementById('descargarReportesCamaras').innerHTML = descarga;
         }else{
           hideProgessBar();
