@@ -172,11 +172,11 @@ def modelo():
     try:
         ZetoneApp = zetoneApp()
         cursorZetoneApp = ZetoneApp.cursor()
-        Consulta_SQL = ("SELECT nombrePDF FROM Pdf_Generados WHERE nombrePDF='" + str(fecha_sql) + "'")
+        Consulta_SQL = ("SELECT nombrePDF FROM Pdf_Generados WHERE nombrePDF=''")
         cursorZetoneApp.execute(Consulta_SQL)
         consultaPDF = cursorZetoneApp.fetchone()
         if consultaPDF:
-            pdf = "Reporte_Camaras_Calidad_" + str(fecha_sql) + ".pdf"
+            pdf = "Reporte_Camaras_Calidad_.pdf"
             jsonList = json.dumps({'message':'Success', 'pdf': pdf}) 
             return JsonResponse(jsonList, safe=False)
         else:
