@@ -36,9 +36,9 @@ function buscar_reportes_camaras() {
         let arrayData = JSON.parse(data);//CONVIERTE EL JSON en ARRAY
         if(arrayData.message == "Success"){
           hideProgessBar();
+          console.log(arrayData.pdf)
           let descarga =  `<button type="button" class="button" onclick="hideButton()" id="descargaPDF"><a href="http://10.32.26.35/empaque/reportes/donwload/${arrayData.pdf}">Descargar</a></button>`;
           document.getElementById('descargarReportesCamaras').innerHTML = descarga;
-          showButton();          
         }else{
           hideProgessBar();
           alert(arrayData.message);
@@ -54,12 +54,6 @@ function buscar_reportes_camaras() {
 function hideButton() {
   var button = document.getElementById("descargaPDF");
   button.style.display = "none";
-}
-
-function showButton(){
-  var button = document.getElementById("descargaPDF");
-  button.style.display = "block";
-  
 }
 
 function hideProgessBar() {
