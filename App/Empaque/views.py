@@ -62,7 +62,7 @@ def post_busqueda_reporte_camaras(request):
                 hora_name = str(data_principal[2]).replace(':', '')
                 lista_user = str(data_principal[4]).split('@')
                 user_name = str(lista_user[0])
-                consulta_data_camaras = ("SELECT Camara, Especie, Envase, Temperatura FROM Control_Camaras WHERE ID_Reporte='" + id_reporte + "'")
+                consulta_data_camaras = ("SELECT Camara, Especie, Envase, Temperatura FROM Control_Camaras WHERE ID_Reporte='" + id_reporte + "' ORDER BY Camara")
                 cursorZetoApp.execute(consulta_data_camaras)
                 consulta_camaras = cursorZetoApp.fetchall()
                 pdf = control_camaras_PDF()
@@ -74,7 +74,7 @@ def post_busqueda_reporte_camaras(request):
                 pdf.text(x=65, y=40, txt= 'Hora Control: ' + str(data_principal[2]) + ' Hs.')
                 pdf.set_font('Arial', 'B', 10)
                 pdf.text(x=16.5, y=286, txt= user_name)
-                pdf.text(x=45, y=286, txt= str(fecha_actual))## Traer fecha actual
+                pdf.text(x=45, y=286, txt= str(fecha_actual()))## Traer fecha actual
                 pdf.set_font('Arial', 'B', 10)
                 pdf.rect(x=10,y=43,w=190,h=5)
                 pdf.text(x=16, y=47.5, txt= 'CÁMARA')
@@ -97,7 +97,7 @@ def post_busqueda_reporte_camaras(request):
                 pdf.text(x=65, y=40, txt= 'Hora Control: ' + hora + ' Hs.')
                 pdf.set_font('Arial', 'B', 10)
                 pdf.text(x=16.5, y=286, txt= user_name)
-                pdf.text(x=45, y=286, txt= str(fecha_actual))## Traer fecha actual    ##OBSERVACIONES
+                pdf.text(x=45, y=286, txt= str(fecha_actual()))## Traer fecha actual    ##OBSERVACIONES
         
                 pdf.add_page()
                 pdf.set_font('Times', 'I', 12)
@@ -105,7 +105,7 @@ def post_busqueda_reporte_camaras(request):
                 pdf.text(x=65, y=40, txt= 'Hora Control: ' + str(data_principal[2]) + ' Hs.')
                 pdf.set_font('Arial', 'B', 10)
                 pdf.text(x=16.5, y=286, txt= user_name)
-                pdf.text(x=45, y=286, txt= str(fecha_actual))## Traer fecha actual
+                pdf.text(x=45, y=286, txt= str(fecha_actual()))## Traer fecha actual
                 pdf.rect(x=10,y=43,w=190,h=5)
                 pdf.text(x=11, y=46.5, txt= 'OBSERVACIONES:')
                 ### CONTRUCTOR DE OBS
