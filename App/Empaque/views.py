@@ -92,38 +92,41 @@ def post_busqueda_reporte_camaras(request):
                         pdf.cell(w=45, h=3, txt= str(i[2]), border='BR', align='C', fill=0)
                         pdf.multi_cell(w=70, h=3, txt= str(i[3] + ' °C'), border='BR', align='C', fill=0)
 
-                pdf.set_font('Times', 'I', 12)
-                pdf.text(x=12, y=40, txt= 'Fecha Control: ' + fecha)
-                pdf.text(x=65, y=40, txt= 'Hora Control: ' + hora + ' Hs.')
-                pdf.set_font('Arial', 'B', 10)
-                pdf.text(x=16.5, y=286, txt= user_name)
-                pdf.text(x=45, y=286, txt= str(fecha_actual()))## Traer fecha actual    ##OBSERVACIONES
-        
-                pdf.add_page()
-                pdf.set_font('Times', 'I', 12)
-                pdf.text(x=12, y=40, txt= 'Fecha Control: ' + str(data_principal[1]))
-                pdf.text(x=65, y=40, txt= 'Hora Control: ' + str(data_principal[2]) + ' Hs.')
-                pdf.set_font('Arial', 'B', 10)
-                pdf.text(x=16.5, y=286, txt= user_name)
-                pdf.text(x=45, y=286, txt= str(fecha_actual()))## Traer fecha actual
-                pdf.rect(x=10,y=43,w=190,h=5)
-                pdf.text(x=11, y=46.5, txt= 'OBSERVACIONES:')
-                ### CONTRUCTOR DE OBS
-                observaciones = str(data_principal[3])
-                lista_observaciones = observaciones.split("-")
-                for j in lista_observaciones:
-                    pdf.set_font('Arial', '', 10)
-                    pdf.multi_cell(w=0, h=5, txt= str(j) or "Sin Observaciones", border='LBR', align='L', fill=0)
-                ### IMAGENES
-                pdf.rect(x=10,y=98,w=190,h=5)
-                pdf.set_font('Arial', 'B', 10)
-                pdf.text(x=11, y=102, txt= 'IMÁGENES:')
+                    pdf.set_font('Times', 'I', 12)
+                    pdf.text(x=12, y=40, txt= 'Fecha Control: ' + fecha)
+                    pdf.text(x=65, y=40, txt= 'Hora Control: ' + hora + ' Hs.')
+                    pdf.set_font('Arial', 'B', 10)
+                    pdf.text(x=16.5, y=286, txt= user_name)
+                    pdf.text(x=45, y=286, txt= str(fecha_actual()))## Traer fecha actual    ##OBSERVACIONES
+            
+                    pdf.add_page()
+                    pdf.set_font('Times', 'I', 12)
+                    pdf.text(x=12, y=40, txt= 'Fecha Control: ' + str(data_principal[1]))
+                    pdf.text(x=65, y=40, txt= 'Hora Control: ' + str(data_principal[2]) + ' Hs.')
+                    pdf.set_font('Arial', 'B', 10)
+                    pdf.text(x=16.5, y=286, txt= user_name)
+                    pdf.text(x=45, y=286, txt= str(fecha_actual()))## Traer fecha actual
+                    pdf.rect(x=10,y=43,w=190,h=5)
+                    pdf.text(x=11, y=46.5, txt= 'OBSERVACIONES:')
+                    ### CONTRUCTOR DE OBS
+                    observaciones = str(data_principal[3])
+                    lista_observaciones = observaciones.split("_")
+                    for j in lista_observaciones:
+                        pdf.set_font('Arial', '', 10)
+                        pdf.multi_cell(w=0, h=5, txt= str(j) or "Sin Observaciones", border='LBR', align='L', fill=0)
+                    
+
+                
 
                 ##CONSULTA IMAGENES
                 consulta_data_images = ("SELECT Fotos FROM Fotos_Control_Camaras WHERE ID_Reporte='" + id_reporte + "'")
                 cursorZetoApp.execute(consulta_data_images)
                 consulta_images = cursorZetoApp.fetchall()
                 if consulta_images:
+                    ### IMAGENES
+                    pdf.rect(x=10,y=98,w=190,h=5)
+                    pdf.set_font('Arial', 'B', 10)
+                    pdf.text(x=11, y=102, txt= 'IMÁGENES:')
                     name_decoded_image = []
                     k_index = 0
                     for k in consulta_images:
@@ -141,10 +144,11 @@ def post_busqueda_reporte_camaras(request):
                         name_image = str(name_decoded_image[index])
                         pdf.image("App/Empaque/data/images/" + name_image, x = valores_x[index], y = valores_y[index], w = 50, h = 82, type = '', link = '')
                         index = index + 1
-                    name_pdf = 'Reporte_Cámaras_' + fecha_name + "_" + hora_name + '.pdf'
-                    pdf.output('App/Empaque/data/pdf/' + name_pdf  , 'F')
-                    jsonList = json.dumps({'message': 'Success', 'pdf': name_pdf}) 
-                    return JsonResponse(jsonList, safe=False)
+                
+                name_pdf = 'Reporte_Cámaras_' + fecha_name + "_" + hora_name + '.pdf'
+                pdf.output('App/Empaque/data/pdf/' + name_pdf  , 'F')
+                jsonList = json.dumps({'message': 'Success', 'pdf': name_pdf}) 
+                return JsonResponse(jsonList, safe=False)
             else:
                 jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
                 return JsonResponse(jsonList, safe=False)
@@ -156,7 +160,10 @@ def post_busqueda_reporte_camaras(request):
         finally:
             cursorZetoApp.close()
             ZetoApp.close()
-
+    else:
+        error = "Ocurrió un error: "
+        jsonList = json.dumps({'message': error}) 
+        return JsonResponse(jsonList, safe=False)
     
 
 def descarga_pdf_control_camaras(request, filename):
