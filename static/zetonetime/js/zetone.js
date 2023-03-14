@@ -156,7 +156,7 @@ $("#exportRegister").on("click",function(event){
         if(arrayData.message == "Success"){
           hideProgessBar();
           //console.log(arrayData.excel)
-          let descarga =  `<a href="http://10.32.26.35/zetonetime/download-excel/${arrayData.excel}"><button class="button" onclick="hideButton()" id="descargaExcel">Descargar</button></a>`;
+          let descarga =  `<a href="http://10.32.26.35/zetonetime/download-excel/${arrayData.excel}"><button type="button" class="button" onclick="hideButton()" id="descargaExcel">Descargar</button></a>`;
           document.getElementById('descargaRegisros').innerHTML = descarga;
           //hideButton();
         }else{
@@ -195,7 +195,7 @@ $("#exportCalculo").on("click",function(event){
         if(arrayData.message == "Success"){
           //console.log(arrayData.excel)
           hideProgessBar();
-          let descarga =  `<a href="http://10.32.26.35/zetonetime/download-excel/${arrayData.excel}"><button class="button" onclick="hideButton()" id="descargaExcel">Descargar</button></a>`;
+          let descarga =  `<a href="http://10.32.26.35/zetonetime/download-excel/${arrayData.excel}"><button type="button" class="button" onclick="hideButton()" id="descargaExcel">Descargar</button></a>`;
           document.getElementById('descargaCalculo').innerHTML = descarga;
         }else{
           hideProgessBar();

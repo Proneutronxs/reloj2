@@ -110,7 +110,7 @@ def post_busqueda_reporte_camaras(request):
                     pdf.text(x=11, y=46.5, txt= 'OBSERVACIONES:')
                     ### CONTRUCTOR DE OBS
                     observaciones = str(data_principal[3])
-                    lista_observaciones = observaciones.split("_")
+                    lista_observaciones = observaciones.split("/")
                     for j in lista_observaciones:
                         pdf.set_font('Arial', '', 10)
                         pdf.multi_cell(w=0, h=5, txt= str(j) or "Sin Observaciones", border='LBR', align='L', fill=0)
