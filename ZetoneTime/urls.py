@@ -26,6 +26,7 @@ urlpatterns = [
 
     path('zetonetime/', include('App.ZTime.urls')),
     path('empaque/', include('App.Empaque.urls')),
+    path('api/', include('App.API.urls')),
 
     path('accounts/login/', LoginView.as_view(template_name='Inicio/index.html'), name='login'),
     path('logout/', logout_then_login, name='logout'),

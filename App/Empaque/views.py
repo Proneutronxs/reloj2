@@ -62,7 +62,7 @@ def post_busqueda_reporte_camaras(request):
                 hora_name = str(data_principal[2]).replace(':', '')
                 lista_user = str(data_principal[4]).split('@')
                 user_name = str(lista_user[0])
-                consulta_data_camaras = ("SELECT Camara, Especie, Envase, Temperatura FROM Control_Camaras WHERE ID_Reporte='" + id_reporte + "' ORDER BY Camara")
+                consulta_data_camaras = ("SELECT Camara, Especie, Envase, Temperatura FROM Control_Camaras WHERE ID_Reporte='" + id_reporte + "' ORDER BY Camara, Envase")
                 cursorZetoApp.execute(consulta_data_camaras)
                 consulta_camaras = cursorZetoApp.fetchall()
                 pdf = control_camaras_PDF()
@@ -84,20 +84,37 @@ def post_busqueda_reporte_camaras(request):
                 pdf.text(x=100, y=47.5, txt= 'ENVASE')
                 pdf.line(130,43,130,48)
                 pdf.text(x=150, y=47.5, txt= 'TEMPERATURA') 
+                cantidad = 0
                 if consulta_camaras:
                     for i in consulta_camaras:
+                        envase = str(i[2])
+                        if envase == "SELECCIONE":
+                            envase = "-"
                         pdf.set_font('Arial', '', 8)
                         pdf.cell(w=30, h=3, txt= str(i[0]), border='LBR', align='C', fill=0)
                         pdf.cell(w=45, h=3, txt= str(i[1]), border='BR', align='C', fill=0)
-                        pdf.cell(w=45, h=3, txt= str(i[2]), border='BR', align='C', fill=0)
+                        pdf.cell(w=45, h=3, txt= envase, border='BR', align='C', fill=0)
                         pdf.multi_cell(w=70, h=3, txt= str(i[3] + ' °C'), border='BR', align='C', fill=0)
+                        cantidad = cantidad + 1
 
-                    pdf.set_font('Times', 'I', 12)
-                    pdf.text(x=12, y=40, txt= 'Fecha Control: ' + fecha)
-                    pdf.text(x=65, y=40, txt= 'Hora Control: ' + hora + ' Hs.')
-                    pdf.set_font('Arial', 'B', 10)
-                    pdf.text(x=16.5, y=286, txt= user_name)
-                    pdf.text(x=45, y=286, txt= str(fecha_actual()))## Traer fecha actual    ##OBSERVACIONES
+                    if cantidad > 76:
+                        pdf.set_font('Times', 'I', 12)
+                        pdf.text(x=12, y=40, txt= 'Fecha Control: ' + fecha)
+                        pdf.text(x=65, y=40, txt= 'Hora Control: ' + hora + ' Hs.')
+                        pdf.set_font('Arial', 'B', 10)
+                        pdf.text(x=16.5, y=286, txt= user_name)
+                        pdf.text(x=45, y=286, txt= str(fecha_actual()))## Traer fecha actual
+                        pdf.set_font('Arial', 'B', 10)
+                        pdf.rect(x=10,y=43,w=190,h=5)
+                        pdf.text(x=16, y=47.5, txt= 'CÁMARA')
+                        pdf.line(40,43,40,48)
+                        pdf.text(x=55, y=47.5, txt= 'ESPECIE')
+                        pdf.line(85,43,85,48)
+                        pdf.text(x=100, y=47.5, txt= 'ENVASE')
+                        pdf.line(130,43,130,48)
+                        pdf.text(x=150, y=47.5, txt= 'TEMPERATURA')     
+                        
+                    ##OBSERVACIONES
             
                     pdf.add_page()
                     pdf.set_font('Times', 'I', 12)
@@ -110,7 +127,7 @@ def post_busqueda_reporte_camaras(request):
                     pdf.text(x=11, y=46.5, txt= 'OBSERVACIONES:')
                     ### CONTRUCTOR DE OBS
                     observaciones = str(data_principal[3])
-                    lista_observaciones = observaciones.split("/")
+                    lista_observaciones = observaciones.split("_")
                     for j in lista_observaciones:
                         pdf.set_font('Arial', '', 10)
                         pdf.multi_cell(w=0, h=5, txt= str(j) or "Sin Observaciones", border='LBR', align='L', fill=0)
