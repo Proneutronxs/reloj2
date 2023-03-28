@@ -9924,6 +9924,8 @@ h6,
   max-width: 200px;
 }
 
+
+
 .formZetone{
   background-color: #4D9C21 ;
   padding-top: 15px;
@@ -10009,14 +10011,16 @@ h6,
 
 
 .selectores, .calendar, .inputs {
-  background-color: #011327ce;
-  color: #fff;
+  background-color: #E6ECEF;
+  color: #000;
   padding: 5px 5px;
+  width: 150px;
   border: none;
   border-radius: 5px;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
+  border: 1px solid #01a7e1;
 }
 
 .button{
@@ -10067,6 +10071,43 @@ button:hover {
   align-items: center;
 }
 
+/* Estilos para los puntos suspensivos */
+.dots-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  border-radius: 50%;
+  background-color: #011327;
+  opacity: 0;
+  animation: fade 1s ease-in-out infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Animación para los puntos suspensivos */
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 
 
 .container-menu{
@@ -10093,4 +10134,47 @@ button:hover {
 
 .login{
   margin-left: 60em;
+}
+
+.formGeneral{
+  background-color: #001327 ;
+  margin-top: 100px;
+  color: white;
+  padding: 20px;
+  margin-left: 15em;
+  margin-right: 15em;
+  border-radius: 5px;
+  border: 1px solid #01a7e1;
+}
+
+@media (max-width: 999px) {
+  .formGeneral {
+    margin-left: 5em;
+    margin-right: 5em;
+  }
+}
+
+.buttonFormGeneral{
+  border: 1px solid #0bb50c;
+  background-color: #001327;
+  color: #fff;
+  padding: 5px 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  width: 150px;
+  cursor: pointer;
+}
+
+.buttonFormGeneral:hover {
+  background-color: #2c3e50;
+  border: 1px solid #01a7e1;
+}
+
+.formGeneral-center{
+  /******* CENTRAR LOS DIVS DEL DIV HIJO ********/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }

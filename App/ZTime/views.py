@@ -45,6 +45,10 @@ def renderCalcHoras(resquest):
 def renderVerRegistros(resquest):
     return render (resquest, 'ZTime/registros/ver.html')
 
+@login_required
+def renderProcesarRegistros(resquest):
+    return render (resquest, 'ZTime/configuracion/procesos.html')
+
 
 def pruebaHTML(request):
     return render (request, 'prueba/prueba.html')
@@ -915,6 +919,218 @@ def descargar_archivo(request):
  
     return response
 
+### CAPTURA LEGAJOS
+def legajos(fecha):
+    try:
+        ZT = ZetoneTime()
+        cursorZT = ZT.cursor()
+        sqlConsulta =("SELECT DISTINCT emp_code FROM servidordb.zkbiotime.dbo.iclock_transaction\n" +
+                "WHERE TRY_CONVERT(DATE, punch_time) = '" + fecha + "'")
+        cursorZT.execute(sqlConsulta)
+        consultaZT = cursorZT.fetchall()
+        if consultaZT:
+            lista_legajos = []
+            for i in consultaZT:
+                legajo = str(i[0])
+                lista_legajos.append(legajo)
+            return lista_legajos
+        else:
+             return 0
+    except Exception as e:
+        print(e)
+        return 5
+    finally:
+        cursorZT.close()
+        ZT.close()
+
+def grupo_horario(id):
+    try:
+        ZT = ZetoneTime()
+        cursorZT = ZT.cursor()
+        sqlConsulta =("SELECT        Grupos_Horarios.Nombre, Horarios.EM1, Horarios.EM2, Horarios.SM1, Horarios.SM2, Horarios.ET1, Horarios.ET2, Horarios.ST1, Horarios.ST2\n" +
+                        "FROM            Grupos_Horarios INNER JOIN\n" +
+                                                "Horarios ON Grupos_Horarios.ID = Horarios.ID_Grupo\n" +
+                        "WHERE        (Grupos_Horarios.ID = '" + str(id) + "')")
+        cursorZT.execute(sqlConsulta)
+        consultaZT = cursorZT.fetchone()
+        if consultaZT:
+            lista_horario = []
+            index = 0
+            for i in consultaZT:
+                lista_horario.append(str(i[index]))
+                index = index + 1
+            return lista_horario
+        else:
+             return 0
+    except Exception as e:
+        print(e)
+        return 5
+    finally:
+        cursorZT.close()
+        ZT.close()
+
+def tipo_hora(hora):
+    horario = datetime.strptime(str(hora), "%X").time()
+
+
+
+    entradaMañana1 = datetime.strptime("05:00:00", "%X").time()
+    entradaMañana2 = datetime.strptime("09:02:00", "%X").time()
+
+    salidaMañana1 = datetime.strptime("10:55:00", "%X").time()
+    salidaMañana2 = datetime.strptime("13:12:00", "%X").time()
+
+    entradaTarde1 = datetime.strptime("13:45:00", "%X").time()
+    entradaTarde2 = datetime.strptime("16:55:00", "%X").time()
+
+    salidaTarde1 = datetime.strptime("17:00:00", "%X").time()
+    salidaTarde2 = datetime.strptime("21:30:00", "%X").time()
+
+    if entradaMañana1 < horario < entradaMañana2:
+        tipo = 'F1'
+        return tipo
+    if salidaMañana1 < horario < salidaMañana2:
+        tipo = 'F2'
+        return tipo 
+    if entradaTarde1 < horario < entradaTarde2:
+        tipo = 'F3'
+        return tipo
+    if salidaTarde1 < horario < salidaTarde2:
+        tipo = 'F4'
+        return tipo
+
+def existe_fichada(legajo, fecha):
+    try:
+        conexion = ZetoneTime()
+        cursor_cox = conexion.cursor()
+        consulta = ("SELECT * FROM TemporalHoras WHERE Legajo ='" + str(legajo) + "' AND Fecha='" + str(fecha) + "'")
+        cursor_cox.execute(consulta)
+        existe = cursor_cox.fetchone()
+        if existe:
+            return 1
+        else:
+            return 0
+    except Exception as e:
+        print(e)
+        return 5
+    finally:
+        cursor_cox.close()
+        conexion.close()
+
+def horas_fichadas(legajo, fecha):
+    try:
+        conexion = ZetoneTime()
+        cursor_cox = conexion.cursor()
+        consultaSQL = ("SELECT CONVERT(varchar, punch_time, 108) AS Hora\n" +
+                        "FROM servidordb.zkbiotime.dbo.iclock_transaction\n" +
+                        "WHERE TRY_CONVERT(DATE, punch_time) = '" + str(fecha) +"' AND emp_code = '" + str(legajo) + "'")
+        cursor_cox.execute(consultaSQL)
+        consulta = cursor_cox.fetchall()
+        if consulta:
+            listado_horas = []
+            for i in consulta:
+                listado_horas.append(i[0])
+            return listado_horas
+        else:
+            return 0
+    except Exception as e:
+        print(e)
+        return 5
+    finally:
+        cursor_cox.close()
+        conexion.close()
+
+def nombre_legajo(legajo):
+    try:
+        conexion = ZetoneTime()
+        cursor_cox = conexion.cursor()
+        consultaSQL = ("SELECT Nombre FROM Legajos WHERE Legajos ='" + str(legajo) + "'")
+        cursor_cox.execute(consultaSQL)
+        consulta = cursor_cox.fetchone()
+        if consulta:
+            nombre = consulta[0]
+            return nombre
+        else:
+            nombre = "Sin Asignar"
+            return nombre
+    except Exception as e:
+        print(e)
+        return 5
+    finally:
+        cursor_cox.close()
+        conexion.close()
+
+def inserta_fichada(legajo, nombre, fecha, hora, fecha_hora, tipo):
+    if tipo != None:
+        try:
+            update = ZetoneTime()
+            cursorUpdate = update.cursor()
+            consulta = ("INSERT INTO TemporalHoras (Legajo, Nombre, " + str(tipo) + ", Fecha, FechaHora) VALUES ('" + str(legajo) + "','" + str(nombre) + "','" + str(hora) + "', '" + str(fecha) + "', '" + str(fecha_hora) + "')")
+            cursorUpdate.execute(consulta)
+            cursorUpdate.commit()
+        except Exception as e:
+            print(e)
+            print("Inserta Fichada " + str(legajo) + " --> " + str(hora))
+        finally:
+            cursorUpdate.close()
+            update.close()
+
+def update_fichada(legajo, fecha, hora, tipo):
+    if tipo != None:
+        try:
+            update = ZetoneTime()
+            cursorUpdate = update.cursor()
+            sql = ("UPDATE TemporalHoras SET " + str(tipo) + "='" + str(hora) + "' WHERE Legajo='" + str(legajo) +"' AND Fecha='" + str(fecha) + "'")
+            #print(sql)
+            cursorUpdate.execute(sql)
+            cursorUpdate.commit()
+        except Exception as e:
+            print("Actualizar Hora " + str(legajo) + " --> " + str(hora))
+            print(e)
+        finally:
+            cursorUpdate.close()
+            update.close()
+
+
+## VISTA DE PROCESO DE HORAS POST
+def proceso_horas(request):
+    grupo = '1'
+    form = form_proceso_fichadas(request.POST)
+    if form.is_valid():
+        f = form.cleaned_data['fecha']
+        departamento = form.cleaned_data['departamento']
+        fecha = datetime.strptime(str(f), "%Y-%m-%d").strftime("%d/%m/%Y")
+        fecha_hora = str(fecha) + " 00:00:00"
+        if legajos(str(fecha)) == 0:
+            jsonList = json.dumps({'message':'No hay Fichadas para la fecha: ' + str(fecha)}) 
+            return JsonResponse(jsonList, safe=False)
+        else:
+            listado_legajos = legajos(str(fecha))
+            for i in listado_legajos:
+                legajo = str(i)
+                nombre = nombre_legajo(legajo)
+                listado_horas = horas_fichadas(legajo,fecha)
+                #print(listado_horas)
+                for j in listado_horas:
+                    hora = str(j)
+                    if existe_fichada(legajo,fecha) == 0:
+                        ##INSERTA
+                        tipo = tipo_hora(hora)
+                        inserta_fichada(legajo,nombre,fecha,hora,fecha_hora,tipo)
+                    elif existe_fichada(legajo,fecha) == 1:
+                        ##ACTUALIZA
+                        tipo = tipo_hora(hora)
+                        update_fichada(legajo,fecha,hora,tipo)
+                    else:
+                        jsonList = json.dumps({'message':'Se produjo un error.'}) 
+                        return JsonResponse(jsonList, safe=False)
+                    
+            jsonList = json.dumps({'message':'Success', 'fecha': fecha}) 
+            return JsonResponse(jsonList, safe=False)
+    else:
+        jsonList = json.dumps({'message':'Formulario no válido.'}) 
+        return JsonResponse(jsonList, safe=False)
+
 
 @csrf_exempt
 def post_recive_data(request):
@@ -934,3 +1150,4 @@ def post_recive_data(request):
         return JsonResponse({"message": "ok", "data": listado})
     else:
         return JsonResponse({'message': 'Not found'})
+    

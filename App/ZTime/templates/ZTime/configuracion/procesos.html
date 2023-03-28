@@ -1,0 +1,57 @@
+{% extends "ZTime/inicio/index.html" %}
+
+{% load static %}
+
+{% block content %}
+  <div class="formGeneral">
+    <div class="formGeneral-center">
+        <form id="procesar_fichadas" action="" method="POST">{% csrf_token %}
+            <div>
+                <div >PROCESAR FICHADAS</div>
+                <div class="roeZetone">
+                    <label class="letras" for="desde">Fecha:</label> <br>
+                    <input type="date" id="fecha" name="fecha" class="calendar" required>
+                </div>
+                <div class="roeZetone">
+                    <label class="letras">Departamento: </label> <br>
+                      <select class="selectores" type="checkbox" id="departamento" name="departamento">
+                      <option value="Todos">Todos</option>
+                    </select>
+                </div>
+            <div class="roeZetone">
+                <button type="submit" class="buttonFormGeneral" id="procesarFichadas">PROCESAR</button>
+            </div>
+            <div class="roeZetone" id="messageProceso">
+            </div>
+          </div>
+        </form>
+    </div>
+  </div>
+
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <div class="loaderZetoProgressBar" id="progressBar"></div>
+    <div class="dots-container">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+    window.onload = function(){
+    var fecha = new Date(); //Fecha actual
+    var mes = fecha.getMonth()+1; //obteniendo mes
+    var dia = fecha.getDate(); //obteniendo dia
+    var ano = fecha.getFullYear(); //obteniendo año
+    if(dia<10)
+      dia='0'+dia; //agrega cero si el menor de 10
+    if(mes<10)
+      mes='0'+mes //agrega cero si el menor de 10
+    document.getElementById('fecha').value=ano+"-"+mes+"-"+dia;
+    }
+</script>
+  
+ 
+{% endblock %}

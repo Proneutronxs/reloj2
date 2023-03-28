@@ -7,11 +7,15 @@ urlpatterns = [
 path('', views.zetoneTime, name="zetonetime"),
 path('resgistros/calculo', views.renderCalcHoras, name="calculo_horas"),
 path('registros/ver', views.renderVerRegistros, name="ver_registros"),
+path('configuracion/procesar', views.renderProcesarRegistros, name="procesar_registros"),
 
 
 ##A JAVASCRIPT
 path('resgistros/calculo/horas', views.calculoHorasJson, name="registros_calculo"),
 path('registros/sin/proceso', views.ver_registros_sin_proceso , name='registros_no_proceso'),
+
+###PROCESO DE HORAS
+path('registros/proceso/horas', views.proceso_horas , name='proceso_horas'),
 
 
 path('prueba/html', views.pruebaHTML, name="pruebahtml"),

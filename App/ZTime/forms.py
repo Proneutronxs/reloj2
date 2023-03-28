@@ -22,3 +22,11 @@ class form_export_registros(forms.ModelForm):
     class Meta:
         model = model_exportar_legajo
         fields = ['legajo', 'departamento', 'desde', 'hasta', 'export']
+
+class form_proceso_fichadas(forms.ModelForm):
+    fecha = forms.DateField()
+    departamento = forms.CharField(max_length=25)
+    
+    class Meta:
+        model = model_proceso_fichadas
+        fields = ['fecha', 'departamento']

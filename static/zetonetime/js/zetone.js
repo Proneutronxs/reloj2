@@ -208,6 +208,42 @@ $("#exportCalculo").on("click",function(event){
   ); 
 });
 
+
+//PROCESAR HORAS
+function procesar_horas() {
+  showProgressBar();
+  var formProceso = new FormData(document.getElementById('procesar_fichadas'));
+  fetch("/zetonetime/registros/proceso/horas", {
+    method: "POST",
+    body: formProceso,
+    headers: {
+      "X-CSRFToken": getCookie('csrftoken'),
+    }
+  }).then(
+    function(response){
+      return response.json();      
+    }
+  ).then(
+    function(data){
+      //console.log(data)
+      try {
+        let arrayData = JSON.parse(data);//CONVIERTE EL JSON en ARRAY
+        if(arrayData.message == "Success"){
+          //console.log(arrayData.message)
+          let proceso =  `<div>Se procesaron las fichadas para la fecha: ${arrayData.fecha}</div>`;
+          document.getElementById('messageProceso').innerHTML = proceso;
+          hideProgessBar();
+        }else{
+          hideProgessBar();
+          alert(arrayData.message);
+        }
+      }catch(error){
+        console.log(error);
+      }
+    }
+  );  
+}
+
 function hideButton() {
   var button = document.getElementById("descargaExcel");
   button.style.display = "none";
@@ -222,7 +258,11 @@ function showProgressBar(){
   modal.style.display = 'block';
 }
 
-
+$("#procesarFichadas").on("click",function(event){
+  event.preventDefault();
+  // resto de tu codigo
+  procesar_horas();
+});
 
 $("#mostraCalcHoras").on("click",function(event){
   event.preventDefault();
