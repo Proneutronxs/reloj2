@@ -9924,20 +9924,17 @@ h6,
   max-width: 200px;
 }
 
-
+.roeZetone{
+  padding: 5px;
+}
 
 .formZetone{
   background-color: #4D9C21 ;
   padding-top: 15px;
   color: white;
-  margin-left: 20px;
-  margin-right: 20px;
   border-radius: 4px;
 }
 
-.roeZetone{
-  padding: 6px;
-}
 
 .table{
   color: white;

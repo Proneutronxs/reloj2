@@ -13,6 +13,10 @@ $("#close-popup-login").on("click",function(event){
   loginPopup.style.display = 'none';
 });
 
+function mostrar_inicio(){
+  loginPopup.style.display = 'block';
+}
+
 function permiso_Zetonetime() {
   fetch("/user/permissions/modulo=ZetoneTime", {
     method: "GET"

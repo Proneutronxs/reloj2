@@ -10096,7 +10096,11 @@ button:hover {
   margin-left: 60em;
 }
 
-
+@media (max-width: 600px) {
+  .login {
+    margin-right: 5em;
+  }
+}
 
 /* Estilos del contenedor del pop-up */
 .login-popup {
