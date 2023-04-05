@@ -7,19 +7,20 @@
     <div class="form-buscar">
         <form id="formReportesCamaras" action="" method="POST">{% csrf_token %}
             <div>
-                <div >REPORTES DE CÁMARAS</div>
+                <div >REPORTES</div>
                 <div class="roeZetone">
-                    <label class="letras" for="desde">Fecha:</label> <br>
+                    <label class="letras" for="desde">Fecha:</label> 
                     <input type="date" id="fechaReporte" name="fechaReporte" class="calendar" required>
                 </div>
-                <div class="roeZetone" style="display: none;">
-                    <label class="letras">Hora: </label> <br>
+                <div class="roeZetone" style="align-items: center;">
+                    <label class="letras">Tipo:</label>
                       <select class="selectores" type="checkbox" id="hora" name="hora">
-                      <option value="14:55:00">14:55:00</option>
+                      <option value="Control Cámaras">Control Cámaras</option>
+                      <option value="Control Empaque">Control Empaque</option>
                     </select>
                 </div>
                 <div class="roeZetone">
-                    <label class="letras">Planta: </label> <br>
+                    <label class="letras">Planta: </label>
                       <select class="selectores" type="checkbox" id="planta" name="planta">
                       <option value="Planta Uno">Planta Uno</option>
                       <!--<option value="Planta Dos">Planta Dos</option>-->

@@ -211,7 +211,6 @@ def muestra_presiones(request):
                     presion = str(i[1])
                     result = {'hora': hora, 'presion': presion}
                     lista.append(result)
-
                 jsonList = json.dumps({'message': 'Success', 'listado':lista}) 
                 return JsonResponse(jsonList, safe=False)
             else:
@@ -245,7 +244,6 @@ def promedio_presiones(request):
                     presion = str(i[1])
                     result = {'hora': hora, 'presion': presion}
                     lista.append(result)
-
                 jsonList = json.dumps({'message': 'Success', 'listado':lista}) 
                 return JsonResponse(jsonList, safe=False)
             else:
