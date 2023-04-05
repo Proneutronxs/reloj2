@@ -332,7 +332,7 @@ def post_busqueda_reporte_camaras(request):
                                 #CONDICIONAL CUANDO VALE 1
                                 pdf.set_font('Arial', '', 10)
                                 pdf.text(x=26, y=168, txt= str(i[14]))#CAJA
-                                pdf.text(x=56, y=168, txt= str(i[14]))#BULTO
+                                pdf.text(x=56, y=168, txt= str(i[0]))#BULTO
                                 pdf.text(x=90, y=168, txt= str(i[15]))#FECHA CONTROL
                                 pdf.text(x=122, y=168, txt= str(i[16]) + ' Hs.')#HORA CONTROL
                                 pdf.text(x=160, y=168, txt= empaque)#EMPAQUE
