@@ -294,12 +294,12 @@ def post_busqueda_reporte_camaras(request):
                                 ruta_caja = 'App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg'
                                 ruta_plu = 'App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg'
                                 if os.path.exists(ruta_caja):
-                                    pdf.image('plu_image_' + bulto + '.jpeg', x=160, y=178, w=15, h=15)
+                                    pdf.image('caja_image_' + bulto + '.jpeg', x=160, y=178, w=15, h=15)
                                 else:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=65, txt='NOT IMAGE')
                                 if os.path.exists(ruta_plu):
-                                    pdf.image('caja_image_' + bulto + '.jpeg', x=146, y=201, w=45, h=70)
+                                    pdf.image('plu_image_' + bulto + '.jpeg', x=146, y=201, w=45, h=70)
                                 else:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=119, txt='NOT IMAGE')
@@ -369,12 +369,12 @@ def post_busqueda_reporte_camaras(request):
                                 ruta_caja = 'App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg'
                                 ruta_plu = 'App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg'
                                 if os.path.exists(ruta_caja):
-                                    pdf.image('plu_image_' + bulto + '.jpeg', x=160, y=178, w=15, h=15)
+                                    pdf.image('caja_image_' + bulto + '.jpeg', x=160, y=178, w=15, h=15)
                                 else:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=188, txt='NOT IMAGE')
                                 if os.path.exists(ruta_plu):
-                                    pdf.image('caja_image_' + bulto + '.jpeg', x=146, y=201, w=45, h=70)
+                                    pdf.image('plu_image_' + bulto + '.jpeg', x=146, y=201, w=45, h=70)
                                 else:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=235, txt='NOT IMAGE')
