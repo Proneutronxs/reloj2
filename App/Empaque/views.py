@@ -312,16 +312,14 @@ def post_busqueda_reporte_camaras(request):
                                     pdf.text(x=12, y=288, txt= user)#USER
                                 ###FOTOS
                                 bulto = str(i[0])
-                                ruta_caja = 'App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg'
-                                ruta_plu = 'App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg'
-                                if os.path.exists(ruta_plu):
+                                try:
                                     pdf.image('App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg', x=160, y=178, w=15, h=15)
-                                else:
+                                except:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=65, txt='NOT IMAGE')
-                                if os.path.exists(ruta_caja):
+                                try:
                                     pdf.image('App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg', x=146, y=201, w=45, h=70)
-                                else:
+                                except:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=119, txt='NOT IMAGE')
                                 index = index + 1
@@ -387,14 +385,14 @@ def post_busqueda_reporte_camaras(request):
                                 bulto = str(i[0])
                                 ruta_caja = 'App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg'
                                 ruta_plu = 'App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg'
-                                if os.path.exists(ruta_plu):
+                                try:
                                     pdf.image('App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg', x=160, y=178, w=15, h=15)
-                                else:
+                                except:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=188, txt='NOT IMAGE')
-                                if os.path.exists(ruta_caja):
+                                try:
                                     pdf.image('App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg', x=146, y=201, w=45, h=70)
-                                else:
+                                except:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=235, txt='NOT IMAGE')
                                 index = 0
