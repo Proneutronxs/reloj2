@@ -302,6 +302,7 @@ def post_busqueda_reporte_camaras(request):
                                 pdf.text(x=129, y=149, txt= str(i[51]))
                                 ## OBSERVACIONES
                                 pdf.text(x=22, y=153, txt= str(i[20]))##OBSERVACION
+                                pdf.text(x=45, y=286, txt= str(fecha_actual()))
                                 pdf.set_font('Times', 'I', 10)
                                 user = str(i[53])
                                 if user == "nicol@zetone.com.ar":
