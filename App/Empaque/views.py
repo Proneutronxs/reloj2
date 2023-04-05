@@ -313,12 +313,12 @@ def post_busqueda_reporte_camaras(request):
                                 ###FOTOS
                                 bulto = str(i[0])
                                 try:
-                                    pdf.image('App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg', x=160, y=178, w=15, h=15)
+                                    pdf.image('App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg', x=160, y=58, w=15, h=15)
                                 except:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=65, txt='NOT IMAGE')
                                 try:
-                                    pdf.image('App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg', x=146, y=201, w=45, h=70)
+                                    pdf.image('App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg', x=146, y=82, w=45, h=70)
                                 except:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=119, txt='NOT IMAGE')
