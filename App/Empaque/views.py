@@ -306,7 +306,9 @@ def post_busqueda_reporte_camaras(request):
                                 user = str(i[53])
                                 if user == "nicol@zetone.com.ar":
                                     user = "Nicole"
-                                pdf.text(x=12, y=288, txt= user)#USER
+                                    pdf.text(x=18, y=288, txt= user)
+                                else:
+                                    pdf.text(x=12, y=288, txt= user)#USER
                                 ###FOTOS
                                 bulto = str(i[0])
                                 ruta_caja = 'App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg'
