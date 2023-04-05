@@ -33,6 +33,20 @@ def fecha_actual():
         mes = "0" + str(hoy.month)
     return(str(dia) + "/" + str(mes) + "/" + str(hoy.year))
 
+def fechaNombre(fecha):
+    dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+    meses = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+    now = datetime.now()
+    #stringFecha = str(now.day) + "-" + str(now.month) + "-" + str(now.year)
+    di = datetime.strptime(str(fecha), "%Y-%m-%d")
+    dianum = now.day
+    mes = meses[now.month]
+    año = now.year
+    diaNombre = dias[di.weekday()]
+    hora_actual = datetime.now().strftime("%H:%M:%S")
+    fechaN = (diaNombre + ", " + str(dianum) + " de " + str(mes) + " del " + str(año) + " - " + str(hora_actual) +" Hs.")
+    return fechaN
+
 def consultaTopCaja(fecha):
     try:
         conexion = zetoneApp()
@@ -233,8 +247,8 @@ def post_busqueda_reporte_camaras(request):
                                     empaque = "Manzana"
                                 pdf.add_page()
                                 pdf.set_font('Arial', '', 7)
-                                pdf.text(x=148, y=16.5, txt= 'Miercoles, 05 de Abril de 2023')
-                                pdf.text(x=165.5, y=19.5, txt= '10:23:33 Hs.')
+                                pdf.text(x=146, y=16.5, txt= str(fechaNombre(fecha)))
+                                #pdf.text(x=165.5, y=19.5, txt= '10:23:33 Hs.')
                                 ###DATOS PRINCIPALES CAJA
                                 pdf.set_font('Arial', '', 10)
                                 pdf.text(x=26, y=48, txt= str(i[14]))
@@ -288,8 +302,11 @@ def post_busqueda_reporte_camaras(request):
                                 pdf.text(x=129, y=149, txt= str(i[51]))
                                 ## OBSERVACIONES
                                 pdf.text(x=22, y=153, txt= str(i[20]))##OBSERVACION
-                                pdf.set_font('Arial', '', 8)
-                                pdf.text(x=12, y=100, txt= str(i[53]))#USER
+                                pdf.set_font('Times', 'I', 10)
+                                user = str(i[53])
+                                if user == "nicol@zetone.com.ar":
+                                    user = "Nicole"
+                                pdf.text(x=12, y=288, txt= user)#USER
                                 ###FOTOS
                                 bulto = str(i[0])
                                 ruta_caja = 'App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg'
