@@ -41,6 +41,7 @@ def consultaTopCaja(fecha):
         cursor.execute(sql5)
         consulta = cursor.fetchone()
         if consulta:
+            id = str(consulta[0])
             return id
         else:
             id = "0"
