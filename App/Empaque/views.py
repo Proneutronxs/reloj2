@@ -288,23 +288,22 @@ def post_busqueda_reporte_camaras(request):
                                 pdf.text(x=129, y=149, txt= str(i[51]))
                                 ## OBSERVACIONES
                                 pdf.text(x=22, y=153, txt= str(i[20]))##OBSERVACION
+                                pdf.set_font('Arial', '', 8)
+                                pdf.text(x=12, y=100, txt= str(i[53]))#USER
                                 ###FOTOS
-
                                 bulto = str(i[0])
                                 ruta_caja = 'App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg'
                                 ruta_plu = 'App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg'
-                                if os.path.exists(ruta_caja):
-                                    pdf.image('App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg', x=160, y=178, w=15, h=15)
+                                if os.path.exists(ruta_plu):
+                                    pdf.image('App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg', x=160, y=178, w=15, h=15)
                                 else:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=65, txt='NOT IMAGE')
-                                if os.path.exists(ruta_plu):
-                                    pdf.image('App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg', x=146, y=201, w=45, h=70)
+                                if os.path.exists(ruta_caja):
+                                    pdf.image('App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg', x=146, y=201, w=45, h=70)
                                 else:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=119, txt='NOT IMAGE')
-                                pdf.set_font('Arial', '', 8)
-                                pdf.text(x=12, y=100, txt= str(i[53]))#USER
                                 index = index + 1
                             else:
                                 if str(i[5]) == "1":
@@ -368,13 +367,13 @@ def post_busqueda_reporte_camaras(request):
                                 bulto = str(i[0])
                                 ruta_caja = 'App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg'
                                 ruta_plu = 'App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg'
-                                if os.path.exists(ruta_caja):
-                                    pdf.image('App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg', x=160, y=178, w=15, h=15)
+                                if os.path.exists(ruta_plu):
+                                    pdf.image('App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg', x=160, y=178, w=15, h=15)
                                 else:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=188, txt='NOT IMAGE')
-                                if os.path.exists(ruta_plu):
-                                    pdf.image('App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg', x=146, y=201, w=45, h=70)
+                                if os.path.exists(ruta_caja):
+                                    pdf.image('App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg', x=146, y=201, w=45, h=70)
                                 else:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=235, txt='NOT IMAGE')
