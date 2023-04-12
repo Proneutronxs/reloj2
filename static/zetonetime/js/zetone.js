@@ -40,7 +40,7 @@ function listadoCalcHoras(){
 function verCalculoHoras() {
   showProgressBar();
   var formCalchoras = new FormData(document.getElementById('formCalcHoras'));
-  fetch("/zetonetime/resgistros/calculo/horas", {
+  fetch("/zetonetime/registros/calculo/horas", {
     method: "POST",
     body: formCalchoras,
     headers: {

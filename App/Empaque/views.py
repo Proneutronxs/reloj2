@@ -9,6 +9,7 @@ from django.views.static import serve
 from App.ZTime.conexion import *
 from App.Empaque.modelosPDF.modelosPDF import *
 import os
+import matplotlib.pyplot as plt
 
 from App.Empaque.forms import *
 ##LOGIN
@@ -154,7 +155,11 @@ def post_busqueda_reporte_camaras(request):
                         pdf.text(x=12, y=40, txt= 'Fecha Control: ' + str(data_principal[1]))
                         pdf.text(x=65, y=40, txt= 'Hora Control: ' + str(data_principal[2]) + ' Hs.')
                         pdf.set_font('Arial', 'B', 10)
-                        pdf.text(x=16.5, y=286, txt= user_name)
+                        if user_name == "Nicole":
+                            pdf.set_font('Times', 'BI', 10)
+                            pdf.text(x=20, y=288, txt= 'Nicole')
+                        else:
+                            pdf.text(x=20, y=288, txt= user_name)#USER
                         pdf.text(x=45, y=286, txt= str(fecha_actual()))## Traer fecha actual
                         pdf.rect(x=10,y=43,w=190,h=5)
                         pdf.text(x=11, y=46.5, txt= 'OBSERVACIONES:')
@@ -208,7 +213,6 @@ def post_busqueda_reporte_camaras(request):
                 ZetoApp.close()
         elif str(Tipo) == "Control Empaque":
             Top_Caja = consultaTopCaja(fecha)
-            print(Top_Caja)
             if Top_Caja != "0":
                 try:
                     conexion = zetoneApp()
@@ -302,14 +306,15 @@ def post_busqueda_reporte_camaras(request):
                                 pdf.text(x=129, y=149, txt= str(i[51]))
                                 ## OBSERVACIONES
                                 pdf.text(x=22, y=153, txt= str(i[20]))##OBSERVACION
-                                pdf.text(x=45, y=286, txt= str(fecha_actual()))
+                                pdf.set_font('Times', 'B', 10)
+                                pdf.text(x=46, y=288, txt= str(fecha_actual()))
                                 pdf.set_font('Times', 'I', 10)
                                 user = str(i[53])
-                                if user == "nicol@zetone.com.ar":
-                                    user = "Nicole"
-                                    pdf.text(x=18, y=288, txt= user)
+                                if user == "Nicole":
+                                    pdf.set_font('Times', 'BI', 10)
+                                    pdf.text(x=20, y=288, txt= 'Nicole')
                                 else:
-                                    pdf.text(x=12, y=288, txt= user)#USER
+                                    pdf.text(x=20, y=288, txt= user)#USER
                                 ###FOTOS
                                 bulto = str(i[0])
                                 try:
@@ -404,7 +409,6 @@ def post_busqueda_reporte_camaras(request):
                         jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
                         return JsonResponse(jsonList, safe=False)
                 except Exception as e:
-                    print(e)
                     error = "Ocurrió un error: " + str(e)
                     jsonList = json.dumps({'message': error}) 
                     return JsonResponse(jsonList, safe=False)
@@ -414,11 +418,358 @@ def post_busqueda_reporte_camaras(request):
             else:
                 jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
                 return JsonResponse(jsonList, safe=False)
+        elif str(Tipo) == "Control Descarte":
+            try:
+                conexion = zetoneApp()
+                cursor = conexion.cursor()
+                sql5 = ("SELECT        DescarteLote.Lote, Variedad.USR_VAR_NOMBRE as Variedad, DescarteLote.Empaque, CONVERT(varchar(10), DescarteLote.Fecha, 103) AS Fecha, CONVERT(varchar(5), DescarteLote.Hora, 108) AS Hora, DescarteLote.cantBins, DescarteLote.obsDescarte, DescarteLote.Usuario, DefectosDescarte.Agamuzado,\n" +
+                                                "DefectosDescarte.Amarillo, DefectosDescarte.Arañuela, DefectosDescarte.Bicho, DefectosDescarte.binsRotos, DefectosDescarte.binsSinLlenar, DefectosDescarte.Bitterpit, DefectosDescarte.Caliz, \n" +
+                                                "DefectosDescarte.Carpocapsa, DefectosDescarte.Acuoso, DefectosDescarte.Mohoso, DefectosDescarte.Corcho, DefectosDescarte.Cucharita, DefectosDescarte.Cracking, DefectosDescarte.Quimico, \n" +
+                                                "DefectosDescarte.Decaimiento, DefectosDescarte.Deformada, DefectosDescarte.Deshidratada, DefectosDescarte.Desvio, DefectosDescarte.faltaBoro, DefectosDescarte.faltaColor, DefectosDescarte.Fondo, \n" +
+                                                "DefectosDescarte.frutoGrande, DefectosDescarte.FrutoChico, DefectosDescarte.golpes, DefectosDescarte.Granizo, DefectosDescarte.Helada, DefectosDescarte.Heridas, DefectosDescarte.heridaMaquina, \n" +
+                                                "DefectosDescarte.heridaPedunculo, DefectosDescarte.Herinosis, DefectosDescarte.Lenticelosis, DefectosDescarte.Machucones, DefectosDescarte.madurezAvanzada, DefectosDescarte.madurezSalpicada, \n" +
+                                                "DefectosDescarte.malCosechada, DefectosDescarte.Mezcla, DefectosDescarte.Piojo, DefectosDescarte.Podridas, DefectosDescarte.Psilido, DefectosDescarte.Pulgon, DefectosDescarte.Quemada, \n" +
+                                                "DefectosDescarte.Rameada, DefectosDescarte.Roce, DefectosDescarte.Rolado, DefectosDescarte.Russeting, DefectosDescarte.Sarna, DefectosDescarte.Flor, DefectosDescarte.sinPedunculo, \n" +
+                                                "DefectosDescarte.Trips\n" +
+                        "FROM            DescarteLote INNER JOIN\n" +
+                                                "DefectosDescarte ON DescarteLote.Lote = DefectosDescarte.Lote INNER JOIN\n" +
+                                                "servidordb.general.dbo.usr_mclote AS Lote ON DescarteLote.Lote = Lote.USR_LOTE_NUMERO INNER JOIN\n" +
+                                                "servidordb.general.dbo.usr_mcvaried AS Variedad ON Lote.USR_VAR_ALIAS = Variedad.USR_VAR_ALIAS\n"+
+                        "WHERE        (TRY_CONVERT(DATE, DescarteLote.Fecha) = '" + str(fecha) + "')")
+                cursor.execute(sql5)
+                consulta = cursor.fetchall()
+                if consulta:
+                    index = 0
+                    pdf = Reporte_Descarte()
+                    pdf.alias_nb_pages()
+                    for i in consulta:
+                        if i[2] == 1:
+                            empaque = "Pera"
+                        else:
+                            empaque = "Manzana"
+                        if index == 0:
+                            pdf.add_page()
+                            ###IZQUIERDA
+                            pdf.set_font('Arial', '', 7)
+                            pdf.text(x=146, y=16.5, txt= str(fechaNombre(fecha)))
+                            pdf.set_font('Arial', '', 10)
+                            pdf.text(x=32, y=44, txt= empaque)
+                            pdf.text(x=66, y=44, txt= str(i[3]))
+                            pdf.text(x=25, y=49, txt= str(i[4]) + ' Hs.')
+                            pdf.text(x=66, y=49, txt= str(i[0]))
+                            pdf.text(x=32, y=54, txt= str(i[5]))
+                            pdf.text(x=58, y=54, txt= str(i[1]))
+                            ##DEFECTOS
+                            pdf.set_font('Arial', '', 8)
+                            pdf.text(x=68, y=63, txt= str(i[8]))
+                            pdf.text(x=68, y=67, txt= str(i[9]))
+                            pdf.text(x=68, y=71, txt= str(i[10]))
+                            pdf.text(x=68, y=75, txt= str(i[11]))
+                            pdf.text(x=68, y=79, txt= str(i[12]))
+                            pdf.text(x=68, y=83, txt= str(i[13]))
+                            pdf.text(x=68, y=87, txt= str(i[14]))
+                            pdf.text(x=68, y=91, txt= str(i[15]))
+                            pdf.text(x=68, y=95, txt= str(i[16]))
+                            pdf.text(x=68, y=99, txt= str(i[17]))
+                            pdf.text(x=68, y=103, txt= str(i[18]))
+                            pdf.text(x=68, y=107, txt= str(i[19]))
+                            pdf.text(x=68, y=111, txt= str(i[20]))
+                            pdf.text(x=68, y=115, txt= str(i[21]))
+                            pdf.text(x=68, y=119, txt= str(i[22]))
+                            pdf.text(x=68, y=123, txt= str(i[23]))
+                            pdf.text(x=68, y=127, txt= str(i[24]))
+                            pdf.text(x=68, y=131, txt= str(i[25]))
+                            pdf.text(x=68, y=135, txt= str(i[26]))
+                            pdf.text(x=68, y=139, txt= str(i[27]))
+                            pdf.text(x=68, y=143, txt= str(i[28]))
+                            pdf.text(x=68, y=147, txt= str(i[29]))
+                            pdf.text(x=68, y=151, txt= str(i[30]))
+                            pdf.text(x=68, y=155, txt= str(i[31]))
+                            pdf.text(x=68, y=159, txt= str(i[32]))
+                            pdf.text(x=68, y=163, txt= str(i[33]))
+                            pdf.text(x=68, y=167, txt= str(i[34]))
+                            pdf.text(x=68, y=171, txt= str(i[35]))
+                            pdf.text(x=68, y=175, txt= str(i[36]))
+                            pdf.text(x=68, y=179, txt= str(i[37]))
+                            pdf.text(x=68, y=183, txt= str(i[38]))
+                            pdf.text(x=68, y=187, txt= str(i[39]))
+                            pdf.text(x=68, y=191, txt= str(i[40]))
+                            pdf.text(x=68, y=195, txt= str(i[41]))
+                            pdf.text(x=68, y=199, txt= str(i[42]))
+                            pdf.text(x=68, y=203, txt= str(i[43]))
+                            pdf.text(x=68, y=207, txt= str(i[44]))
+                            pdf.text(x=68, y=211, txt= str(i[45]))
+                            pdf.text(x=68, y=215, txt= str(i[46]))
+                            pdf.text(x=68, y=219, txt= str(i[47]))
+                            pdf.text(x=68, y=223, txt= str(i[48]))
+                            pdf.text(x=68, y=227, txt= str(i[49]))
+                            pdf.text(x=68, y=231, txt= str(i[50]))
+                            pdf.text(x=68, y=235, txt= str(i[51]))
+                            pdf.text(x=68, y=239, txt= str(i[52]))
+                            pdf.text(x=68, y=243, txt= str(i[53]))
+                            pdf.text(x=68, y=247, txt= str(i[54]))
+                            pdf.text(x=68, y=251, txt= str(i[55]))
+                            pdf.text(x=68, y=255, txt= str(i[56]))
+                            pdf.text(x=68, y=259, txt= str(i[57]))
+                            pdf.text(x=20, y=267, txt= str(i[6]))
+                            pdf.set_font('Arial', 'B', 10)
+                            pdf.text(x=46, y=288, txt= str(i[3]))#FECHA
+                            ## CONDICIONAL DE USER
+                            if str(i[7]) == "Nicole":
+                                pdf.set_font('Times', 'BI', 10)
+                                pdf.text(x=20, y=288, txt= 'Nicole')
+                            else:
+                                pdf.text(x=20, y=288, txt= str(i[7]))
+                            index = index + 1
+                        else:
+                            ##DERECHA
+                            pdf.set_font('Arial', '', 10)
+                            pdf.text(x=142, y=44, txt= empaque)
+                            pdf.text(x=176, y=44, txt= str(i[3]))
+                            pdf.text(x=135, y=49, txt= str(i[4]) + ' Hs.')
+                            pdf.text(x=176, y=49, txt= str(i[0]))
+                            pdf.text(x=142, y=54, txt= str(i[5]))
+                            pdf.text(x=168, y=54, txt= str(i[1]))
+                            ##DEFECTOS
+                            pdf.set_font('Arial', '', 8)
+                            pdf.text(x=178, y=63, txt= str(i[8]))
+                            pdf.text(x=178, y=67, txt= str(i[9]))
+                            pdf.text(x=178, y=71, txt= str(i[10]))
+                            pdf.text(x=178, y=75, txt= str(i[11]))
+                            pdf.text(x=178, y=79, txt= str(i[12]))
+                            pdf.text(x=178, y=83, txt= str(i[13]))
+                            pdf.text(x=178, y=87, txt= str(i[14]))
+                            pdf.text(x=178, y=91, txt= str(i[15]))
+                            pdf.text(x=178, y=95, txt= str(i[16]))
+                            pdf.text(x=178, y=99, txt= str(i[17]))
+                            pdf.text(x=178, y=103, txt= str(i[18]))
+                            pdf.text(x=178, y=107, txt= str(i[19]))
+                            pdf.text(x=178, y=111, txt= str(i[20]))
+                            pdf.text(x=178, y=115, txt= str(i[21]))
+                            pdf.text(x=178, y=119, txt= str(i[22]))
+                            pdf.text(x=178, y=123, txt= str(i[23]))
+                            pdf.text(x=178, y=127, txt= str(i[24]))
+                            pdf.text(x=178, y=131, txt= str(i[25]))
+                            pdf.text(x=178, y=135, txt= str(i[26]))
+                            pdf.text(x=178, y=139, txt= str(i[27]))
+                            pdf.text(x=178, y=143, txt= str(i[28]))
+                            pdf.text(x=178, y=147, txt= str(i[29]))
+                            pdf.text(x=178, y=151, txt= str(i[30]))
+                            pdf.text(x=178, y=155, txt= str(i[31]))
+                            pdf.text(x=178, y=159, txt= str(i[32]))
+                            pdf.text(x=178, y=163, txt= str(i[33]))
+                            pdf.text(x=178, y=167, txt= str(i[34]))
+                            pdf.text(x=178, y=171, txt= str(i[35]))
+                            pdf.text(x=178, y=175, txt= str(i[36]))
+                            pdf.text(x=178, y=179, txt= str(i[37]))
+                            pdf.text(x=178, y=183, txt= str(i[38]))
+                            pdf.text(x=178, y=187, txt= str(i[39]))
+                            pdf.text(x=178, y=191, txt= str(i[40]))
+                            pdf.text(x=178, y=195, txt= str(i[41]))
+                            pdf.text(x=178, y=199, txt= str(i[42]))
+                            pdf.text(x=178, y=203, txt= str(i[43]))
+                            pdf.text(x=178, y=207, txt= str(i[44]))
+                            pdf.text(x=178, y=211, txt= str(i[45]))
+                            pdf.text(x=178, y=215, txt= str(i[46]))
+                            pdf.text(x=178, y=219, txt= str(i[47]))
+                            pdf.text(x=178, y=223, txt= str(i[48]))
+                            pdf.text(x=178, y=227, txt= str(i[49]))
+                            pdf.text(x=178, y=231, txt= str(i[50]))
+                            pdf.text(x=178, y=235, txt= str(i[51]))
+                            pdf.text(x=178, y=239, txt= str(i[52]))
+                            pdf.text(x=178, y=243, txt= str(i[53]))
+                            pdf.text(x=178, y=247, txt= str(i[54]))
+                            pdf.text(x=178, y=251, txt= str(i[55]))
+                            pdf.text(x=178, y=255, txt= str(i[56]))
+                            pdf.text(x=178, y=259, txt= str(i[57]))
+                            pdf.text(x=130, y=267, txt= str(i[6]))
+                            index = 0
+                    ###IMPRIMO PDF
+                    name_fecha = str(fecha).replace('-','')
+                    name = "Control_Descarte_" + name_fecha
+                    pdf.output('App/Empaque/data/pdf/' + name + '.pdf', 'F')
+                    jsonList = json.dumps({'message': 'Success', 'pdf': name}) 
+                    return JsonResponse(jsonList, safe=False)
+                else:
+                    jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
+                    return JsonResponse(jsonList, safe=False)
+            except Exception as e:
+                    error = "Ocurrió un error: " + str(e)
+                    jsonList = json.dumps({'message': error}) 
+                    return JsonResponse(jsonList, safe=False)
+            finally:
+                cursor.close()
+                conexion.close()
+        elif str(Tipo) == "Control Presiones":
+            if  listaHoras(fecha) == 5:
+                error = "Ocurrió un error en la conexión."
+                jsonList = json.dumps({'message': error}) 
+                return JsonResponse(jsonList, safe=False)
+            elif listaHoras(fecha) == 0:
+                jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
+                return JsonResponse(jsonList, safe=False)
+            else:
+                ##CONSIGUIÓ LAS HORAS
+                listado_de_horas = listaHoras(str(fecha))
+                index = 0
+                pdf = Reporte_Presiones()
+                pdf.alias_nb_pages()
+                for i in listado_de_horas:
+                    hora = str(i)
+                    hora_replace = hora.replace(':','')
+                    lista_x = data_x(str(fecha),hora)
+                    lista_y = data_y(str(fecha),hora)
+                    Crea_grafico(lista_x,lista_y,hora_replace)
+                    datos = data_Presiones(str(fecha),hora)
+                    if datos[0] == "1":
+                        empaque = "Pera"
+                    else:
+                        empaque = "Manzana"
+                    if index == 0:
+                        pdf.add_page()
+                        ###ARRIBA
+                        pdf.set_font('Arial', '', 7)
+                        pdf.text(x=146, y=16.5, txt= str(fechaNombre(fecha)))
+                        pdf.set_font('Arial', '', 10)
+                        pdf.text(x=44, y=49, txt= empaque)
+                        pdf.text(x=100, y=49, txt= datos[1])
+                        pdf.text(x=160, y=49, txt= datos[2]+' Hs.')
+                        pdf.text(x=76, y=64, txt= str(datos[3]))
+                        pdf.text(x=165, y=64, txt= datos[4] + ' Bar')
+                        pdf.image('App/API/media/images/Calidad/reportes_presiones/grafico_presion_' + hora_replace + '.png', x=12, y=85, w=180, h=50)
+                        pdf.set_font('Arial', 'B', 10)
+                        pdf.text(x=46, y=288, txt= datos[1])
+                        ## CONDICIONAL DE USER
+                        if str(datos[5]) == "Nicole" or str(datos[5]) == "nicole":
+                            pdf.set_font('Times', 'BI', 10)
+                            pdf.text(x=20, y=288, txt= 'Nicole')
+                        else:
+                            pdf.text(x=20, y=288, txt= str(datos[5]))
+                        index = index + 1
+                    else:
+                        ###ABAJO
+                        pdf.set_font('Arial', '', 10)
+                        pdf.text(x=44, y=169, txt= empaque)
+                        pdf.text(x=100, y=169, txt= datos[1])
+                        pdf.text(x=160, y=169, txt= datos[2] + ' Hs.')
+                        pdf.text(x=76, y=184, txt= str(datos[3]))
+                        pdf.text(x=165, y=184, txt= datos[4] + ' Bar')
+                        pdf.image('App/API/media/images/Calidad/reportes_presiones/grafico_presion_' + hora_replace + '.png', x=12, y=205, w=180, h=50)
+                        index = 0
+                name_fecha = str(fecha).replace('-','')
+                name = "Control_Presiones_" + name_fecha
+                pdf.output('App/Empaque/data/pdf/' + name + '.pdf', 'F')
+                delete_png_files()
+                jsonList = json.dumps({'message': 'Success', 'pdf': name}) 
+                return JsonResponse(jsonList, safe=False)
     else:
         error = "Ocurrió un error: "
         jsonList = json.dumps({'message': error}) 
         return JsonResponse(jsonList, safe=False)
     
+
+def data_x(fecha,hora):
+    try:
+        conexion = zetoneApp()
+        cursor = conexion.cursor()
+        sql = ("SELECT Fruto FROM Presiones WHERE TRY_CONVERT(DATE, Fecha) ='" + fecha + "' AND Hora='" + str(hora) + "'")
+        cursor.execute(sql)
+        consulta = cursor.fetchall()
+        if consulta:
+            x_data = [] # FRUTOS
+            for i in consulta:
+                x_data.append(i[0])
+        return x_data
+    except Exception as e:
+            print(e)
+    finally:
+        cursor.close()
+        conexion.close()
+
+def data_y(fecha,hora):
+    try:
+        conexion = zetoneApp()
+        cursor = conexion.cursor()
+        sql = ("SELECT CAST((ROUND(Presion, 0, 0)) AS INT) FROM Presiones WHERE TRY_CONVERT(DATE, Fecha) ='" + fecha + "' AND Hora='" + str(hora) + "'")
+        cursor.execute(sql)
+        consulta = cursor.fetchall()
+        if consulta:
+            y_data = [] # FRUTOS
+            for i in consulta:
+                y_data.append(i[0])
+        return y_data
+    except Exception as e:
+            print(e)
+    finally:
+        cursor.close()
+        conexion.close()
+
+def Crea_grafico(lista_x,lista_y,hora):
+    fig, ax = plt.subplots(figsize=(8, 2))
+    ax.plot(lista_x, lista_y, 'o-', label='Presiones')
+    for x, y in zip(lista_x, lista_y):
+        ax.scatter(x, y, color='black')
+        ax.annotate(y, (x, y), textcoords="offset points", xytext=(0,5), ha='center')
+    ax.set_xlabel("N° Fruto")
+    ax.set_ylabel("Presión")
+    ax.set_xticks(lista_x)
+    ax.set_yticks(lista_y)
+    ax.set_yticks(range(min(lista_y), max(lista_y)+1, 2))
+    ax.legend()
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    plt.tight_layout()
+    name_image = 'grafico_presion_' + str(hora)
+    plt.savefig('App/API/media/images/Calidad/reportes_presiones/'+ name_image + '.png')
+
+def listaHoras(fecha):
+    try:
+        conexion = zetoneApp()
+        cursor = conexion.cursor()
+        sql5 = ("SELECT DISTINCT CONVERT(char(5),Hora) FROM Presiones WHERE Fecha='" + str(fecha) + "'")
+        cursor.execute(sql5)
+        consulta = cursor.fetchall()
+        if consulta:
+            horasLista = []
+            for i in consulta:
+                hora = str(i[0])
+                horasLista.append(hora)
+            return horasLista
+        else:
+            return 0
+    except Exception as e:
+            return 5
+    finally:
+        cursor.close()
+        conexion.close()
+
+def data_Presiones(fecha,hora):
+    try:
+        conexion = zetoneApp()
+        cursor = conexion.cursor()
+        sql5 = ("SELECT Empaque, CONVERT(varchar(10), Fecha, 103) AS fecha, CONVERT(char(5),Hora) AS hora, MAX(Fruto) AS frutos, CONVERT(char(5),CAST(round(AVG(Presion),2) AS decimal(9,2))) AS Promedio, usuario\n"+
+                "FROM Presiones\n" +
+                "WHERE Fecha='" + str(fecha) + "' AND Hora='" + str(hora) + "'\n"
+                "GROUP BY Empaque, Fecha, Hora, usuario")
+        cursor.execute(sql5)
+        consulta = cursor.fetchone()
+        if consulta:
+            lista_datos = []
+            for i in consulta:
+                dato = str(i)
+                lista_datos.append(dato)
+            return lista_datos
+    except Exception as e:
+            print(e)
+    finally:
+        cursor.close()
+        conexion.close()
+
+def delete_png_files():
+    directory = "App/API/media/images/Calidad/reportes_presiones"
+    for filename in os.listdir(directory):
+        if filename.endswith('.png'):
+            os.remove(os.path.join(directory, filename))
 
 def descarga_pdf_control_camaras(request, filename):
     nombre = filename

@@ -11,7 +11,7 @@ path('configuracion/procesar', views.renderProcesarRegistros, name="procesar_reg
 
 
 ##A JAVASCRIPT
-path('resgistros/calculo/horas', views.calculoHorasJson, name="registros_calculo"),
+path('registros/calculo/horas', views.calculoHorasJson, name="registros_calculo"),
 path('registros/sin/proceso', views.ver_registros_sin_proceso , name='registros_no_proceso'),
 
 ###PROCESO DE HORAS

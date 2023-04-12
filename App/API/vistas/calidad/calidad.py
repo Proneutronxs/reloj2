@@ -179,7 +179,6 @@ def busca_presiones(request):
                 #return HttpResponse(jsonList)
                 return JsonResponse(jsonList, safe=False)
             else:
-                print("else")
                 jsonList = json.dumps({'message': 'Not Found'}) 
                 return JsonResponse(jsonList, safe=False)
         except Exception as e:
