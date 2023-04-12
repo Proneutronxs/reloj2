@@ -310,7 +310,7 @@ def post_busqueda_reporte_camaras(request):
                                 pdf.text(x=46, y=288, txt= str(fecha_actual()))
                                 pdf.set_font('Times', 'I', 10)
                                 user = str(i[53])
-                                if str(datos[5]) == "Nicole" or str(datos[5]) == "nicole":
+                                if user == "Nicole" or user == "nicole":
                                     pdf.set_font('Times', 'BI', 10)
                                     pdf.text(x=20, y=288, txt= 'Nicole')
                                 else:
@@ -515,7 +515,7 @@ def post_busqueda_reporte_camaras(request):
                             pdf.set_font('Arial', 'B', 10)
                             pdf.text(x=46, y=288, txt= str(i[3]))#FECHA
                             ## CONDICIONAL DE USER
-                            if str(datos[5]) == "Nicole" or str(datos[5]) == "nicole":
+                            if str(i[7]) == "Nicole" or str(i[7]) == "nicole":
                                 pdf.set_font('Times', 'BI', 10)
                                 pdf.text(x=20, y=288, txt= 'Nicole')
                             else:
