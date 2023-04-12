@@ -586,8 +586,8 @@ def post_busqueda_reporte_camaras(request):
                             index = 0
                     ###IMPRIMO PDF
                     name_fecha = str(fecha).replace('-','')
-                    name = "Control_Descarte_" + name_fecha
-                    pdf.output('App/Empaque/data/pdf/' + name + '.pdf', 'F')
+                    name = "Control_Descarte_" + name_fecha + '.pdf'
+                    pdf.output('App/Empaque/data/pdf/' + name, 'F')
                     jsonList = json.dumps({'message': 'Success', 'pdf': name}) 
                     return JsonResponse(jsonList, safe=False)
                 else:
@@ -657,8 +657,8 @@ def post_busqueda_reporte_camaras(request):
                         pdf.image('App/API/media/images/Calidad/reportes_presiones/grafico_presion_' + hora_replace + '.png', x=12, y=205, w=180, h=50)
                         index = 0
                 name_fecha = str(fecha).replace('-','')
-                name = "Control_Presiones_" + name_fecha
-                pdf.output('App/Empaque/data/pdf/' + name + '.pdf', 'F')
+                name = "Control_Presiones_" + name_fecha + '.pdf'
+                pdf.output('App/Empaque/data/pdf/' + name, 'F')
                 delete_png_files()
                 jsonList = json.dumps({'message': 'Success', 'pdf': name}) 
                 return JsonResponse(jsonList, safe=False)
