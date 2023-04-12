@@ -219,7 +219,7 @@ def post_busqueda_reporte_camaras(request):
                     cursor = conexion.cursor()
                     consultaSQL = ("SELECT        Bulto.Id_bulto AS id, Marca.Nombre_marca AS Marca, Calidad.nombre_calidad AS Calidad, Variedad.nombre_variedad AS Variedad, Especie.nombre_especie AS Especie, Bulto.id_galpon AS Galpon, \n" +
                                                             "Envase.nombre_envase AS Envase, Calibre.nombre_calibre AS Calibre, USR_MCCUADRO.USR_CUAD_UMI AS UMI, USR_MCCUADRO.USR_CUAD_UP AS UP, Embalador.nombre_embalador AS Embalador, \n" +
-                                                            "USR_MCLOTE.USR_LOTE_NUMERO AS Lote, CONVERT(varchar(10), Bulto.fecha_alta_bulto, 103) AS FechaEmbalado, CONVERT(varchar(5), Bulto.fecha_alta_bulto, 108) AS HoraEmbalado, numeroCaja, CONVERT(varchar(10), DefectosCaja.Fecha, 103) AS FechaControl, CONVERT(varchar(8), DefectosCaja.Hora, 108) AS HoraControl, PesoNeto, PesoBruto, PLU, Observaciones, Deformadas, TamañoIncorrecto, FaltaDeColor, Russeting, Heladas, roceBins, Asoleado, QuemadoPorSol, Fitotoxicidad, Rolado, Golpes, \n" +
+                                                            "USR_MCLOTE.USR_LOTE_NUMERO AS Lote, CONVERT(varchar(10), Bulto.fecha_alta_bulto, 103) AS FechaEmbalado, CONVERT(varchar(5), Bulto.fecha_alta_bulto, 108) AS HoraEmbalado, numeroCaja, CONVERT(varchar(10), DefectosCaja.Fecha, 103) AS FechaControl, CONVERT(varchar(5), DefectosCaja.Hora, 108) AS HoraControl, PesoNeto, PesoBruto, PLU, Observaciones, Deformadas, TamañoIncorrecto, FaltaDeColor, Russeting, Heladas, roceBins, Asoleado, QuemadoPorSol, Fitotoxicidad, Rolado, Golpes, \n" +
                                                             "Heridas, HeridasViejas, Cracking, Bitterpit, Granizo, DañoPorInsecto, FaltaDePedunculo, DesvioDeClasificacion, SegundaFlor, Madurez, Deshidratacion, Decaimiento, MohoHumedo, MohoSeco, MohoAcuoso, Rameado, \n" +
                                                             "FirmezaPulpaMax, FirmezaPulpaMin, FirmezaPulpaPromedio, faltaDeBoro, Maquina, Usuario\n" +
                                     "FROM            servidordb.trazabilidad.dbo.Especie AS Especie INNER JOIN\n" +
@@ -258,7 +258,7 @@ def post_busqueda_reporte_camaras(request):
                                 pdf.text(x=26, y=48, txt= str(i[14]))
                                 pdf.text(x=56, y=48, txt= str(i[0]))
                                 pdf.text(x=90, y=48, txt= str(i[15]))
-                                pdf.text(x=122, y=48, txt= str(i[16]))
+                                pdf.text(x=122, y=48, txt= str(i[16]) + ' Hs.')
                                 pdf.text(x=160, y=48, txt= empaque)
                                 pdf.text(x=196, y=48, txt= str(i[52]))#MAQUINA
 
