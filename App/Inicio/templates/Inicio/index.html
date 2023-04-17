@@ -55,7 +55,11 @@
         <div class="logoInicio">
             <img src="{%static 'zetonetime/img/logosf.png' %}" alt="">
         </div>
-
+        {% if message %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
         <!-- Contenedor del pop-up -->
             <div class="login-popup" id="login-popup">
                 <!-- Formulario de inicio de sesión -->

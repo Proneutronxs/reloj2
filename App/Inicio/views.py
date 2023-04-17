@@ -6,6 +6,15 @@ import json
 ##LOGIN
 from django.contrib.auth.decorators import login_required
 from  django.contrib.auth import logout
+from django.contrib.auth.views import LoginView
+
+
+# Create your views here.
+
+class CustomLoginView(LoginView):
+    print("entra?")
+    template_name = 'Inicio/index.html'
+    extra_context = {'message': 'Usuario o contraseña incorrectos'}
 
 
 

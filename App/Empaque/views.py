@@ -48,6 +48,64 @@ def fechaNombre(fecha):
     fechaN = (diaNombre + ", " + str(dianum) + " de " + str(mes) + " del " + str(año) + " - " + str(hora_actual) +" Hs.")
     return fechaN
 
+def data_general(fecha):
+    try:
+        conexion = zetoneApp()
+        cursor = conexion.cursor()
+        sql = ("SELECT ID, CONVERT(VARCHAR(10), Fecha, 103) AS Fecha, CONVERT(VARCHAR(5),Hora, 108) AS Hora, Observaciones, Usuario\n" +
+                "FROM Reporte_Control_Camaras \n" +
+                "WHERE TRY_CONVERT(DATE,Fecha)='" + str(fecha) +"'")
+        cursor.execute(sql)
+        consulta = cursor.fetchone()
+        if consulta:
+            lista_datos_general = []
+            for i in consulta:
+                dato = str(i)
+                lista_datos_general.append(dato)
+            return lista_datos_general
+        else:
+            return 0
+    except Exception as e:
+            print(e)
+            return 5
+    finally:
+        cursor.close()
+        conexion.close()
+
+def data_distinct_camaras(id):
+    try:
+        conexion = zetoneApp()
+        cursor = conexion.cursor()
+        sql = ("SELECT DISTINCT RIGHT('00' + Camara, 2) AS Camara\n" +
+                "FROM Control_Camaras\n" +
+                "WHERE ID_Reporte='" + str(id) + "' AND Camara NOT LIKE 'ANTE-CAM-%'\n" +
+                "UNION \n" +
+                "SELECT DISTINCT Camara\n" +
+                "FROM Control_Camaras\n" +
+                "WHERE ID_Reporte='" + str(id) + "' AND Camara LIKE 'ANTE%' ")
+        cursor.execute(sql)
+        consulta = cursor.fetchall()
+        if consulta:
+            lista_camaras = []
+            for i in consulta:
+                camara = str(i[0])
+                new_camara = camara[1:] if camara.startswith("0") else camara
+                lista_camaras.append(new_camara)
+            return lista_camaras
+    except Exception as e:
+            print(e)
+            return 5
+    finally:
+        cursor.close()
+        conexion.close()
+
+def delete_jpeg_files_control_camaras():
+    directory = "App/Empaque/data/images"
+    for filename in os.listdir(directory):
+        if filename.endswith('.JPEG'):
+            os.remove(os.path.join(directory, filename))
+
+
 def consultaTopCaja(fecha):
     try:
         conexion = zetoneApp()
@@ -76,102 +134,59 @@ def post_busqueda_reporte_camaras(request):
         planta = form.cleaned_data['planta']
         if str(Tipo) == "Control Cámaras":
             try:
-                data_principal = []
-                ZetoApp = zetoneApp()
-                cursorZetoApp = ZetoApp.cursor()
-                consulta_data_principal = ("SELECT ID, CONVERT(VARCHAR(10), Fecha, 103) AS Fecha, Hora, Observaciones, Usuario FROM Reporte_Control_Camaras WHERE Fecha='" + str(fecha) + "'")
-                cursorZetoApp.execute(consulta_data_principal)
-                consulta_general = cursorZetoApp.fetchone()
-                if consulta_general:
-                    data_principal.append(str(consulta_general[0])) ##ID
-                    data_principal.append(str(consulta_general[1])) ##FECHA
-                    data_principal.append(str(consulta_general[2])) ##HORA
-                    data_principal.append(str(consulta_general[3])) ##OBSERVACIONES
-                    data_principal.append(str(consulta_general[4])) ##USUARIO
-
-                    id_reporte = str(data_principal[0])
-                    fecha = str(data_principal[1])
-                    hora = str(data_principal[2])
-                    fecha_name = str(data_principal[1]).replace('/', '')
-                    hora_name = str(data_principal[2]).replace(':', '')
-                    lista_user = str(data_principal[4]).split('@')
-                    user_name = str(lista_user[0])
-                    consulta_data_camaras = ("SELECT Camara, Especie, Envase, Temperatura FROM Control_Camaras WHERE ID_Reporte='" + id_reporte + "' ORDER BY Camara, Envase")
-                    cursorZetoApp.execute(consulta_data_camaras)
-                    consulta_camaras = cursorZetoApp.fetchall()
-                    pdf = control_camaras_PDF()
-            
+                lista_data_general = data_general(fecha)
+                if lista_data_general != 0:
+                    id = lista_data_general[0]
+                    fechaReporte = str(lista_data_general[1])
+                    horaReporte = str(lista_data_general[2])
+                    observaciones = str(lista_data_general[3])
+                    usuario = str(lista_data_general[4])
+                    listado_camaras = data_distinct_camaras(id)
+                    fechaActual = str(fecha_actual())
+                    pdf = control_camaras_PDF(fechaReporte, horaReporte, fechaActual, usuario)
                     pdf.alias_nb_pages()
                     pdf.add_page()
-                    pdf.set_font('Times', 'I', 12)
-                    pdf.text(x=12, y=40, txt= 'Fecha Control: ' + str(data_principal[1]))
-                    pdf.text(x=65, y=40, txt= 'Hora Control: ' + str(data_principal[2]) + ' Hs.')
-                    pdf.set_font('Arial', 'B', 10)
-                    pdf.text(x=16.5, y=286, txt= user_name)
-                    pdf.text(x=45, y=286, txt= str(fecha_actual()))## Traer fecha actual
-                    pdf.set_font('Arial', 'B', 10)
-                    pdf.rect(x=10,y=43,w=190,h=5)
-                    pdf.text(x=16, y=47.5, txt= 'CÁMARA')
-                    pdf.line(40,43,40,48)
-                    pdf.text(x=55, y=47.5, txt= 'ESPECIE')
-                    pdf.line(85,43,85,48)
-                    pdf.text(x=100, y=47.5, txt= 'ENVASE')
-                    pdf.line(130,43,130,48)
-                    pdf.text(x=150, y=47.5, txt= 'TEMPERATURA') 
-                    cantidad = 0
-                    if consulta_camaras:
-                        for i in consulta_camaras:
-                            envase = str(i[2])
-                            if envase == "SELECCIONE":
-                                envase = "-"
-                            pdf.set_font('Arial', '', 8)
-                            pdf.cell(w=30, h=3, txt= str(i[0]), border='LBR', align='C', fill=0)
-                            pdf.cell(w=45, h=3, txt= str(i[1]), border='BR', align='C', fill=0)
-                            pdf.cell(w=45, h=3, txt= envase, border='BR', align='C', fill=0)
-                            pdf.multi_cell(w=70, h=3, txt= str(i[3] + ' °C'), border='BR', align='C', fill=0)
-                            cantidad = cantidad + 1
+                    for i in listado_camaras:
+                        pdf.set_font('Arial', 'B', 11)
+                        pdf.set_fill_color(186, 233, 175)
+                        pdf.multi_cell(w=0, h=8, txt='Cámara:      ' + str(i), border='', align='L', fill=True)
+                        try:
+                            conexion = zetoneApp()
+                            cursor = conexion.cursor()
+                            sql = ("SELECT Especie, Envase, Temperatura \n " +
+                                    "FROM Control_Camaras \n " +
+                                    "WHERE ID_Reporte='" + str(id) + "' AND Camara='" + str(i) + "'\n " +
+                                    "ORDER BY Camara, Envase")
+                            cursor.execute(sql)
+                            consulta = cursor.fetchall()
+                            if consulta:
+                                for j in consulta:
+                                    pdf.set_font('Arial', '', 8)
+                                    pdf.cell(w=40, h=5, txt= str(j[0]), border='LTBR', align='C', fill=0)
+                                    pdf.cell(w=40, h=5, txt= str(j[1]), border='LBTR', align='C', fill=0)
+                                    pdf.multi_cell(w=0, h=5, txt= str(j[2]) +  ' °C', border='LBTR', align='C', fill=0)
+                        except Exception as e:
+                                print(e)
+                        finally:
+                            cursor.close()
+                            conexion.close()
 
-                        if cantidad > 76:
-                            pdf.set_font('Times', 'I', 12)
-                            pdf.text(x=12, y=40, txt= 'Fecha Control: ' + fecha)
-                            pdf.text(x=65, y=40, txt= 'Hora Control: ' + hora + ' Hs.')
-                            pdf.set_font('Arial', 'B', 10)
-                            pdf.text(x=16.5, y=286, txt= user_name)
-                            pdf.text(x=45, y=286, txt= str(fecha_actual()))## Traer fecha actual
-                            pdf.set_font('Arial', 'B', 10)
-                            pdf.rect(x=10,y=43,w=190,h=5)
-                            pdf.text(x=16, y=47.5, txt= 'CÁMARA')
-                            pdf.line(40,43,40,48)
-                            pdf.text(x=55, y=47.5, txt= 'ESPECIE')
-                            pdf.line(85,43,85,48)
-                            pdf.text(x=100, y=47.5, txt= 'ENVASE')
-                            pdf.line(130,43,130,48)
-                            pdf.text(x=150, y=47.5, txt= 'TEMPERATURA')     
-                            
-                        ##OBSERVACIONES
-                
-                        pdf.add_page()
-                        pdf.set_font('Times', 'I', 12)
-                        pdf.text(x=12, y=40, txt= 'Fecha Control: ' + str(data_principal[1]))
-                        pdf.text(x=65, y=40, txt= 'Hora Control: ' + str(data_principal[2]) + ' Hs.')
-                        pdf.set_font('Arial', 'B', 10)
-                        if user_name == "Nicole":
-                            pdf.set_font('Times', 'BI', 10)
-                            pdf.text(x=20, y=288, txt= 'Nicole')
-                        else:
-                            pdf.text(x=20, y=288, txt= user_name)#USER
-                        pdf.text(x=45, y=286, txt= str(fecha_actual()))## Traer fecha actual
-                        pdf.rect(x=10,y=43,w=190,h=5)
-                        pdf.text(x=11, y=46.5, txt= 'OBSERVACIONES:')
-                        ### CONTRUCTOR DE OBS
-                        observaciones = str(data_principal[3])
-                        lista_observaciones = observaciones.split("_")
-                        for j in lista_observaciones:
-                            pdf.set_font('Arial', '', 10)
-                            pdf.multi_cell(w=0, h=5, txt= str(j) or "Sin Observaciones", border='LBR', align='L', fill=0)                        
+
+                    ### AGREGA PÁGINA DE OBSERVACIONES E IMÁGENES
+                    pdf.add_page()
+                    pdf.rect(x=10,y=43,w=190,h=5)
+                    pdf.text(x=11, y=46.5, txt= 'OBSERVACIONES:')
+                    ### CONTRUCTOR DE OBS
+                    observaciones = observaciones
+                    lista_observaciones = observaciones.split("_")
+                    for j in lista_observaciones:
+                        pdf.set_font('Arial', '', 10)
+                        pdf.multi_cell(w=0, h=5, txt= str(j) or "Sin Observaciones", border='LBR', align='L', fill=0)
 
                     ##CONSULTA IMAGENES
-                    consulta_data_images = ("SELECT Fotos FROM Fotos_Control_Camaras WHERE ID_Reporte='" + id_reporte + "'")
+                    ZetoApp = zetoneApp()
+                    cursorZetoApp = ZetoApp.cursor()
+                    consulta_data_images = ("SELECT Fotos FROM Fotos_Control_Camaras WHERE ID_Reporte='" + str(id) + "'")
                     cursorZetoApp.execute(consulta_data_images)
                     consulta_images = cursorZetoApp.fetchall()
                     if consulta_images:
@@ -181,8 +196,10 @@ def post_busqueda_reporte_camaras(request):
                         pdf.text(x=11, y=102, txt= 'IMÁGENES:')
                         name_decoded_image = []
                         k_index = 0
+                        fecha_name = fechaReporte.replace('/', '')
+                        hora_name = horaReporte.replace(':', '')
                         for k in consulta_images:
-                            nombre_foto = decode_base64_to_image(k_index,fecha_name, hora_name, id_reporte, k[0])
+                            nombre_foto = decode_base64_to_image(k_index,fecha_name, hora_name, str(id), k[0])
                             name_decoded_image.append(str(nombre_foto))
                             k_index = k_index + 1
                         valores_x = [10,80,150,10,80,150]
@@ -196,21 +213,22 @@ def post_busqueda_reporte_camaras(request):
                             name_image = str(name_decoded_image[index])
                             pdf.image("App/Empaque/data/images/" + name_image, x = valores_x[index], y = valores_y[index], w = 50, h = 82, type = '', link = '')
                             index = index + 1
-                    
-                    name_pdf = 'Reporte_Cámaras_' + fecha_name + "_" + hora_name + '.pdf'
-                    pdf.output('App/Empaque/data/pdf/' + name_pdf  , 'F')
-                    jsonList = json.dumps({'message': 'Success', 'pdf': name_pdf}) 
+                    fecha = fechaReporte.replace('/', '')
+                    name = "Reporte_Control_Cámaras_" + fecha + '.pdf'
+                    pdf.output('App/Empaque/data/pdf/' + name, 'F') 
+                    delete_jpeg_files_control_camaras() 
+                    jsonList = json.dumps({'message': 'Success', 'pdf': name}) 
                     return JsonResponse(jsonList, safe=False)
+
                 else:
                     jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
                     return JsonResponse(jsonList, safe=False)
+                
             except Exception as e:
                 error = "Ocurrió un error: " + str(e)
                 jsonList = json.dumps({'message': error}) 
                 return JsonResponse(jsonList, safe=False)
-            finally:
-                cursorZetoApp.close()
-                ZetoApp.close()
+            
         elif str(Tipo) == "Control Empaque":
             Top_Caja = consultaTopCaja(fecha)
             if Top_Caja != "0":

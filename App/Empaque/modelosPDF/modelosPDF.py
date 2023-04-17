@@ -13,6 +13,13 @@ def decode_base64_to_image(index, fecha, hora, id, base64_string):
 
 ##CONTROL DE CAMARAS
 class control_camaras_PDF(FPDF):
+    def __init__(self, fecha_reporte, hora_reporte, fechaActual, usuario):
+        super().__init__()
+        self.fecha_reporte = fecha_reporte
+        self.hora_reporte = hora_reporte
+        self.fechaActual = fechaActual
+        self.usuario = usuario
+
     def header(self):
         self.set_font('Arial', '', 15)
         self.rect(x=10,y=14,w=190,h=19)
@@ -36,6 +43,13 @@ class control_camaras_PDF(FPDF):
         self.set_font('Times', 'I', 12)
         self.text(x=146, y=40, txt= 'Establecimiento: Planta Uno')
         self.line(10,41,200,41)
+
+        self.set_font('Times', 'I', 12)
+        self.text(x=12, y=40, txt= 'Fecha Control: ' + self.fecha_reporte)
+        self.text(x=65, y=40, txt= 'Hora Control: ' + self.hora_reporte + ' Hs.')
+        self.set_font('Arial', 'B', 10)
+        self.text(x=18, y=287, txt= self.usuario)
+        self.text(x=45, y=286, txt= self.fechaActual)
         self.ln(38)
 
     def footer(self):

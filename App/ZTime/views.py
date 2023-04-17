@@ -17,8 +17,6 @@ from openpyxl.drawing.image import Image
 ##LOGIN
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
-
 def fechaNombre(fecha):
     dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
     meses = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
