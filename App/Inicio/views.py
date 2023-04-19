@@ -12,7 +12,6 @@ from django.contrib.auth.views import LoginView
 # Create your views here.
 
 class CustomLoginView(LoginView):
-    print("entra?")
     template_name = 'Inicio/index.html'
     extra_context = {'message': 'Usuario o contraseña incorrectos'}
 
@@ -33,7 +32,6 @@ def user_permissions(user, permissions):
             permiso = "0"
             return permiso
     except Exception as e:
-        print(e)
         permiso = "0"
         return permiso
     finally:

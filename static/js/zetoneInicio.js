@@ -42,6 +42,31 @@ function permiso_Zetonetime() {
   );  
 }
 
+function permiso_ZetoneFrio() {
+  fetch("/user/permissions/modulo=ZetoneFrio", {
+    method: "GET"
+  }).then(
+    function(response){
+      return response.json();      
+    }
+  ).then(
+    function(data){
+      //console.log(data)
+      try {
+        let arrayData = JSON.parse(data);//CONVIERTE EL JSON en ARRAY
+        if(arrayData.permiso == 1){
+          //console.log(arrayData.permiso)
+          window.location.href = '/frigorifico/';
+        }else{
+          alert(arrayData.message);
+        }
+      }catch(error){
+        console.log(error);
+      }
+    }
+  );  
+}
+
 function permiso_ZetoneEmpaque() {
   fetch("/user/permissions/modulo=ZetoneEmpaque", {
     method: "GET"
