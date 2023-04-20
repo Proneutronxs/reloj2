@@ -547,7 +547,8 @@ class Reporte_Presiones(FPDF):
         self.text(x=24, y=49, txt= 'Empaque:')
         self.text(x=84, y=49, txt= 'Fecha:')
         self.text(x=144, y=49, txt= 'Hora:')
-        self.text(x=34, y=64, txt= 'Cantidad de Frutos:')
+        self.text(x=12, y=64, txt= 'Cantidad de Frutos:')
+        self.text(x=58, y=64, txt= 'Variedad:')
         self.text(x=115, y=64, txt= 'Promedio de Presiones:')
 
 
@@ -558,7 +559,8 @@ class Reporte_Presiones(FPDF):
         self.text(x=24, y=169, txt= 'Empaque:')
         self.text(x=84, y=169, txt= 'Fecha:')
         self.text(x=144, y=169, txt= 'Hora')
-        self.text(x=34, y=184, txt= 'Cantidad de Frutos:')
+        self.text(x=12, y=184, txt= 'Cantidad de Frutos:')
+        self.text(x=58, y=184, txt= 'Variedad:')
         self.text(x=115, y=184, txt= 'Promedio de Presiones:')
         self.ln(40)
 

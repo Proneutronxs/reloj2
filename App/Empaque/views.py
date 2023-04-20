@@ -228,7 +228,6 @@ def post_busqueda_reporte_camaras(request):
                 error = "Ocurrió un error: " + str(e)
                 jsonList = json.dumps({'message': error}) 
                 return JsonResponse(jsonList, safe=False)
-            
         elif str(Tipo) == "Control Empaque":
             Top_Caja = consultaTopCaja(fecha)
             if Top_Caja != "0":
@@ -639,7 +638,9 @@ def post_busqueda_reporte_camaras(request):
                     lista_y = data_y(str(fecha),hora)
                     Crea_grafico(lista_x,lista_y,hora_replace)
                     datos = data_Presiones(str(fecha),hora)
-                    if datos[0] == "1":
+                    idGalpon = str(datos[0])
+                    variedad = str(consultaVariedad(fecha,idGalpon))
+                    if idGalpon == "1":
                         empaque = "Pera"
                     else:
                         empaque = "Manzana"
@@ -652,7 +653,8 @@ def post_busqueda_reporte_camaras(request):
                         pdf.text(x=44, y=49, txt= empaque)
                         pdf.text(x=100, y=49, txt= datos[1])
                         pdf.text(x=160, y=49, txt= datos[2]+' Hs.')
-                        pdf.text(x=76, y=64, txt= str(datos[3]))
+                        pdf.text(x=48, y=64, txt= str(datos[3]))
+                        pdf.text(x=75, y=64, txt= variedad)
                         pdf.text(x=165, y=64, txt= datos[4] + ' Lb.')
                         pdf.image('App/API/media/images/Calidad/reportes_presiones/grafico_presion_' + hora_replace + '.png', x=12, y=85, w=180, h=50)
                         pdf.set_font('Arial', 'B', 10)
@@ -670,7 +672,8 @@ def post_busqueda_reporte_camaras(request):
                         pdf.text(x=44, y=169, txt= empaque)
                         pdf.text(x=100, y=169, txt= datos[1])
                         pdf.text(x=160, y=169, txt= datos[2] + ' Hs.')
-                        pdf.text(x=76, y=184, txt= str(datos[3]))
+                        pdf.text(x=48, y=184, txt= str(datos[3]))
+                        pdf.text(x=75, y=184, txt= variedad)
                         pdf.text(x=165, y=184, txt= datos[4] + ' Lb.')
                         pdf.image('App/API/media/images/Calidad/reportes_presiones/grafico_presion_' + hora_replace + '.png', x=12, y=205, w=180, h=50)
                         index = 0
@@ -864,3 +867,27 @@ def recolecta_horas_control_camaras(request, fecha):
     finally:
         cursorZetoneApp.close()
         ZetoneApp.close()    
+
+### CONSULTA VARIEDAD PRESIONES 
+def consultaVariedad(fecha,idGalpon):
+    try:
+        conexion = zetoneApp()
+        cursor = conexion.cursor()
+        sql = ("SELECT        TOP(1)MCVariedad.USR_VAR_NOMBRE AS Variedad\n" +
+                "FROM            servidordb.Trazabilidad.dbo.LoteEtiquetado AS Lote INNER JOIN\n" +
+                                        "servidordb.General.dbo.USR_MCLOTE AS MCLote ON Lote.id_lote = MCLote.USR_LOTE_NUMERO INNER JOIN\n" +
+                                        "servidordb.General.dbo.USR_MCVARIED AS MCVariedad ON MCLote.USR_VAR_ALIAS = MCVariedad.USR_VAR_ALIAS\n" +
+                "WHERE        (TRY_CONVERT(DATE, Lote.Fecha) = '" + str(fecha) + "' AND Lote.id_galpon ='" + str(idGalpon) + "')")
+        cursor.execute(sql)
+        consulta = cursor.fetchone()
+        if consulta:
+            variedad = str(consulta[0])
+            return variedad
+        else:
+            variedad = "---"
+            return variedad
+    except Exception as e:
+            print(e)
+    finally:
+        cursor.close()
+        conexion.close()
