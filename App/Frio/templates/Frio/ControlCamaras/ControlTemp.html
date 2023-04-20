@@ -5,33 +5,30 @@
 {% block content %}
   <div class="">
     <div class="container-temp">
-        <form class="container-temperatura" id="formReportesCamaras" action="" method="POST">{% csrf_token %}
+        <form class="container-temperatura" id="formGuardarTemperaturas" action="" method="POST">{% csrf_token %}
             <div>
                 <div >CONTROL DE TEMPERATURAS</div>
                 <div class="roeZetone">
-                    <label class="letras" for="desde">Fecha:</label> 
-                    <input type="date" id="fechaReporte" name="fechaReporte" class="calendar" required>
+                  <label class="letras">Legajo: </label> 
+                  <input style="width: 6rem;" maxlength="6" type="number" id="legajo" name="legajo" class="inputs" placeholder="0000" >
                 </div>
                 <div class="roeZetone" style="align-items: center;">
-                    <label class="letras">Tipo:</label>
-                      <select class="selectores" type="checkbox" id="hora" name="hora">
-                      <option value="Control Cámaras">Control Cámaras</option>
-                      <option value="Control Descarte">Control Descarte</option>
-                      <option value="Control Empaque">Control Empaque</option>
-                      <option value="Control Presiones">Control de Presiones</option>
+                    <label class="letras">Tipo: </label>
+                      <select class="selectores" type="checkbox" id="tipo" name="tipo">
+                      <option value="C">C</option>
+                      <option value="A">A</option>
                     </select>
                 </div>
                 <div class="roeZetone">
-                    <label class="letras">Planta: </label>
-                      <select class="selectores" type="checkbox" id="planta" name="planta">
-                      <option value="Planta Uno">Planta Uno</option>
-                      <!--<option value="Planta Dos">Planta Dos</option>-->
-                    </select>
+                  <label class="letras">Número o Ante-Cámara: </label>
+                  <input maxlength="6" type="text" id="camara" name="camara" class="inputs" placeholder="Número o Ante-Cámara" >
+                </div>
+                <div class="roeZetone">
+                  <label class="letras">Temperatura : </label>
+                  <input maxlength="6" type="text" id="temp" name="temp" class="inputs" placeholder="-1.0" >
                 </div>
             <div class="roeZetone">
-                <button type="submit" class="button" id="buscarReportes">GUARDAR</button>
-            </div>
-            <div class="roeZetone" id="descargarReportesCamaras">
+                <button type="submit" class="button" id="guardarTemperatura">GUARDAR</button>
             </div>
           </div>
         </form>
@@ -39,29 +36,25 @@
           <div>
               <div >LISTADO DE TEMPERATURAS</div>
               <div >(Últimas 20)</div>
-              <div class="listado-encabezado">Cámara &#8594; Temperatura &#8594; Hora.</div>
+              <div class="listado-encabezado">Cámara &#8594; Hora &#8594; Temperaturas</div>
               <div class="container-lista">
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
-                <div class="listado">Cámara 10 &#8594; -0.7 &#8594; 00:32 Hs.</div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
+                <div class="listado">Cámara 10 &#8594; 00:32 Hs. &#8594; -0.7 / -0.7 </div>
               </div>
           <div class="roeZetone" id="descargarReportesCamaras">
           </div>
@@ -86,7 +79,7 @@
       dia='0'+dia; //agrega cero si el menor de 10
     if(mes<10)
       mes='0'+mes //agrega cero si el menor de 10
-    document.getElementById('fechaReporte').value=ano+"-"+mes+"-"+dia;
+    //document.getElementById('fechaReporte').value=ano+"-"+mes+"-"+dia;
     }
 </script>
   
