@@ -4,7 +4,7 @@
 <head>
     {% load static %}
     <meta charset="utf-8">
-    <title>Frigorífico</title>
+    <title>Administración</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -31,7 +31,7 @@
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
             <a href="{% url 'Index_frio' %}" class="navbar-brand ml-lg-3">
-                <h3 class="text-primary">ZETONE FRÍO</h3>
+                <h3 class="text-primary">ADMINISTRACIÓN</h3>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
@@ -39,14 +39,14 @@
             <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mx-auto py-0">
                     <a href="{% url 'Inicio' %}" class="nav-item nav-link">Inicio</a>
-                    <div class="nav-item dropdown">
+                    <!--<div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Cámaras</a>
                         <div class="dropdown-menu m-0">
                             <a href="{% url 'control_camaras' %}" class="dropdown-item">Control de Temp.</a>
-                            <!--<a href="#" class="dropdown-item">Ciclos</a>
-                            <a href="#" class="dropdown-item">Asignaciones</a>-->
+                            <a href="#" class="dropdown-item">Ciclos</a>
+                            <a href="#" class="dropdown-item">Asignaciones</a>
                         </div>
-                    </div>
+                    </div>-->
                     <!--<div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Usuarios</a>
                         <div class="dropdown-menu m-0">
@@ -80,6 +80,10 @@
                             <a href="{% url 'logout' %}" class="dropdown-item">Salir</a>
                         </div>
                     </div>
+                    
+                    <div class="nav-item dropdown" id="freeSpace">
+
+                    </div>
                 </div>
             </div>
         </nav>
@@ -90,10 +94,41 @@
     <!-- Header Start -->
     <header class="headerZetone">
         {% block content %}
-        <div class="logoInicio">
-            <img src="{%static 'Frio/img/logosf.png' %}" alt="">
+        <div class="cards-consola">
+            <div class="card-consola">
+                <div class="titulo-card" >DESCARGAR PDF'S</div>
+                <button class="button" id="descargaPDF">EJECUTAR</button>
+                <div id="descargaZIP" >
+
+                </div>
+            </div>
+            <div class="card-consola">
+                <div class="titulo-card" >BORRAR PDF'S</div>
+                <button class="button" id="borrarPDF">EJECUTAR</button>
+                <div id="notaPDF" >
+                    
+                </div>
+            </div>
+            <div class="card-consola">
+                <div class="titulo-card" >BORRAR EXCEL'S</div>
+                <button class="button" id="borrarEXCEL">EJECUTAR</button>
+                <div id="notaEXCEL" >
+                    
+                </div>
+            </div>
+            <div class="card-consola">
+                <div class="titulo-card" >BORRAR IMÁGENES</div>
+                <button class="button" id="borrarImagenes">EJECUTAR</button>
+                <div id="notaJPEG" >
+                    
+                </div>
+            </div>
         </div>
-        
+        <div id="modal" class="modal">
+            <div class="modal-content">
+              <div class="loaderZetoProgressBar" id="progressBar"></div>
+            </div>
+        </div>
         {% endblock %}
     </header>
     <!-- Header End -->
@@ -108,7 +143,7 @@
 
     <!-- Template Javascript -->
     <script src="{%static 'Frio/js/main.js' %}"></script>
-    <script src="{%static 'Frio/js/zetoneEmpaque.js' %}"></script>
+    <script src="{%static 'Frio/js/zetoneAdmin.js' %}"></script>
 </body>
 
 </html>

@@ -25,7 +25,7 @@ urlpatterns = [
     path('', include('App.Inicio.urls')),
 
     path('zetonetime/', include('App.ZTime.urls')),
-    path('frigorifico/', include('App.Frio.urls')),
+    path('administracion/', include('App.Frio.urls')),
     path('empaque/', include('App.Empaque.urls')),
     path('api/', include('App.API.urls')),
 

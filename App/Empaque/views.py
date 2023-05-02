@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.http import JsonResponse
-from datetime import datetime
 import json
+from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.views.static import serve

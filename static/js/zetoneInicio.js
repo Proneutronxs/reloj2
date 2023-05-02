@@ -56,7 +56,7 @@ function permiso_ZetoneFrio() {
         let arrayData = JSON.parse(data);//CONVIERTE EL JSON en ARRAY
         if(arrayData.permiso == 1){
           //console.log(arrayData.permiso)
-          window.location.href = '/frigorifico/';
+          window.location.href = '/administracion/';
         }else{
           alert(arrayData.message);
         }
