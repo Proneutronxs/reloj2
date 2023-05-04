@@ -174,8 +174,7 @@ def ver_registros_sin_proceso(request):
                                          "CONVERT(varchar, iclock_transaction_1.punch_time, 108) AS Hora, iclock_transaction_1.punch_time AS FechaHora\n" +
                          "FROM            servidordb.zkbiotime.dbo.iclock_transaction AS iclock_transaction_1 INNER JOIN\n" +
                                                  "Legajos ON iclock_transaction_1.emp_code = Legajos.Legajos\n" +
-                         "WHERE      iclock_transaction_1.emp_code = '"+str(legajo)+"' AND TRY_CONVERT(DATE, iclock_transaction_1.punch_time) >= '"+str(desdeSql)+"' AND TRY_CONVERT(DATE, iclock_transaction_1.punch_time) <= '"+str(hastaSql)+"' AND \n" +
-                                                     "(iclock_transaction_1.emp_code > '100099')\n" +
+                         "WHERE      iclock_transaction_1.emp_code = '"+str(legajo)+"' AND TRY_CONVERT(DATE, iclock_transaction_1.punch_time) >= '"+str(desdeSql)+"' AND TRY_CONVERT(DATE, iclock_transaction_1.punch_time) <= '"+str(hastaSql)+"' \n" +
                          "ORDER BY Legajo, iclock_transaction_1.punch_time")
             cursorZT.execute(sql_consulta)
             consulta = cursorZT.fetchall()
@@ -242,8 +241,7 @@ def ver_registros_sin_proceso(request):
                                             "CONVERT(varchar, iclock_transaction_1.punch_time, 108) AS Hora, iclock_transaction_1.punch_time AS FechaHora\n" +
                             "FROM            servidordb.zkbiotime.dbo.iclock_transaction AS iclock_transaction_1 INNER JOIN\n" +
                                                     "Legajos ON iclock_transaction_1.emp_code = Legajos.Legajos\n" +
-                            "WHERE      TRY_CONVERT(DATE, iclock_transaction_1.punch_time) >= '"+str(desdeSql)+"' AND TRY_CONVERT(DATE, iclock_transaction_1.punch_time) <= '"+str(hastaSql)+"' AND \n" +
-                                                        "(iclock_transaction_1.emp_code > '100099')\n" +
+                            "WHERE      TRY_CONVERT(DATE, iclock_transaction_1.punch_time) >= '"+str(desdeSql)+"' AND TRY_CONVERT(DATE, iclock_transaction_1.punch_time) <= '"+str(hastaSql)+"' \n" +
                             "ORDER BY Legajo, iclock_transaction_1.punch_time")
                 cursorZT.execute(sql_consulta)
                 consulta = cursorZT.fetchall()
@@ -323,8 +321,7 @@ def excelCreateRegistros(request):
                                          "CONVERT(varchar, iclock_transaction_1.punch_time, 108) AS Hora, iclock_transaction_1.punch_time AS FechaHora\n" +
                          "FROM            servidordb.zkbiotime.dbo.iclock_transaction AS iclock_transaction_1 INNER JOIN\n" +
                                                  "Legajos ON iclock_transaction_1.emp_code = Legajos.Legajos\n" +
-                         "WHERE      iclock_transaction_1.emp_code = '"+str(legajo)+"' AND TRY_CONVERT(DATE, iclock_transaction_1.punch_time) >= '"+str(desdeSql)+"' AND TRY_CONVERT(DATE, iclock_transaction_1.punch_time) <= '"+str(hastaSql)+"' AND \n" +
-                                                     "(iclock_transaction_1.emp_code > '100099')\n" +
+                         "WHERE      iclock_transaction_1.emp_code = '"+str(legajo)+"' AND TRY_CONVERT(DATE, iclock_transaction_1.punch_time) >= '"+str(desdeSql)+"' AND TRY_CONVERT(DATE, iclock_transaction_1.punch_time) <= '"+str(hastaSql)+"' \n" +
                          "ORDER BY Legajo, iclock_transaction_1.punch_time")
             cursorZT.execute(sql_consulta)
             consulta = cursorZT.fetchall()
@@ -416,8 +413,7 @@ def excelCreateRegistros(request):
                                                 "CONVERT(varchar, iclock_transaction_1.punch_time, 108) AS Hora, iclock_transaction_1.punch_time AS FechaHora\n" +
                         "FROM            servidordb.zkbiotime.dbo.iclock_transaction AS iclock_transaction_1 INNER JOIN\n" +
                                                 "Legajos ON iclock_transaction_1.emp_code = Legajos.Legajos\n" +
-                        "WHERE      TRY_CONVERT(DATE, iclock_transaction_1.punch_time) >= '"+ desdeSql +"' AND TRY_CONVERT(DATE, iclock_transaction_1.punch_time) <= '"+ hastaSql +"' AND \n" +
-                                                "(iclock_transaction_1.emp_code > '100099')\n" +
+                        "WHERE      TRY_CONVERT(DATE, iclock_transaction_1.punch_time) >= '"+ desdeSql +"' AND TRY_CONVERT(DATE, iclock_transaction_1.punch_time) <= '"+ hastaSql +"' \n" +
                         "ORDER BY Legajo, iclock_transaction_1.punch_time")
                 cursorZTime.execute(consultaSql)
                 consulta = cursorZTime.fetchall()
