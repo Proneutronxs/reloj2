@@ -31,7 +31,7 @@ def dataInicial(request):
             with connections['Trazabilidad'].cursor() as cursor:
 
                 # exec Destino_Mostrar '','','S' id, destino, descripcion,debaja
-                cursor.execute('exec Destino_Mostrar', ['','','S'])
+                cursor.execute("exec Destino_Mostrar'','','S'")
                 results = cursor.fetchall()
                 if results:
                     for row in results:
@@ -43,7 +43,7 @@ def dataInicial(request):
                         DataDestino.append(datos)
 
                 # exec Defecto_Mostrar '','','N','I' id, defecto, descrip, de baja
-                cursor.execute('exec Defecto_Mostrar', ['','','N','I'])
+                cursor.execute("exec Defecto_Mostrar '','','N','I'")
                 results = cursor.fetchall()
                 if results:
                     for row in results:
@@ -55,7 +55,7 @@ def dataInicial(request):
                         DataDefectos.append(datos)
 
                 # exec Tratamiento_Mostrar '','','S' id, trataiento, descrip, de baja
-                cursor.execute('exec Tratamiento_Mostrar', ['','','S'])
+                cursor.execute("exec Tratamiento_Mostrar'','','S'")
                 results = cursor.fetchall()
                 if results:
                     for row in results:
@@ -67,7 +67,7 @@ def dataInicial(request):
                         DataTratamiento.append(datos)
 
                 # exec Condicion_Mostrar '','','S' id, condicion, descripcion, de baja
-                cursor.execute('exec Condicion_Mostrar', ['','','S'])
+                cursor.execute("exec Condicion_Mostrar '','','S'")
                 results = cursor.fetchall()
                 if results:
                     for row in results:
@@ -79,7 +79,7 @@ def dataInicial(request):
                         DataCondicion.append(datos)
                 
                 # exec Categoria_Mostrar '','','S' id, categoría, descrip, de baja
-                cursor.execute('exec Categoria_Mostrar', ['','','S'])
+                cursor.execute("exec Categoria_Mostrar '','','S'")
                 results = cursor.fetchall()
                 if results:
                     for row in results:
@@ -91,7 +91,7 @@ def dataInicial(request):
                         DataCategoria.append(datos)
 
                 # exec Responsable_Mostrar '','','N'  id, responsable, de baja
-                cursor.execute('exec Responsable_Mostrar', ['','','N'])
+                cursor.execute("exec Responsable_Mostrar '','','N'")
                 results = cursor.fetchall()
                 if results:
                     for row in results:
