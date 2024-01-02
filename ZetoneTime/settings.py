@@ -102,18 +102,18 @@ DATABASES = {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
     }
-    # ,
-    # 'Trazabilidad': {
-    #     'ENGINE': 'sql_server.pyodbc',
-    #     'NAME': 'Trazabilidad',
-    #     'USER': 'sa',
-    #     'HOST': '10.32.26.8',
-    #     'PASSWORD': 'Florencia1976',
-    #     'PORT': '',
-    #     'OPTIONS': {
-    #         'driver': 'ODBC Driver 17 for SQL Server',
-    #     },
-    # }
+    ,
+    'Trazabilidad': {
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'Trazabilidad',
+        'USER': 'sa',
+        'HOST': '10.32.26.8',
+        'PASSWORD': 'Florencia1976',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    }
 }
 
 

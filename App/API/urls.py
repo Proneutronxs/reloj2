@@ -1,5 +1,5 @@
 from django.urls import path
-from App.API.vistas.calidad import calidad 
+from App.API.vistas.calidad import calidad, bascula 
 
 urlpatterns = [
     ######################### CALIDAD EMPAQUE ###################################
@@ -18,4 +18,7 @@ urlpatterns = [
     path('calidad/presiones/mostrar', calidad.muestra_presiones, name='muestra_presiones'),
     path('calidad/presiones/promedio', calidad.promedio_presiones, name='promedio_presiones'),
 
+    ######################## URLS CALIDAD BASCULA ###########################
+
+    path('calidad/bascula/data-inicial/', bascula.dataInicial, name='inserta_presiones'),
 ]
