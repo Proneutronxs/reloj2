@@ -1,0 +1,184 @@
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="{%static 'rrhh/img/PS.ico' %}" rel="icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'rrhh/css/style.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <title>PS-TIME</title> 
+</head>
+<body>
+    <nav class="sidebar">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="{%static 'rrhh/img/PS.png' %}" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name"></span>
+                    <span class="profession"> <b>PS-TIME</b> </span>
+                </div>
+            </div>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="{% url 'rrhh' %}">
+                            <i class='bx material-symbols-outlined icon' >home</i>
+                            <span class="text nav-text">Inicio</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx material-symbols-outlined icon' >add</i>
+                            <span class="text nav-text">Crear</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="{% url 'horarios' %}">
+                            <i class='bx material-symbols-outlined icon' >person_add</i>
+                            <span class="text nav-text">Asignar</span>
+                        </a>
+                    </li>
+
+                    <!-- <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-bar-chart-alt-2 icon' ></i>
+                            <span class="text nav-text">ETE</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bxs-truck icon' ></i>
+                            <span class="text nav-text">Expedición</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-money icon' ></i>
+                            <span class="text nav-text">Liquidación</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-cog icon' ></i>
+                            <span class="text nav-text">Mantenimiento</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-trending-up icon' ></i>
+                            <span class="text nav-text">Producción</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-file icon' ></i>
+                            <span class="text nav-text">Reportes</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-group icon' ></i>
+                            <span class="text nav-text">RRHH</span>
+                        </a>
+                    </li>
+                    -->
+                </ul>
+            </div> 
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="{% url 'logout' %}">
+                        <i class='bx material-symbols-outlined icon' >logout</i>
+                        <span class="text"><b>{{user.username}}</b></span>
+                    </a>
+                </li>                
+            </div>
+        </div>
+    </nav>
+    <section class="home">
+        <div class="container">          
+            <div class="encabezado" style="background-color: #001327">
+                <div class="text" style="font-size: 20px;">GESTOR DE ASISTENCIA - DEPARTAMENTOS Y ASIGNACIÓN DE DEPARTAMENTOS</div>
+            </div>
+            
+            <div class="cards-consola" style="height: 35rem; max-height: 35rem;">
+                <div class="card-consola"  style="max-width: 22rem;">
+                    <div class="titulo-card">NUEVO DEPARTAMENTO</div>
+                    <div class="container-tabla-he">
+                        <form id="formGuardaDepartamento" action="" method="POST">
+                            <div class="formularios">
+                                <div class="columna-centrada">
+                                    <div class="columna-vertical">
+                                        <input class="input-number" type="text" id="nombreDepto" style="width: 250px; text-transform: uppercase;" name="nombreDepto" placeholder="NOMBRE DEPARTAMENTO">
+                                    </div>
+                                    <div class="columna-vertical">
+                                        <button id="btnGuardaDepartamento" class="btn-submit botones" type="button"><b>Guardar</b></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div id="infoParrafo">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="card-consola" style="height: 35rem; max-height: 35rem;">
+                    <div class="titulo-card">DEPARTAMENTOS</div>
+                    <div class="container-tabla-he">
+                        <table class="pre-hs-ex">
+                            <thead>
+                              <tr>
+                                <th style="width: 100px;">ID</th>
+                                <th >Departamentos</th>
+                              </tr>
+                            </thead>
+                            <tbody id="tablaDepartamentos">
+                                
+                            </tbody>
+                          </table>                          
+                    </div>
+                </div>
+                <!-- <div class="card-consola">
+                    <div class="titulo-card" >BORRAR EXCEL'S</div>
+                    <button class="button" id="borrarEXCEL">EJECUTAR</button>
+                    <div id="notaEXCEL" >
+                        
+                    </div>
+                </div>
+                <div class="card-consola">
+                    <div class="titulo-card" >BORRAR IMÁGENES</div>
+                    <button class="button" id="borrarImagenes">EJECUTAR</button>
+                    <div id="notaJPEG" >
+                        
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+    <div class="modal-overlay">
+        <div class="modal-container">
+          <div class="demo-container">
+            <div class="progress-bar">
+              <div class="progress-bar-value"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <script src="{%static 'rrhh/js/departamentos.js' %}"></script>
+</body>
+</html>

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'App.Empaque',
     'App.Frio',
     'App.API',
+    'App.RRHH',
 ]
 
 MIDDLEWARE = [
@@ -83,13 +84,36 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'ZetoneTime',
         'USER': 'sa',
-        'HOST': '191.97.47.105',
+        'HOST': '191.97.47.105',##10.32.26.34
+        'PASSWORD': 'Sideswipe348',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    },
+    'PS_Time': {
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'PS_Time',
+        'USER': 'sa',
+        'HOST': '191.97.47.105',##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
     }
+    # ,
+    # 'Trazabilidad': {
+    #     'ENGINE': 'sql_server.pyodbc',
+    #     'NAME': 'Trazabilidad',
+    #     'USER': 'sa',
+    #     'HOST': '10.32.26.8',
+    #     'PASSWORD': 'Florencia1976',
+    #     'PORT': '',
+    #     'OPTIONS': {
+    #         'driver': 'ODBC Driver 17 for SQL Server',
+    #     },
+    # }
 }
 
 
@@ -126,7 +150,7 @@ USE_L10N = True
 USE_TZ = True
 
 #LOGIN_REDIRECT_URL = reverse_lazy('/')
-LOGOUT_REDIRECT_URL = reverse_lazy('Inicio')
+LOGOUT_REDIRECT_URL = reverse_lazy('inicio_principal')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

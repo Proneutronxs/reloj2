@@ -3,10 +3,11 @@ from App.Inicio import views
 
 urlpatterns = [
 
-    path('menu/', views.Index_inicio, name="Index_inicio"),
-    path('', views.inicio, name="Inicio"),
+    path('', views.inicioMenu, name="inicio_principal"),
 
+    path('repassword/', views.repassword, name="repassword"),
+
+    #path('inicio/', views.inicioMenu, name="inicio_menu"),
 
     path('user/permissions/modulo=<str:modulo>', views.json_premissions, name="permisos_json"),
-
 ]

@@ -31,15 +31,15 @@
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
             <a href="{% url 'zetonetime' %}" class="navbar-brand ml-lg-3">
-                <h3 class="text-primary">ZETONE TIME</h3>
+                <h3 class="text-primary">PXS TIME</h3>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mx-auto py-0">
-                    <a href="{% url 'Inicio' %}" class="nav-item nav-link">Inicio</a>
-                    <div class="nav-item dropdown">
+                    <a href="{% url 'inicio_principal' %}" class="nav-item nav-link">Inicio</a>
+                    <!-- <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Configuración</a>
                         <div class="dropdown-menu m-0">
                             <a href="#" class="dropdown-item">Departamentos</a>
@@ -52,11 +52,8 @@
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Usuarios</a>
                         <div class="dropdown-menu m-0">
                             <a href="#" class="dropdown-item">Buscar Usuario</a>
-                            <!--<a href="feature.html" class="dropdown-item">Our Features</a>
-                            <a href="team.html" class="dropdown-item">Instructors</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a> -->
                         </div>
-                    </div>
+                    </div> -->
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Registros</a>
                         <div class="dropdown-menu m-0">
@@ -66,15 +63,12 @@
                             <a href="testimonial.html" class="dropdown-item">Testimonial</a> -->
                         </div>
                     </div>
-                    <div class="nav-item dropdown">
+                    <!-- <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Asistencia</a>
                         <div class="dropdown-menu m-0">
                             <a href="#" class="dropdown-item">Ver Asistencia</a>
-                            <!--<a href="feature.html" class="dropdown-item">Exportar E</a>
-                            <a href="team.html" class="dropdown-item">Instructors</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a> -->
                         </div>
-                    </div>
+                    </div> -->
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" style="color: #011327;" >{{user.username}}</a>
                         <div class="dropdown-menu m-0">

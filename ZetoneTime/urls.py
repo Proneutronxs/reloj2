@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from App.Inicio import views
+from django.contrib.auth.views import logout_then_login
 
 from django.contrib.auth.views import LoginView, logout_then_login
 
@@ -28,8 +29,14 @@ urlpatterns = [
     path('administracion/', include('App.Frio.urls')),
     path('empaque/', include('App.Empaque.urls')),
     path('api/', include('App.API.urls')),
+    path('rrhh/', include('App.RRHH.urls')),
 
-    path('accounts/login/', LoginView.as_view(template_name='Inicio/index.html'), name='login'),
+    path('accounts/login/', views.inicioSesion, name="login"),
+    path('accounts/login/pxs/', views.custom_login, name='psx'),
+    #path('accounts/login/change-password/', views.cambiar_password, name='change_password'),
+
+    # path('accounts/login/', LoginView.as_view(template_name='Inicio/index.html'), name='login'),
     path('logout/', logout_then_login, name='logout'),
-    path('accounts/profile/', views.inicio, name="Inicio"),
+    path('accounts/login/logout/', logout_then_login, name='log_out'),
+    # path('accounts/profile/', views.inicio, name="Inicio"),
 ]

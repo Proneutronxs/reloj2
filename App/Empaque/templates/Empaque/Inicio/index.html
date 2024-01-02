@@ -31,14 +31,14 @@
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
             <a href="{% url 'Index_empaque' %}" class="navbar-brand ml-lg-3">
-                <h3 class="text-primary">ZETONE EMPAQUE</h3>
+                <h3 class="text-primary">PXS EMPAQUE</h3>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mx-auto py-0">
-                    <a href="{% url 'Inicio' %}" class="nav-item nav-link">Inicio</a>
+                    <a href="{% url 'inicio_principal' %}" class="nav-item nav-link">Inicio</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Calidad</a>
                         <div class="dropdown-menu m-0">
@@ -91,7 +91,7 @@
     <header class="headerZetone">
         {% block content %}
         <div class="logoInicio">
-            <img src="{%static 'Empaque/img/logosf.png' %}" alt="">
+            <img src="{%static 'rrhh/img/PS.png' %}" style="height: 120px; width: 180px;">
         </div>
         
         {% endblock %}

@@ -1,0 +1,192 @@
+
+:root{
+  --body-color: #f0f0f0;
+  --sidebar-color: #FFF;
+  --primary-color: #001327;
+  --hover-color: #0e0b23;
+  --primary-color-light: #f0f0f1;
+  --toggle-color: #b4adad;
+  --text-color: #444343;
+
+}
+
+
+
+.imageInicio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logoInicio {
+  width: 170px;
+  height: 130px;
+  background-image: url('../img/ZT.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+
+.login-form {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.644);
+  width: 300px;
+  margin: 0 auto;
+}
+
+.login-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.button {
+  width: 100%;
+  background-color: #001327;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #002046;
+}
+
+
+
+/* ACÁ  INICIO TODO LAS PANTALLAS A RECORRER */
+
+/* Estilo para el contenedor del formulario pop-pass */
+.pop-pass {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center; /* Centrar horizontalmente */
+  align-items: center; /* Centrar verticalmente */
+  z-index: 9999; /* Asegura que esté en la parte superior */
+}
+
+/* Estilo para el contenido del formulario dentro de pop-pass */
+#popupContent {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  max-width: 400px; /* Define el ancho máximo del formulario    //#001327 */
+}
+
+.form-group-changePassword {
+  margin: 10px 0;
+}
+
+.form-group-changePassword input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+}
+
+
+.password-conditions {
+  font-size: 12px;
+  color: #4e4e4e;
+}
+
+
+
+
+.container{
+    height: 100%;
+    background-color: #2653a70d;
+}
+.encabezado{
+    height: 60px;
+    background-color: #001327;
+    border-radius: 5px;
+}
+
+.contenedor{
+    color: #fff;
+}
+
+.formularios{
+    color: #fff;
+}
+
+/*CONFIRMACIÓN DEL POP UP */
+
+.popup {
+  position: fixed;
+  bottom: 2rem;
+  right: -300px; /* Posición inicial fuera de la pantalla 
+  border: 2px solid #a72626;*/
+  width: 250px;
+  height: auto;
+  background-color: #f0f0f0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.356);
+  padding: 10px;
+  transition: right 0.3s ease;
+}
+
+.popup.active {
+  right: 0;
+}
+
+.close {
+  float: right;
+  cursor: pointer;
+}
+
+#openPopup {
+  margin-top: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  

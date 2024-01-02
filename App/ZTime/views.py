@@ -847,7 +847,7 @@ def createExcelCalculo(request):
                     jsonList = json.dumps({'message':'Success', 'excel': nombre_excel}) 
                     return JsonResponse(jsonList, safe=False)
                 else:
-                    jsonList = json.dumps({'message':'No se encoontraron fichadas.'}) 
+                    jsonList = json.dumps({'message':'No se encontraron fichadas.'}) 
                     return JsonResponse(jsonList, safe=False)
             except Exception as e:
                 print(e)
