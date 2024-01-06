@@ -136,18 +136,20 @@ def levantaPlantas():
         return DataPlantas
 
 
-#sp_mc_Levanta_Datos_Lote '49573','1'
+
+#LoteCalidad_Mostrar '2023-02-24 00:00:00','1','N'
 @csrf_exempt
 def traeLotes(request):
     if request.method == 'POST':
         body = request.body.decode('utf-8')
-        lote = str(json.loads(body)['lote'])
+        fecha = formatear_fecha(str(json.loads(body)['fecha']))
         planta = str(json.loads(body)['planta'])
-        values = [lote, planta]
+        values = [fecha, planta, 'N']
+        values = [lote, planta, 'N']
         DataLotes = []
         try:
-            with connections['General'].cursor() as cursor:
-                cursor.execute('exec sp_mc_Levanta_Datos_Lote %s,%s', values)
+            with connections['Trazabilidad'].cursor() as cursor:
+                cursor.execute('exec LoteCalidad_Mostrar %s,%s,%s', values)
                 results = cursor.fetchall()
                 if results:
                     for row in results:
@@ -167,26 +169,26 @@ def traeLotes(request):
             }
             return JsonResponse(response_data)
         finally:
-            connections['General'].close()
+            connections['Trazabilidad'].close()
     else:
         response_data = {
             'Message': 'No se pudo resolver la petición.'
         }
         return JsonResponse(response_data)
 
-#LoteCalidad_Mostrar '2023-02-24 00:00:00','1','N'
 
+#sp_mc_Levanta_Datos_Lote '49573','1'
 @csrf_exempt
 def traeDetalleLotes(request):
     if request.method == 'POST':
         body = request.body.decode('utf-8')
-        fecha = formatear_fecha(str(json.loads(body)['fecha']))
+        lote = str(json.loads(body)['lote'])
         planta = str(json.loads(body)['planta'])
-        values = [fecha, planta, 'N']
+        values = [lote, planta]
         DataDetalle = []
         try:
-            with connections['Trazabilidad'].cursor() as cursor:
-                cursor.execute('exec LoteCalidad_Mostrar %s,%s,%s', values)
+            with connections['General'].cursor() as cursor:
+                cursor.execute('exec sp_mc_Levanta_Datos_Lote %s,%s', values)
                 results = cursor.fetchall()
                 if results:
                     for row in results:
