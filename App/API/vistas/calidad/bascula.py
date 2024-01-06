@@ -221,7 +221,7 @@ def traeDetalleLotes(request):
 def formatear_fecha(fecha_str):
     try:
         fecha_obj = datetime.strptime(fecha_str, '%d/%m/%Y')
-        fecha_formateada = fecha_obj.strftime('%Y-%m-%d %H:%M:%S')
+        fecha_formateada = fecha_obj.strftime('%Y-%m-%d 00:00:00')
 
         return str(fecha_formateada)
     except ValueError:
