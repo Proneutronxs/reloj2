@@ -107,7 +107,7 @@ def dataInicial(request):
             if DataResponsable and DataCategoria and DataCondicion and DataDefectos and DataDestino and DataTratamiento and DataPlantas:
                 return JsonResponse({'Message': 'Success', 'Responsables': DataResponsable, 'Categorias': DataCategoria, 
                                      'Condiciones':DataCondicion, 'Defectos': DataDefectos, 'Destinos': DataDestino, 
-                                     'Tratamientos': DataTratamiento})
+                                     'Tratamientos': DataTratamiento, 'Plantas':DataPlantas})
             else:
                 data = "No se encontraron Datos."
                 return JsonResponse({'Message': 'Error', 'Nota': data})                
