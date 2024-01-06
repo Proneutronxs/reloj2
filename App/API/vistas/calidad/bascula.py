@@ -145,7 +145,6 @@ def traeLotes(request):
         fecha = formatear_fecha(str(json.loads(body)['fecha']))
         planta = str(json.loads(body)['planta'])
         values = [fecha, planta, 'N']
-        values = [lote, planta, 'N']
         DataLotes = []
         try:
             with connections['Trazabilidad'].cursor() as cursor:
@@ -153,9 +152,9 @@ def traeLotes(request):
                 results = cursor.fetchall()
                 if results:
                     for row in results:
-                        planta = str(row[0])
-                        lote = str(row[1])
-                        data = {'Planta':planta, 'Lote':lote}
+                        lote = str(row[0])
+                        planta = str(row[2])
+                        data = {'Lote':lote,'Planta':planta}
                         DataLotes.append(data)
                     return JsonResponse({'Message': 'Success', 'Lotes': DataLotes})
                 else:
@@ -212,7 +211,7 @@ def traeDetalleLotes(request):
             }
             return JsonResponse(response_data)
         finally:
-            connections['Trazabilidad'].close()
+            connections['General'].close()
     else:
         response_data = {
             'Message': 'No se pudo resolver la petición.'
