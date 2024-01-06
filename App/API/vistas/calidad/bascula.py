@@ -223,6 +223,6 @@ def formatear_fecha(fecha_str):
         fecha_obj = datetime.strptime(fecha_str, '%d/%m/%Y')
         fecha_formateada = fecha_obj.strftime('%Y-%m-%d %H:%M:%S')
 
-        return fecha_formateada
+        return str(fecha_formateada)
     except ValueError:
         return None
