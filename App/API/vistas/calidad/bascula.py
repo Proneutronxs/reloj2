@@ -5,6 +5,7 @@ import json
 import os
 from django.http import HttpResponse, Http404
 from PIL import Image
+from datetime import datetime
 import base64
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
@@ -101,7 +102,9 @@ def dataInicial(request):
                         datos = {'ID':ids,'Responsable':responsable, 'Baja':debaja}
                         DataResponsable.append(datos)
 
-            if DataResponsable and DataCategoria and DataCondicion and DataDefectos and DataDestino and DataTratamiento:
+            DataPlantas = levantaPlantas()
+
+            if DataResponsable and DataCategoria and DataCondicion and DataDefectos and DataDestino and DataTratamiento and DataPlantas:
                 return JsonResponse({'Message': 'Success', 'Responsables': DataResponsable, 'Categorias': DataCategoria, 
                                      'Condiciones':DataCondicion, 'Defectos': DataDefectos, 'Destinos': DataDestino, 
                                      'Tratamientos': DataTratamiento})
@@ -115,5 +118,110 @@ def dataInicial(request):
         data = "No se pudo resolver la Petición"
         return JsonResponse({'Message': 'Error', 'Nota': data})
 
+def levantaPlantas():
+    DataPlantas = []
+    try:
+        with connections['General'].cursor() as cursor:
+            cursor.execute('exec sp_mc_levanta_pcontrol')
+            results = cursor.fetchall()
+            if results:
+                for row in results:
+                    ids = str(row[0])
+                    planta = str(row[1])
+                    datos = {'ID':ids,'Planta':planta}
+                    DataPlantas.append(datos)
+            return DataPlantas
+    except Exception as e:
+        data = str(e)
+        return DataPlantas
 
 
+#sp_mc_Levanta_Datos_Lote '49573','1'
+@csrf_exempt
+def traeLotes(request):
+    if request.method == 'POST':
+        body = request.body.decode('utf-8')
+        lote = str(json.loads(body)['lote'])
+        planta = str(json.loads(body)['planta'])
+        values = [lote, planta]
+        DataLotes = []
+        try:
+            with connections['General'].cursor() as cursor:
+                cursor.execute('exec sp_mc_Levanta_Datos_Lote %s,%s', values)
+                results = cursor.fetchall()
+                if results:
+                    for row in results:
+                        planta = str(row[0])
+                        lote = str(row[1])
+                        data = {'Planta':planta, 'Lote':lote}
+                        DataLotes.append(data)
+                    return JsonResponse({'Message': 'Success', 'Lotes': DataLotes})
+                else:
+                    data = "No se encontraron Datos."
+                    return JsonResponse({'Message': 'Error', 'Nota': data}) 
+        except Exception as e:
+            error = str(e)
+            response_data = {
+                'Message': 'Error',
+                'Nota': error
+            }
+            return JsonResponse(response_data)
+        finally:
+            connections['General'].close()
+    else:
+        response_data = {
+            'Message': 'No se pudo resolver la petición.'
+        }
+        return JsonResponse(response_data)
+
+#LoteCalidad_Mostrar '2023-02-24 00:00:00','1','N'
+
+@csrf_exempt
+def traeDetalleLotes(request):
+    if request.method == 'POST':
+        body = request.body.decode('utf-8')
+        fecha = formatear_fecha(str(json.loads(body)['fecha']))
+        planta = str(json.loads(body)['planta'])
+        values = [fecha, planta, 'N']
+        DataDetalle = []
+        try:
+            with connections['Trazabilidad'].cursor() as cursor:
+                cursor.execute('exec LoteCalidad_Mostrar %s,%s,%s', values)
+                results = cursor.fetchall()
+                if results:
+                    for row in results:
+                        lote = str(row[0])
+                        productor = str(row[1])
+                        variedad = str(row[2])
+                        umi = str(row[3])
+                        cantidad = str(row[4])
+                        up = str(row[7])
+                        data = {'Lote':lote, 'Productor':productor, 'Variedad':variedad, 'UMI':umi, 'Cantidad':cantidad, 'UP':up}
+                        DataDetalle.append(data)
+                    return JsonResponse({'Message': 'Success', 'Detalle': DataDetalle})
+                else:
+                    data = "No se encontraron Datos."
+                    return JsonResponse({'Message': 'Error', 'Nota': data}) 
+        except Exception as e:
+            error = str(e)
+            response_data = {
+                'Message': 'Error',
+                'Nota': error
+            }
+            return JsonResponse(response_data)
+        finally:
+            connections['Trazabilidad'].close()
+    else:
+        response_data = {
+            'Message': 'No se pudo resolver la petición.'
+        }
+        return JsonResponse(response_data)
+
+def formatear_fecha(fecha_str):
+    try:
+        fecha_obj = datetime.strptime(fecha_str, '%d/%m/%Y')
+        fecha_formateada = fecha_obj.strftime('%Y-%m-%d %H:%M:%S')
+
+        return fecha_formateada
+    except ValueError:
+        return None

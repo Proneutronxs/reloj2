@@ -21,4 +21,8 @@ urlpatterns = [
     ######################## URLS CALIDAD BASCULA ###########################
 
     path('calidad-bascula/data-inicial/', bascula.dataInicial, name='inserta_presiones'),
+
+    path('calidad-bascula/data-lotes/', bascula.traeLotes, name='trae_lotes'),
+
+    path('calidad-bascula/data-detalle-lote/', bascula.traeDetalleLotes, name='detalle_lotes'),
 ]
