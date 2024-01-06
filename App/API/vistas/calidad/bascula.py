@@ -122,13 +122,44 @@ def levantaPlantas():
     DataPlantas = []
     try:
         with connections['General'].cursor() as cursor:
-            cursor.execute('exec sp_mc_levanta_pcontrol')
+            sql = """
+                SELECT sttdeh_deposi, sttdeh_descrp,CASE WHEN (SELECT (Trazabilidad.dbo.Galpon.Id_galpon) 
+                        FROM Trazabilidad.dbo.Galpon 
+                        WHERE id_deposito = sttdeh_deposi) IS NULL THEN '0' ELSE (SELECT (Trazabilidad.dbo.Galpon.Id_galpon) 
+                        FROM Trazabilidad.dbo.Galpon 
+                        WHERE id_deposito = sttdeh_deposi) END AS Id_galpon
+                FROM  [10.32.26.5].Softland.dbo.sttdeh
+                WHERE 
+                    (sttdeh_deposi between '110108' and '110109' 
+                    or  sttdeh_deposi = '110113'
+                    or  sttdeh_deposi = '315300'
+                    or  sttdeh_deposi = '315200')
+                    or  sttdeh_deposi = '110879'
+                    or  sttdeh_deposi= '110883'
+                    or  sttdeh_deposi= '111071' 
+                    or  sttdeh_deposi= '110880' 
+                    or  sttdeh_deposi= '110881' 
+                    or  sttdeh_deposi= '110884'
+                    or  sttdeh_deposi= '110882'
+                    or  sttdeh_deposi= '110878'
+                    or  sttdeh_deposi= '110877'
+                    or  sttdeh_deposi= '110869'
+                    or  sttdeh_deposi= '110502'
+                    or  sttdeh_deposi = '110111' 
+                UNION
+                SELECT '8','PLANTA EMPAQUE 1 - MANZANA','8'
+                UNION
+                SELECT '110107','PLANTA EMPAQUE 1','1'
+                ORDER BY 2
+            """
+            cursor.execute(sql)
             results = cursor.fetchall()
             if results:
                 for row in results:
                     ids = str(row[0])
                     planta = str(row[1])
-                    datos = {'ID':ids,'Planta':planta}
+                    idPlanta = str(row[2])
+                    datos = {'ID':ids,'Planta':planta,'IdPlanta':idPlanta}
                     DataPlantas.append(datos)
             return DataPlantas
     except Exception as e:
