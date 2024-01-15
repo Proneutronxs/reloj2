@@ -12,13 +12,7 @@ from django.shortcuts import render
 from django.db import connections
 
 
-
-# exec Responsable_Mostrar '','','N'  id, responsable, de baja
-# exec Defecto_Mostrar '','','N','I' id, defecto, descrip, de baja
-# exec Tratamiento_Mostrar '','','S' id, trataiento, descrip, de baja
-# exec Condicion_Mostrar '','','S' id, condicion, descripcion, de baja
-# exec Categoria_Mostrar '','','S' id, categoría, descrip, de baja
-
+##### TRAE DATOS DE INICIO DESTINO, RESPONSABLE, DEFECTOS, TRATAMIENTO,CONDICIÓN CATEGORÍA
 @csrf_exempt
 def dataInicial(request):
     if request.method == 'GET':
@@ -118,6 +112,7 @@ def dataInicial(request):
         data = "No se pudo resolver la Petición"
         return JsonResponse({'Message': 'Error', 'Nota': data})
 
+##### LEVANTA PLANTAS SELECCIONADAS
 def levantaPlantas():
     DataPlantas = []
     try:
@@ -166,9 +161,7 @@ def levantaPlantas():
         data = str(e)
         return DataPlantas
 
-
-
-#LoteCalidad_Mostrar '2023-02-24 00:00:00','1','N'
+##### TRAE LOS LOTES SEGUN LA PLANTA Y LA FECHA 
 @csrf_exempt
 def traeLotes(request):
     if request.method == 'POST':
@@ -206,8 +199,7 @@ def traeLotes(request):
         }
         return JsonResponse(response_data)
 
-
-#sp_mc_Levanta_Datos_Lote '49573','1'
+##### LLAMA LOS DETALLES DE LOS LOTES EN CASO DE ENCONTRAR
 @csrf_exempt
 def traeDetalleLotes(request):
     if request.method == 'POST':
@@ -253,7 +245,136 @@ def formatear_fecha(fecha_str):
     try:
         fecha_obj = datetime.strptime(fecha_str, '%d/%m/%Y')
         fecha_formateada = fecha_obj.strftime('%Y-%m-%d 00:00:00')
-
         return str(fecha_formateada)
     except ValueError:
         return None
+    
+
+@csrf_exempt
+def Ejecuta_Procedimientos(request):
+    if request.method == 'POST':
+        body = request.body.decode('utf-8')
+        
+        result = InsertaDataPrueba("EJECUTA PROCEDIMIENTOS", str(body))
+        if result == 1:
+            response_data = {
+            'Message': 'Se guardó la data.'
+            }
+            return JsonResponse(response_data)
+        elif result == 8:
+            response_data = {
+            'Message': 'Error en el Insert.'
+            }
+            return JsonResponse(response_data)
+        else:
+            response_data = {
+            'Message': 'No se insertó.'
+            }
+            return JsonResponse(response_data)
+    else:
+        response_data = {
+            'Message': 'No se pudo resolver la petición.'
+        }
+        return JsonResponse(response_data)
+    
+
+def ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,Solubles,Almidon,Acidez,
+                          Carpocapsa,idDestino,Observaciones,idResponsable,LV,CarpoReal,LVReal,InfoReal,
+                          Primera,Segunda,Tercera,Descarte):
+
+    values = [idLote,idGalpon,idCategoria,idCondicion,idTratamiento,Solubles,Almidon,Acidez,
+                          Carpocapsa,idDestino,Observaciones,idResponsable,LV,CarpoReal,LVReal,InfoReal,
+                          Primera,Segunda,Tercera,Descarte]
+    try:
+        with connections['Trazabilidad'].cursor() as cursor:
+            cursor.execute(""" exec ControlCalidad_Insert %s,%s,%s,%s,%s,%s,%s,%s,
+                           %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s""", values)
+            result = cursor.fetchone()
+            return str(result[0])
+    except Exception as e:
+        error = str(e)
+        return error
+    finally:
+        connections['Trazabilidad'].close()
+
+# @@idLote integer,
+# @@idGalpon integer,
+# @@idCategoria integer,
+# @@idCondicion integer,
+# @@idTratamiento varchar(10),
+# @@Solubles numeric(18,4),
+# @@Almidon numeric(18,4),
+# @@Acidez numeric(18,4),
+# @@Carpocapsa numeric(18,2),
+# @@idDestino integer,
+# @@Observaciones varchar(100),
+# @@idRespnsable integer,
+# @@LV integer,
+# @@CarpoReal  numeric(18,2),
+# @@LVReal integer,
+# @@InfoReal integer,
+# @@Primera numeric(18,2),
+# @@Segunda numeric(18,2),
+# @@Tercera numeric(18,2),
+# @@Descarte numeric(18,2)
+
+def CalidadPresion_Insert(idCalidad,NroPresion,Presion1,Presion2):
+
+    values = [idCalidad,NroPresion,Presion1,Presion2]
+    try:
+        with connections['Trazabilidad'].cursor() as cursor:
+            cursor.execute(""" exec CalidadPresion_Insert %s,%s,%s,%s """, values)
+            
+    except Exception as e:
+        error = str(e)
+        return error
+    finally:
+        connections['Trazabilidad'].close()
+
+# @@idCalidad integer,
+# @@NroPresion integer,
+# @@Presion1 decimal(18,4),
+# @@Presion2 decimal(18,4)
+
+
+def CalidadDefecto_Insert(idCalidad,idDefecto,Leve,Moderado,Severo,Porcentaje):
+
+    values = [idCalidad,idDefecto,Leve,Moderado,Severo,Porcentaje]
+    try:
+        with connections['Trazabilidad'].cursor() as cursor:
+            cursor.execute(""" exec CalidadDefecto_Insert %s,%s,%s,%s,%s,%s """, values)
+            
+    except Exception as e:
+        error = str(e)
+        return error
+    finally:
+        connections['Trazabilidad'].close()
+
+# @@idCalidad integer,
+# @@idDefecto integer,
+# @@Leve bit,
+# @@Moderado bit,
+# @@Severo bit,
+# @@Porcentaje numeric(18,2)
+
+
+def InsertaDataPrueba(funcion,json):
+
+    values = [funcion,json]
+    try:
+        with connections['Trazabilidad'].cursor() as cursor:
+            sql = """ INSERT INTO Data_Json (Funcion,FechaAlta,Json) VALUES (%s,GETDATE(),%s) """
+            cursor.execute(sql, values)
+            cursor.execute("SELECT @@ROWCOUNT AS AffectedRows")
+            affected_rows = cursor.fetchone()[0]
+
+            if affected_rows > 0:
+                return 1
+            else:
+                return 0
+
+    except Exception as e:
+        error = str(e)
+        return 8
+    finally:
+        connections['Trazabilidad'].close()

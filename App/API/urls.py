@@ -25,4 +25,6 @@ urlpatterns = [
     path('calidad-bascula/data-lotes/', bascula.traeLotes, name='trae_lotes'),
 
     path('calidad-bascula/data-detalle-lote/', bascula.traeDetalleLotes, name='detalle_lotes'),
+
+    path('calidad-bascula/inserta-data/', bascula.Ejecuta_Procedimientos, name='ejecuta_procedimientos'),
 ]
