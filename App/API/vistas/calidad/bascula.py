@@ -362,7 +362,7 @@ def InsertaDataPrueba(funcion,json):
 
     values = [funcion,json]
     try:
-        with connections['Trazabilidad'].cursor() as cursor:
+        with connections['default'].cursor() as cursor:
             sql = """ INSERT INTO Data_Json (Funcion,FechaAlta,Json) VALUES (%s,GETDATE(),%s) """
             cursor.execute(sql, values)
             cursor.execute("SELECT @@ROWCOUNT AS AffectedRows")
@@ -377,4 +377,4 @@ def InsertaDataPrueba(funcion,json):
         error = str(e)
         return 8
     finally:
-        connections['Trazabilidad'].close()
+        connections['default'].close()
