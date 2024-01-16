@@ -378,3 +378,30 @@ def InsertaDataPrueba(funcion,json):
         return 8
     finally:
         connections['default'].close()
+
+def resultadosInsert(request):
+    if request.method == 'GET':
+        try:
+            listado = []
+            with connections['default'].cursor() as cursor:
+                cursor.execute(""" Select Json FROM Data_Json""")
+                results = cursor.fetchall()
+                index = 0
+                if results:
+                    for row in results:
+                        dato = str(row[0])
+                        datos = {'ID':str(index),'Json':dato}
+                        listado.append(datos) 
+
+                        index = index +1  
+                if listado:
+                    return JsonResponse({'Message': 'Success', 'Listado': listado})
+                else:
+                    data = "No se encontraron Datos."
+                    return JsonResponse({'Message': 'Error', 'Nota': data})    
+        except Exception as e:
+            data = str(e)
+            return JsonResponse({'Message': 'Error', 'Nota': data})
+    else:
+        data = "No se pudo resolver la Petición"
+        return JsonResponse({'Message': 'Error', 'Nota': data})
