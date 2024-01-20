@@ -254,23 +254,40 @@ def formatear_fecha(fecha_str):
 def Ejecuta_Procedimientos(request):
     if request.method == 'POST':
         body = request.body.decode('utf-8')
+        idLote = str(json.loads(body)['idLote'])
+        idGalpon = str(json.loads(body)['idGalpon'])
+        idCategoria = str(json.loads(body)['idCategoria'])
+        idCondicion = str(json.loads(body)['idCondicion'])
+        idTratamiento = str(json.loads(body)['idTratamiento'])
+        solubles = str(json.loads(body)['solubles'])
+        almidon = str(json.loads(body)['almidon'])
+        acidez = str(json.loads(body)['acidez'])
+        carpocapsa = str(json.loads(body)['carpocapsa'])
+        idDestino = str(json.loads(body)['idDestino'])
+        observaciones = str(json.loads(body)['observaciones'])
+        idResponsable = str(json.loads(body)['idResponsable'])
+        LV = str(json.loads(body)['LV'])
+        carpoReal = str(json.loads(body)['carpoReal'])
+        LVReal = str(json.loads(body)['LVReal'])
+        infoReal = str(json.loads(body)['infoReal'])
+        primera = str(json.loads(body)['primera'])
+        segunda = str(json.loads(body)['segunda'])
+        tercera = str(json.loads(body)['tercera'])
+        descarte = str(json.loads(body)['descarte'])
         
-        result = InsertaDataPrueba("EJECUTA PROCEDIMIENTOS", str(body))
-        if result == 1:
-            response_data = {
-            'Message': 'Se guardó la data.'
-            }
-            return JsonResponse(response_data)
-        elif result == 8:
-            response_data = {
-            'Message': 'Error en el Insert.'
-            }
-            return JsonResponse(response_data)
-        else:
-            response_data = {
-            'Message': 'No se insertó.'
-            }
-            return JsonResponse(response_data)
+        InsertaDataPrueba("EJECUTA PROCEDIMIENTOS", str(body))
+        result = ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
+                                       solubles,almidon,acidez,carpocapsa,idDestino,observaciones,
+                                       idResponsable,LV,carpoReal,LVReal,infoReal,primera,segunda,tercera,descarte)
+        if result:
+            InsertaDataPrueba("ID CALIDAD", str(result))
+        InsertaDataPrueba("ID CALIDAD", str(result))
+
+        response_data = {
+        'Message': 'Success', 'Nota':'Ingreso.'
+        }
+        return JsonResponse(response_data)
+
     else:
         response_data = {
             'Message': 'No se pudo resolver la petición.'
