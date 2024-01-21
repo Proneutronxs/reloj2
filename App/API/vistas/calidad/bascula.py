@@ -316,26 +316,31 @@ def ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
                           Carpocapsa,idDestino,Observaciones,idResponsable,LV,CarpoReal,LVReal,InfoReal,
                           Primera,Segunda,Tercera,Descarte,colorManzanaUno,colorManzanaDos,colorManzanaTres,grandeManzana,
                           medioManzana,chicoManzana,v,va,av,a,grandePera,medioPera,chicoPera,imagenes):
+    try:
+        with connections['Trazabilidad'].cursor() as cursor:
 
-    values = [idLote,idGalpon,idCategoria,idCondicion,idTratamiento,Solubles,Almidon,Acidez,
+            cursor.execute(""" SELECT (MAX(idCalidad),0)+1 FROM CalidadControl """)
+            result = cursor.fetchone()
+            idCalidad = str(result[0])
+
+            values = [idCalidad,idLote,idGalpon,idCategoria,idCondicion,idTratamiento,Solubles,Almidon,Acidez,
                           Carpocapsa,idDestino,Observaciones,idResponsable,LV,CarpoReal,LVReal,InfoReal,
                           Primera,Segunda,Tercera,Descarte,colorManzanaUno,colorManzanaDos,colorManzanaTres,grandeManzana,
                           medioManzana,chicoManzana,v,va,av,a,grandePera,medioPera,chicoPera,imagenes]
-    try:
-        with connections['Trazabilidad'].cursor() as cursor:
-            cursor.execute(""" exec ControlCalidad_Insert %s,%s,%s,%s,%s,%s,%s,%s,
+            cursor.execute(""" INSERT INTO CalidadControl VALUES (%s,%s,GETDATE(),%s,%s,%s,%s,%s,%s,%s,
                            %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
-                           %s,%s,%s,%s,%s,%s,%s,%s""", values)
-            results = cursor.fetchall()
-            if results:
-                return str(results[0])
-            else:
-                return "0"
+                           %s,%s,%s,%s,%s,%s,%s,%s)""", values)
+            
+            cursor.execute(""" UPDATE LoteCalidad SET idCalidad= %s , FechaIngresoCalidad=GETDATE() WHERE LoteNumero = %s """, [idCalidad,idLote])
+
+            return idCalidad
     except Exception as e:
         error = str(e)
-        return "error"
+        return error
     finally:
         connections['Trazabilidad'].close()
+
+
 
 # @@idLote integer,
 # @@idGalpon integer,
