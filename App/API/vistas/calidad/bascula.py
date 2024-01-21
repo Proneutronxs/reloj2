@@ -349,24 +349,24 @@ def imagenesBASE64(idLote,imagenUno,imagenDos):
         return ""
     if imagenUno != "0" and imagenDos == "0":
         imagen = base64.b64decode(imagenUno)
-        nombre = "calidad_image_"+ str(idLote) + "uno.jpeg"
+        nombre = "calidad_image_"+ str(idLote) + "_uno.jpeg"
         with open('App/API/media/images/Calidad/reportes_empaque/' + nombre , "wb") as image:
             image.write(imagen)
         return nombre
     if imagenUno == "0" and imagenDos != "0":
         imagen = base64.b64decode(imagenDos)
-        nombre = "calidad_image_"+ str(idLote) + "dos.jpeg"
+        nombre = "calidad_image_"+ str(idLote) + "_dos.jpeg"
         with open('App/API/media/images/Calidad/reportes_empaque/' + nombre , "wb") as image:
             image.write(imagen)
         return  nombre
     if imagenUno != "0" and imagenDos != "0":
         imagen1 = base64.b64decode(imagenUno)
-        nombre1 = "calidad_image_"+ str(idLote) + "uno.jpeg"
+        nombre1 = "calidad_image_"+ str(idLote) + "_uno.jpeg"
         with open('App/API/media/images/Calidad/reportes_empaque/' + nombre1 , "wb") as image:
             image.write(imagen1)
 
         imagen2 = base64.b64decode(imagenDos)
-        nombre2 = "calidad_image_"+ str(idLote) + "dos.jpeg"
+        nombre2 = "calidad_image_"+ str(idLote) + "_dos.jpeg"
         with open('App/API/media/images/Calidad/reportes_empaque/' + nombre2 , "wb") as image:
             image.write(imagen2)
         return  nombre1 + ";" + nombre2
