@@ -327,11 +327,13 @@ def ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
                            %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
                            %s,%s,%s,%s,%s,%s,%s,%s""", values)
             results = cursor.fetchall()
-            for result in results:
-                return result
+            if results:
+                return str(results[0])
+            else:
+                return "0"
     except Exception as e:
         error = str(e)
-        return error
+        return "error"
     finally:
         connections['Trazabilidad'].close()
 
