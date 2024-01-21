@@ -326,8 +326,9 @@ def ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
             cursor.execute(""" exec ControlCalidad_Insert %s,%s,%s,%s,%s,%s,%s,%s,
                            %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
                            %s,%s,%s,%s,%s,%s,%s,%s""", values)
-            result = cursor.fetchone()
-            return str(result[0])
+            results = cursor.fetchall()
+            for result in results:
+                return result
     except Exception as e:
         error = str(e)
         return error
