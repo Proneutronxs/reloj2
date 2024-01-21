@@ -274,14 +274,31 @@ def Ejecuta_Procedimientos(request):
         segunda = str(json.loads(body)['segunda'])
         tercera = str(json.loads(body)['tercera'])
         descarte = str(json.loads(body)['descarte'])
+        colorManzanaUno = str(json.loads(body)['colorManzanaUno'])
+        colorManzanaDos = str(json.loads(body)['colorManzanaDos'])
+        colorManzanaTres = str(json.loads(body)['colorManzanaTres'])
+        grandeManzana = str(json.loads(body)['grandeManzana'])
+        medioManzana = str(json.loads(body)['medioManzana'])
+        chicoManzana = str(json.loads(body)['chicoManzana'])
+        v = str(json.loads(body)['v'])
+        va = str(json.loads(body)['va'])
+        av = str(json.loads(body)['av'])
+        a = str(json.loads(body)['a'])
+        grandePera = str(json.loads(body)['grandePera'])
+        medioPera = str(json.loads(body)['medioPera'])
+        chicoPera = str(json.loads(body)['chicoPera'])
+
+        imagenes ="images"
         
         InsertaDataPrueba("EJECUTA PROCEDIMIENTOS", str(body))
-        # result = ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
-        #                                solubles,almidon,acidez,carpocapsa,idDestino,observaciones,
-        #                                idResponsable,LV,carpoReal,LVReal,infoReal,primera,segunda,tercera,descarte)
-        # if result:
-        #     InsertaDataPrueba("ID CALIDAD", str(result))
-        # InsertaDataPrueba("ID CALIDAD", str(result))
+        result = ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
+                                       solubles,almidon,acidez,carpocapsa,idDestino,observaciones,
+                                       idResponsable,LV,carpoReal,LVReal,infoReal,primera,segunda,tercera,descarte,
+                                       colorManzanaUno,colorManzanaDos,colorManzanaTres,grandeManzana,
+                                       medioManzana,chicoManzana,v,va,av,a,grandePera,medioPera,chicoPera,imagenes)
+        if result:
+            InsertaDataPrueba("ID CALIDAD", str(result))
+        InsertaDataPrueba("ID CALIDAD", str(result))
 
         response_data = {
         'Message': 'Success', 'Nota':'Ingreso.'
@@ -297,15 +314,18 @@ def Ejecuta_Procedimientos(request):
 
 def ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,Solubles,Almidon,Acidez,
                           Carpocapsa,idDestino,Observaciones,idResponsable,LV,CarpoReal,LVReal,InfoReal,
-                          Primera,Segunda,Tercera,Descarte):
+                          Primera,Segunda,Tercera,Descarte,colorManzanaUno,colorManzanaDos,colorManzanaTres,grandeManzana,
+                          medioManzana,chicoManzana,v,va,av,a,grandePera,medioPera,chicoPera,imagenes):
 
     values = [idLote,idGalpon,idCategoria,idCondicion,idTratamiento,Solubles,Almidon,Acidez,
                           Carpocapsa,idDestino,Observaciones,idResponsable,LV,CarpoReal,LVReal,InfoReal,
-                          Primera,Segunda,Tercera,Descarte]
+                          Primera,Segunda,Tercera,Descarte,colorManzanaUno,colorManzanaDos,colorManzanaTres,grandeManzana,
+                          medioManzana,chicoManzana,v,va,av,a,grandePera,medioPera,chicoPera,imagenes]
     try:
         with connections['Trazabilidad'].cursor() as cursor:
             cursor.execute(""" exec ControlCalidad_Insert %s,%s,%s,%s,%s,%s,%s,%s,
-                           %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s""", values)
+                           %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
+                           %s,%s,%s,%s,%s,%s,%s,%s""", values)
             result = cursor.fetchone()
             return str(result[0])
     except Exception as e:
