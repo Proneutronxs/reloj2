@@ -289,6 +289,9 @@ def Ejecuta_Procedimientos(request):
         chicoPera = str(json.loads(body)['chicoPera'])
         imagenUno = str(json.loads(body)['imagenUno'])
         imagenDos = str(json.loads(body)['imagenDos'])
+        datosPresiones = json.loads(body)['DataPresiones']
+        datosDefectos = json.loads(body)['DataDefectos']
+
 
         imagenes = imagenesBASE64(idLote,imagenUno,imagenDos)
         
@@ -300,8 +303,9 @@ def Ejecuta_Procedimientos(request):
                                        medioManzana,chicoManzana,v,va,av,a,grandePera,medioPera,chicoPera,imagenes)
         if result:
             InsertaDataPrueba("ID CALIDAD", str(result))
-        InsertaDataPrueba("ID CALIDAD", str(result))
         InsertaDataPrueba("IMAGENES", str(imagenes))
+        InsertaDataPrueba("DATA PRESIONES", str(datosPresiones))
+        InsertaDataPrueba("DATA DEFECTOS", str(datosDefectos))
 
         response_data = {
         'Message': 'Success', 'Nota':'Ingreso.'
