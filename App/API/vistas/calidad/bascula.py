@@ -287,8 +287,10 @@ def Ejecuta_Procedimientos(request):
         grandePera = str(json.loads(body)['grandePera'])
         medioPera = str(json.loads(body)['medioPera'])
         chicoPera = str(json.loads(body)['chicoPera'])
+        imagenUno = str(json.loads(body)['imagenUno'])
+        imagenDos = str(json.loads(body)['imagenDos'])
 
-        imagenes ="images"
+        imagenes = imagenesBASE64(idLote,imagenUno,imagenDos)
         
         InsertaDataPrueba("EJECUTA PROCEDIMIENTOS", str(body))
         result = ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
@@ -299,6 +301,7 @@ def Ejecuta_Procedimientos(request):
         if result:
             InsertaDataPrueba("ID CALIDAD", str(result))
         InsertaDataPrueba("ID CALIDAD", str(result))
+        InsertaDataPrueba("IMAGENES", str(imagenes))
 
         response_data = {
         'Message': 'Success', 'Nota':'Ingreso.'
@@ -341,7 +344,32 @@ def ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
     finally:
         connections['Trazabilidad'].close()
 
+def imagenesBASE64(idLote,imagenUno,imagenDos):
+    if imagenUno == "0" and imagenDos == "0":
+        return ""
+    if imagenUno != "0" and imagenDos == "0":
+        imagen = base64.b64decode(imagenUno)
+        nombre = "calidad_image_"+ str(idLote) + "uno.jpeg"
+        with open('App/API/media/images/Calidad/reportes_empaque/' + nombre , "wb") as image:
+            image.write(imagen)
+        return nombre
+    if imagenUno == "0" and imagenDos != "0":
+        imagen = base64.b64decode(imagenDos)
+        nombre = "calidad_image_"+ str(idLote) + "dos.jpeg"
+        with open('App/API/media/images/Calidad/reportes_empaque/' + nombre , "wb") as image:
+            image.write(imagen)
+        return  nombre
+    if imagenUno != "0" and imagenDos != "0":
+        imagen1 = base64.b64decode(imagenUno)
+        nombre1 = "calidad_image_"+ str(idLote) + "uno.jpeg"
+        with open('App/API/media/images/Calidad/reportes_empaque/' + nombre1 , "wb") as image:
+            image.write(imagen1)
 
+        imagen2 = base64.b64decode(imagenDos)
+        nombre2 = "calidad_image_"+ str(idLote) + "dos.jpeg"
+        with open('App/API/media/images/Calidad/reportes_empaque/' + nombre2 , "wb") as image:
+            image.write(imagen2)
+        return  nombre1 + ";" + nombre2
 
 # @@idLote integer,
 # @@idGalpon integer,
