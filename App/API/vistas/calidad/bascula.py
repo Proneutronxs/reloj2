@@ -276,12 +276,12 @@ def Ejecuta_Procedimientos(request):
         descarte = str(json.loads(body)['descarte'])
         
         InsertaDataPrueba("EJECUTA PROCEDIMIENTOS", str(body))
-        result = ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
-                                       solubles,almidon,acidez,carpocapsa,idDestino,observaciones,
-                                       idResponsable,LV,carpoReal,LVReal,infoReal,primera,segunda,tercera,descarte)
-        if result:
-            InsertaDataPrueba("ID CALIDAD", str(result))
-        InsertaDataPrueba("ID CALIDAD", str(result))
+        # result = ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
+        #                                solubles,almidon,acidez,carpocapsa,idDestino,observaciones,
+        #                                idResponsable,LV,carpoReal,LVReal,infoReal,primera,segunda,tercera,descarte)
+        # if result:
+        #     InsertaDataPrueba("ID CALIDAD", str(result))
+        # InsertaDataPrueba("ID CALIDAD", str(result))
 
         response_data = {
         'Message': 'Success', 'Nota':'Ingreso.'
