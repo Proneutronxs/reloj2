@@ -318,7 +318,7 @@ def ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
                           medioManzana,chicoManzana,v,va,av,a,grandePera,medioPera,chicoPera,imagenes):
     try:
         with connections['Trazabilidad'].cursor() as cursor:
-            sql = """ SELECT (MAX(idCalidad),0)+1 FROM CalidadControl """
+            sql = """ SELECT MAX(idCalidad)+1 FROM CalidadControl """
             cursor.execute(sql)
             result = cursor.fetchone()
             idCalidad = str(result[0])
