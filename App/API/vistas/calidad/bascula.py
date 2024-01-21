@@ -292,26 +292,42 @@ def Ejecuta_Procedimientos(request):
         datosPresiones = json.loads(body)['DataPresiones']
         datosDefectos = json.loads(body)['DataDefectos']
 
-
         imagenes = imagenesBASE64(idLote,imagenUno,imagenDos)
-        
-        InsertaDataPrueba("EJECUTA PROCEDIMIENTOS", str(body))
         result = ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
                                        solubles,almidon,acidez,carpocapsa,idDestino,observaciones,
                                        idResponsable,LV,carpoReal,LVReal,infoReal,primera,segunda,tercera,descarte,
                                        colorManzanaUno,colorManzanaDos,colorManzanaTres,grandeManzana,
                                        medioManzana,chicoManzana,v,va,av,a,grandePera,medioPera,chicoPera,imagenes)
-        if result:
-            InsertaDataPrueba("ID CALIDAD", str(result))
+        
+        InsertaDataPrueba("ID CALIDAD", str(result))
         InsertaDataPrueba("IMAGENES", str(imagenes))
         InsertaDataPrueba("DATA PRESIONES", str(datosPresiones))
         InsertaDataPrueba("DATA DEFECTOS", str(datosDefectos))
+        if result != "0":
+            for item in datosDefectos:
+                idCalidad = str(result)
+                idDefecto = str(item['idDefecto'])
+                porcentaje = str(item['Porcentaje'])
+                leve = "0"
+                moderado = "0"
+                severo = "0"
+                if idDefecto != "0":
+                    CalidadDefecto_Insert(idCalidad,idDefecto,leve,moderado,severo,porcentaje)
 
-        response_data = {
-        'Message': 'Success', 'Nota':'Ingreso.'
-        }
-        return JsonResponse(response_data)
+            for item in datosPresiones:
+                idCalidad = str(result)
+                numFruto = str(item['NumFruto'])
+                minPresion = str(item['minPresion'])
+                maxPresion = str(item['maxPresion'])
+                if numFruto != "0":
+                    CalidadPresion_Insert(idCalidad,numFruto,minPresion,maxPresion)
 
+            response_data = {'Message': 'Success', 'Nota':'Los datos se guardaron correctamente.'}
+            return JsonResponse(response_data)
+        else:
+            response_data = {'Message': 'Success', 'Nota':'Se produjo un error al intentar procesar la solicitud.'}
+            return JsonResponse(response_data)
+            
     else:
         response_data = {
             'Message': 'No se pudo resolver la petición.'
@@ -344,7 +360,7 @@ def ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
             return idCalidad
     except Exception as e:
         error = str(e)
-        return error
+        return "0"
     finally:
         connections['Trazabilidad'].close()
 
