@@ -318,8 +318,8 @@ def ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
                           medioManzana,chicoManzana,v,va,av,a,grandePera,medioPera,chicoPera,imagenes):
     try:
         with connections['Trazabilidad'].cursor() as cursor:
-
-            cursor.execute(""" SELECT (MAX(idCalidad),0)+1 FROM CalidadControl """)
+            sql = """ SELECT (MAX(idCalidad),0)+1 FROM CalidadControl """
+            cursor.execute(sql)
             result = cursor.fetchone()
             idCalidad = str(result[0])
 
@@ -327,11 +327,12 @@ def ControlCalidad_Insert(idLote,idGalpon,idCategoria,idCondicion,idTratamiento,
                           Carpocapsa,idDestino,Observaciones,idResponsable,LV,CarpoReal,LVReal,InfoReal,
                           Primera,Segunda,Tercera,Descarte,colorManzanaUno,colorManzanaDos,colorManzanaTres,grandeManzana,
                           medioManzana,chicoManzana,v,va,av,a,grandePera,medioPera,chicoPera,imagenes]
-            cursor.execute(""" INSERT INTO CalidadControl VALUES (%s,%s,GETDATE(),%s,%s,%s,%s,%s,%s,%s,
-                           %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
-                           %s,%s,%s,%s,%s,%s,%s,%s)""", values)
             
-            cursor.execute(""" UPDATE LoteCalidad SET idCalidad= %s , FechaIngresoCalidad=GETDATE() WHERE LoteNumero = %s """, [idCalidad,idLote])
+            sql1 =""" INSERT INTO CalidadControl VALUES (%s,%s,GETDATE(),%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""" ##35
+            cursor.execute(sql1, values)
+            
+            sql2 = """ UPDATE LoteCalidad SET idCalidad= %s, FechaIngresoCalidad = GETDATE() WHERE LoteNumero = %s """
+            cursor.execute(sql2, [idCalidad,idLote])
 
             return idCalidad
     except Exception as e:
