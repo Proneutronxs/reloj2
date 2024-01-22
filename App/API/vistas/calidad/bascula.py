@@ -421,6 +421,7 @@ def CalidadPresion_Insert(idCalidad,NroPresion,Presion1,Presion2):
             
     except Exception as e:
         error = str(e)
+        InsertaDataPrueba("PRESION", error)
         return error
     finally:
         connections['Trazabilidad'].close()
@@ -440,6 +441,7 @@ def CalidadDefecto_Insert(idCalidad,idDefecto,Leve,Moderado,Severo,Porcentaje):
             
     except Exception as e:
         error = str(e)
+        InsertaDataPrueba("DEFECTOS", error)
         return error
     finally:
         connections['Trazabilidad'].close()
