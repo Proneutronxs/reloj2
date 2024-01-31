@@ -976,7 +976,7 @@ def traeVeriedades_Fecha(fecha):
                                         General.dbo.USR_MCLOTE ON LoteCalidad.LoteNumero = General.dbo.USR_MCLOTE.USR_LOTE_NUMERO
                 WHERE        (CONVERT(DATE, LoteCalidad.FechaIngresoCalidad) = CONVERT(DATE, @@Fecha))
             """
-            cursor.execute(sql, [fecha])
+        cursor.execute(sql, [fecha])
         consulta = cursor.fetchall()
         if consulta:
             results = [] 
@@ -1009,8 +1009,6 @@ def traeCantBinsPorFecha_variedad(fecha,variedad):
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("traeCantBinsPorFecha_variedad", error)
-    finally:
-        cursor.close()
 
 def traeChacrasPorVariedadFecha(variedad,fecha):
     try:
@@ -1038,8 +1036,6 @@ def traeChacrasPorVariedadFecha(variedad,fecha):
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("traeChacrasPorVariedadFecha", error)
-    finally:
-        cursor.close()
 
 def detalleGeneral(variedad,fecha,chacra):
     try:
@@ -1077,8 +1073,6 @@ def detalleGeneral(variedad,fecha,chacra):
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("detalleGeneral", error)
-    finally:
-        cursor.close()
 
 
 def presiones(idCalidad):
@@ -1100,8 +1094,6 @@ def presiones(idCalidad):
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("presiones", error)
-    finally:
-        cursor.close()
 
 def detallesControl(idCalidad):
     try:
@@ -1122,8 +1114,6 @@ def detallesControl(idCalidad):
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("detallesControl", error)
-    finally:
-        cursor.close()
 
 
 def traeNombreChacra(idChacra):
@@ -1142,8 +1132,6 @@ def traeNombreChacra(idChacra):
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("traeNombreChacra", error)
-    finally:
-        cursor.close()
 
 def traeNombreVariedad(idVariedad):
     try:
@@ -1161,8 +1149,6 @@ def traeNombreVariedad(idVariedad):
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("traeNombreVariedad", error)
-    finally:
-        cursor.close()
         
 def formatear_fecha(fecha_str):
     fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d')
