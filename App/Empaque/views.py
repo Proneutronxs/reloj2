@@ -976,13 +976,13 @@ def traeVeriedades_Fecha(fecha):
                                         General.dbo.USR_MCLOTE ON LoteCalidad.LoteNumero = General.dbo.USR_MCLOTE.USR_LOTE_NUMERO
                 WHERE        (CONVERT(DATE, LoteCalidad.FechaIngresoCalidad) = CONVERT(DATE, @@Fecha))
             """
-        cursor.execute(sql, [fecha])
-        consulta = cursor.fetchall()
-        if consulta:
-            results = [] 
-            for i in consulta:
-                results.append(str(i[0]))
-        return results
+            cursor.execute(sql, [fecha])
+            consulta = cursor.fetchall()
+            if consulta:
+                results = [] 
+                for i in consulta:
+                    results.append(str(i[0]))
+            return results
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("traeVeriedades_Fecha", error)
@@ -1001,11 +1001,11 @@ def traeCantBinsPorFecha_variedad(fecha,variedad):
                                         General.dbo.USR_MCLOTE ON LoteCalidad.LoteNumero = General.dbo.USR_MCLOTE.USR_LOTE_NUMERO
                 WHERE        (CONVERT(DATE, LoteCalidad.FechaIngresoCalidad) = @@Fecha AND General.dbo.USR_MCLOTE.USR_VAR_ALIAS = @@Variedad)
             """
-        cursor.execute(sql, [fecha,variedad])
-        consulta = cursor.fetchone()
-        if consulta:
-            cantidad = str(consulta[0])
-        return cantidad
+            cursor.execute(sql, [fecha,variedad])
+            consulta = cursor.fetchone()
+            if consulta:
+                cantidad = str(consulta[0])
+            return cantidad
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("traeCantBinsPorFecha_variedad", error)
@@ -1026,13 +1026,13 @@ def traeChacrasPorVariedadFecha(variedad,fecha):
                                         USR_MCCHACRA ON USR_MCMOVCAM.USR_CHAC_ALIAS = USR_MCCHACRA.USR_CHAC_ALIAS
                 WHERE        (USR_MCLOTE.USR_VAR_ALIAS = @@Variedad) AND (CONVERT(DATE, Trazabilidad.dbo.LoteCalidad.FechaIngresoCalidad) = @@Fecha)
             """
-        cursor.execute(sql, [variedad,fecha])
-        consulta = cursor.fetchall()
-        if consulta:
-            results = [] 
-            for i in consulta:
-                results.append(str(i[0]))
-        return results
+            cursor.execute(sql, [variedad,fecha])
+            consulta = cursor.fetchall()
+            if consulta:
+                results = [] 
+                for i in consulta:
+                    results.append(str(i[0]))
+            return results
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("traeChacrasPorVariedadFecha", error)
@@ -1067,9 +1067,9 @@ def detalleGeneral(variedad,fecha,chacra):
                                 AND USR_MCCHACRA.USR_CHAC_ALIAS = @@Productor
                 ORDER BY PRODUCTOR
             """
-        cursor.execute(sql, [variedad,fecha,chacra])
-        consulta = cursor.fetchall()
-        return consulta
+            cursor.execute(sql, [variedad,fecha,chacra])
+            consulta = cursor.fetchall()
+            return consulta
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("detalleGeneral", error)
@@ -1084,13 +1084,13 @@ def presiones(idCalidad):
                 FROM CalidadPresion
                 WHERE idCalidad = %s
             """
-        cursor.execute(sql, [idCalidad])
-        consulta = cursor.fetchone()
-        if consulta:
-            min = str(consulta[0]).replace('.',',')
-            promedio = str(consulta[1]).replace('.',',')
-            max = str(consulta[2]).replace('.',',')
-        return min,promedio,max
+            cursor.execute(sql, [idCalidad])
+            consulta = cursor.fetchone()
+            if consulta:
+                min = str(consulta[0]).replace('.',',')
+                promedio = str(consulta[1]).replace('.',',')
+                max = str(consulta[2]).replace('.',',')
+            return min,promedio,max
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("presiones", error)
@@ -1104,13 +1104,13 @@ def detallesControl(idCalidad):
                 FROM CalidadControl
                 WHERE idCalidad = %s
             """
-        cursor.execute(sql, [idCalidad])
-        consulta = cursor.fetchone()
-        if consulta:
-            solubles = str(consulta[0]).replace('.',',')
-            almidon = str(consulta[1]).replace('.',',')
-            acidez = str(consulta[2]).replace('.',',')
-        return solubles,almidon,acidez
+            cursor.execute(sql, [idCalidad])
+            consulta = cursor.fetchone()
+            if consulta:
+                solubles = str(consulta[0]).replace('.',',')
+                almidon = str(consulta[1]).replace('.',',')
+                acidez = str(consulta[2]).replace('.',',')
+            return solubles,almidon,acidez
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("detallesControl", error)
@@ -1124,11 +1124,11 @@ def traeNombreChacra(idChacra):
                 FROM USR_MCCHACRA
                 WHERE USR_CHAC_ALIAS = %s
             """
-        cursor.execute(sql, [idChacra])
-        consulta = cursor.fetchone()
-        if consulta:
-            nombreChacra = str(consulta[0])
-        return nombreChacra
+            cursor.execute(sql, [idChacra])
+            consulta = cursor.fetchone()
+            if consulta:
+                nombreChacra = str(consulta[0])
+            return nombreChacra
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("traeNombreChacra", error)
@@ -1141,11 +1141,11 @@ def traeNombreVariedad(idVariedad):
                 FROM USR_MCVARIED
                 WHERE USR_VAR_ALIAS = %s
             """
-        cursor.execute(sql, [idVariedad])
-        consulta = cursor.fetchone()
-        if consulta:
-            nombreVariedad = str(consulta[0])
-        return nombreVariedad
+            cursor.execute(sql, [idVariedad])
+            consulta = cursor.fetchone()
+            if consulta:
+                nombreVariedad = str(consulta[0])
+            return nombreVariedad
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("traeNombreVariedad", error)
