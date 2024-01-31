@@ -705,7 +705,7 @@ def post_busqueda_reporte_camaras(request):
                         pdf.set_font('Arial', 'B', 16)
                         pdf.cell(w=100, h=8, txt= str(nombreVariedad), border='', align='L', fill=True)
                         pdf.set_font('Arial', 'B', 9)
-                        pdf.multi_cell(w=0, h=8, txt= "TOTAL BINS: " + str(cantidadBins) + " - Fecha: " + str(formatear_fecha(fecha)), border='', align='R', fill=True)
+                        pdf.multi_cell(w=0, h=8, txt= "TOTAL BINS: " + str(cantidadBins) + " - Fecha: " + str(formatear_fecha(str(fecha))), border='', align='R', fill=True)
                         pdf.multi_cell(w=0, h=2, txt= "", border='', align='R', fill=0)
 
                         chacrasPorVariedad = traeChacrasPorVariedadFecha(variedad,fecha)
