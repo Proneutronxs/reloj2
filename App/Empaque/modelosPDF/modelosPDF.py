@@ -77,7 +77,7 @@ class Reporte_Ingreso_Bascula(FPDF):
         self.text(x=78, y=31, txt= 'INGRESO BÁSCULA')
         self.line(143,14,143,33)
         self.set_font('Arial', 'B', 10)
-        self.text(x=146, y=32, txt= 'Código: PLE30')
+        self.text(x=146, y=32, txt= 'Código: s/n')
         self.ln(30)
 
     def footer(self):

@@ -969,7 +969,7 @@ def traeVeriedades_Fecha(fecha):
                 SELECT        DISTINCT General.dbo.USR_MCLOTE.USR_VAR_ALIAS
                 FROM            LoteCalidad INNER JOIN
                                         General.dbo.USR_MCLOTE ON LoteCalidad.LoteNumero = General.dbo.USR_MCLOTE.USR_LOTE_NUMERO
-                WHERE        (CONVERT(DATE, LoteCalidad.FechaIngresoCalidad) = @@Fecha)
+                WHERE        (CONVERT(DATE, LoteCalidad.FechaIngresoCalidad) = CONVERT(DATE, @@Fecha))
             """
             cursor.execute(sql, [fecha])
         consulta = cursor.fetchall()
