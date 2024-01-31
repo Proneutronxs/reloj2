@@ -65,7 +65,7 @@ class Reporte_Ingreso_Bascula(FPDF):
         self.set_font('Arial', 'B', 13)
         self.text(x=73, y=22, txt= 'DEPARTAMENTO DE CALIDAD')
         self.set_font('Arial', '', 8)
-        self.text(x=144, y=18, txt= formatear_fecha_actual())
+        self.text(x=144, y=18, txt= str(formatear_fecha_actual()))
         self.set_font('Arial', '', 10)
         self.text(x=146, y=25, txt= 'Tipo de Documento:')
         self.set_font('Arial', 'B', 10)
