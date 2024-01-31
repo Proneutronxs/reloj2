@@ -1089,7 +1089,7 @@ def presiones(idCalidad):
                 SELECT CONVERT(VARCHAR,CAST(MIN(Presion1) AS DECIMAL(18, 2))) AS MINIMA, CONVERT(VARCHAR,CAST((SUM(Presion1) + SUM(Presion2)) / (MAX(NroPresion) * 2) AS DECIMAL(18, 2))) AS PROMEDIO,
 		                CONVERT(VARCHAR,CAST(MAX(Presion2) AS DECIMAL(18, 2))) AS MAXIMA
                 FROM CalidadPresion
-                WHERE idCalidad = %s
+                WHERE idCalidad = %s AND Presion1 <> '0.0000' AND Presion2 <> '0.0000'
             """
             cursor.execute(sql, [idCalidad])
             consulta = cursor.fetchone()
