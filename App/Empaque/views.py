@@ -687,6 +687,8 @@ def post_busqueda_reporte_camaras(request):
         elif str(Tipo) == "Ingreso Bascula":
 
             variedadesDia =  traeVeriedades_Fecha(fecha)
+
+            InsertaDataPrueba(fecha, str(variedadesDia))
             if variedadesDia:
                 pdf = Reporte_Ingreso_Bascula()
                 pdf.alias_nb_pages()
@@ -694,7 +696,9 @@ def post_busqueda_reporte_camaras(request):
                 for variedad in variedadesDia:
                     #print(variedad + " ##### VARIEDAD #####") ### VARIEDAD GRANDE
                     nombreVariedad = traeNombreVariedad(variedad)
+                    InsertaDataPrueba(fecha, str(nombreVariedad))
                     cantidadBins = traeCantBinsPorFecha_variedad(fecha,variedad)
+                    InsertaDataPrueba(fecha, str(cantidadBins))
                     #### CADA VEZ QUE CAMBIO LA VARIEDAD #### ENCABEZADO
                     pdf.set_fill_color(186, 233, 175)
                     pdf.set_font('Arial', 'B', 16)
@@ -704,6 +708,7 @@ def post_busqueda_reporte_camaras(request):
                     pdf.multi_cell(w=0, h=2, txt= "", border='', align='R', fill=0)
 
                     chacrasPorVariedad = traeChacrasPorVariedadFecha(variedad,fecha)
+                    InsertaDataPrueba(fecha, str(chacrasPorVariedad))
                     for chacra in chacrasPorVariedad:
                         #print(chacra + " ##### CHACRA #####") ### ID CHACRA 
                         Listados = detalleGeneral(variedad,fecha,chacra)
@@ -980,6 +985,7 @@ def traeVeriedades_Fecha(fecha):
         return results
     except Exception as e:
         error = str(e)
+        InsertaDataPrueba("traeVeriedades_Fecha", error)
 
 
 def traeCantBinsPorFecha_variedad(fecha,variedad):
@@ -1001,7 +1007,8 @@ def traeCantBinsPorFecha_variedad(fecha,variedad):
             cantidad = str(consulta[0])
         return cantidad
     except Exception as e:
-            print(e)
+        error = str(e)
+        InsertaDataPrueba("traeCantBinsPorFecha_variedad", error)
     finally:
         cursor.close()
 
@@ -1029,7 +1036,8 @@ def traeChacrasPorVariedadFecha(variedad,fecha):
                 results.append(str(i[0]))
         return results
     except Exception as e:
-            print(e)
+        error = str(e)
+        InsertaDataPrueba("traeChacrasPorVariedadFecha", error)
     finally:
         cursor.close()
 
@@ -1067,7 +1075,8 @@ def detalleGeneral(variedad,fecha,chacra):
         consulta = cursor.fetchall()
         return consulta
     except Exception as e:
-            print(e)
+        error = str(e)
+        InsertaDataPrueba("detalleGeneral", error)
     finally:
         cursor.close()
 
@@ -1089,7 +1098,8 @@ def presiones(idCalidad):
             max = str(consulta[2]).replace('.',',')
         return min,promedio,max
     except Exception as e:
-            print(e)
+        error = str(e)
+        InsertaDataPrueba("presiones", error)
     finally:
         cursor.close()
 
@@ -1110,7 +1120,8 @@ def detallesControl(idCalidad):
             acidez = str(consulta[2]).replace('.',',')
         return solubles,almidon,acidez
     except Exception as e:
-            print(e)
+        error = str(e)
+        InsertaDataPrueba("detallesControl", error)
     finally:
         cursor.close()
 
@@ -1129,7 +1140,8 @@ def traeNombreChacra(idChacra):
             nombreChacra = str(consulta[0])
         return nombreChacra
     except Exception as e:
-            print(e)
+        error = str(e)
+        InsertaDataPrueba("traeNombreChacra", error)
     finally:
         cursor.close()
 
@@ -1147,7 +1159,8 @@ def traeNombreVariedad(idVariedad):
             nombreVariedad = str(consulta[0])
         return nombreVariedad
     except Exception as e:
-            print(e)
+        error = str(e)
+        InsertaDataPrueba("traeNombreVariedad", error)
     finally:
         cursor.close()
         
@@ -1155,6 +1168,27 @@ def formatear_fecha(fecha_str):
     fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d')
     fecha_formateada = fecha_obj.strftime('%d/%m/%Y')
     return fecha_formateada
+
+def InsertaDataPrueba(funcion,json):
+
+    values = [funcion,json]
+    try:
+        with connections['default'].cursor() as cursor:
+            sql = """ INSERT INTO Data_Json (Funcion,FechaAlta,Json) VALUES (%s,GETDATE(),%s) """
+            cursor.execute(sql, values)
+            cursor.execute("SELECT @@ROWCOUNT AS AffectedRows")
+            affected_rows = cursor.fetchone()[0]
+
+            if affected_rows > 0:
+                return 1
+            else:
+                return 0
+
+    except Exception as e:
+        error = str(e)
+        return 8
+    finally:
+        connections['default'].close()
 # def a(fecha):
 #     try:
 #         conexion = Trazabilidad()
