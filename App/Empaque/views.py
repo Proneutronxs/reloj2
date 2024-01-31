@@ -10,6 +10,7 @@ from App.ZTime.conexion import *
 from App.Empaque.modelosPDF.modelosPDF import *
 import os
 import matplotlib.pyplot as plt
+from django.db import connections
 
 from App.Empaque.forms import *
 ##LOGIN
@@ -683,6 +684,68 @@ def post_busqueda_reporte_camaras(request):
                 delete_png_files()
                 jsonList = json.dumps({'message': 'Success', 'pdf': name}) 
                 return JsonResponse(jsonList, safe=False)
+        elif str(Tipo) == "Ingreso Bascula":
+
+            variedadesDia =  traeVeriedades_Fecha(fecha)
+            if variedadesDia:
+                pdf = Reporte_Ingreso_Bascula()
+                pdf.alias_nb_pages()
+                pdf.add_page()
+                for variedad in variedadesDia:
+                    #print(variedad + " ##### VARIEDAD #####") ### VARIEDAD GRANDE
+                    nombreVariedad = traeNombreVariedad(variedad)
+                    cantidadBins = traeCantBinsPorFecha_variedad(fecha,variedad)
+                    #### CADA VEZ QUE CAMBIO LA VARIEDAD #### ENCABEZADO
+                    pdf.set_fill_color(186, 233, 175)
+                    pdf.set_font('Arial', 'B', 16)
+                    pdf.cell(w=100, h=8, txt= nombreVariedad, border='', align='L', fill=True)
+                    pdf.set_font('Arial', 'B', 9)
+                    pdf.multi_cell(w=0, h=8, txt= "TOTAL BINS: " + cantidadBins + " - Fecha: " + formatear_fecha(fecha), border='', align='R', fill=True)
+                    pdf.multi_cell(w=0, h=2, txt= "", border='', align='R', fill=0)
+
+                    chacrasPorVariedad = traeChacrasPorVariedadFecha(variedad,fecha)
+                    for chacra in chacrasPorVariedad:
+                        #print(chacra + " ##### CHACRA #####") ### ID CHACRA 
+                        Listados = detalleGeneral(variedad,fecha,chacra)
+                        nombreChacra = traeNombreChacra(chacra)
+                        pdf.set_font('Arial', 'B', 12)
+                        pdf.multi_cell(w=0, h=7, txt= "CHACRA: " +  nombreChacra , border='LTR', align='L', fill=0)
+                        pdf.set_font('Arial', '', 8)
+                        pdf.cell(w=40, h=5, txt= "", border='LT', align='C', fill=True)
+                        pdf.cell(w=55, h=5, txt= "FIRMEZA DE PULPA (lbs)", border='LTR', align='C', fill=True)
+                        pdf.multi_cell(w=0, h=5, txt= "", border='LTR', align='C', fill=True)
+                        pdf.cell(w=20, h=5, txt= "LOTE", border='TLRB', align='C', fill=True)
+                        pdf.cell(w=20, h=5, txt= "CANT. BINS", border='TLRB', align='C', fill=True)
+                        pdf.cell(w=15, h=5, txt= "MIN", border='TLRB', align='C', fill=True)
+                        pdf.cell(w=25, h=5, txt= "PROMEDIO", border='TLRB', align='C', fill=True)
+                        pdf.cell(w=15, h=5, txt= "MAX", border='TLRB', align='C', fill=True)
+                        pdf.cell(w=30, h=5, txt= "SOLUBLES", border='TLRB', align='C', fill=True)
+                        pdf.cell(w=30, h=5, txt= "ALMIDON", border='TLRB', align='C', fill=True)
+                        pdf.multi_cell(w=0, h=5, txt= "ACIDEZ", border='TLRB', align='C', fill=True)
+                        for lista in Listados:
+                            #print(str(lista[4]))
+                            min,promedio,max = presiones(str(lista[4]))
+                            solubles,almidon,acidez = detallesControl(str(lista[4]))
+
+                            pdf.cell(w=20, h=5, txt= str(lista[0]), border='LB', align='C', fill=0)
+                            pdf.cell(w=20, h=5, txt= str(lista[3]), border='LB', align='C', fill=0)
+                            pdf.cell(w=15, h=5, txt= min, border='LB', align='C', fill=0)
+                            pdf.cell(w=25, h=5, txt= promedio, border='LB', align='C', fill=0)
+                            pdf.cell(w=15, h=5, txt= max, border='LB', align='C', fill=0)
+                            pdf.cell(w=30, h=5, txt= solubles, border='LB', align='C', fill=0)
+                            pdf.cell(w=30, h=5, txt= almidon, border='LB', align='C', fill=0)
+                            pdf.multi_cell(w=0, h=5, txt= acidez, border='LRB', align='C', fill=0)
+                        pdf.multi_cell(w=0, h=8, txt= "", border='', align='C', fill=0)
+
+                name_fecha = str(fecha).replace('-','')
+                name = "Ingreso_Bascula_" + name_fecha + '.pdf'
+                pdf.output('App/Empaque/data/pdf/' + name, 'F')
+                jsonList = json.dumps({'message': 'Success', 'pdf': name}) 
+                return JsonResponse(jsonList, safe=False)
+                
+            else:
+                jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
+                return JsonResponse(jsonList, safe=False)
     else:
         error = "Ocurrió un error: "
         jsonList = json.dumps({'message': error}) 
@@ -802,7 +865,7 @@ def descarga_pdf_control_camaras(request, filename):
     else:
         raise Http404
 
-def modelo():
+def modelo(fecha):
     try:
         ZetoneApp = zetoneApp()
         cursorZetoneApp = ZetoneApp.cursor()
@@ -891,3 +954,409 @@ def consultaVariedad(fecha,idGalpon):
     finally:
         cursor.close()
         conexion.close()
+
+
+
+#### CONSULTA PARTES NUEVAS!!!!
+
+
+def traeVeriedades_Fecha(fecha):
+    try:
+        with connections['Trazabilidad'].cursor() as cursor:
+            sql = """
+                DECLARE @@Fecha DATE;
+                SET @@Fecha = %s;
+                SELECT        DISTINCT General.dbo.USR_MCLOTE.USR_VAR_ALIAS
+                FROM            LoteCalidad INNER JOIN
+                                        General.dbo.USR_MCLOTE ON LoteCalidad.LoteNumero = General.dbo.USR_MCLOTE.USR_LOTE_NUMERO
+                WHERE        (CONVERT(DATE, LoteCalidad.FechaIngresoCalidad) = @@Fecha)
+            """
+            cursor.execute(sql, [fecha])
+        consulta = cursor.fetchall()
+        if consulta:
+            results = [] 
+            for i in consulta:
+                results.append(str(i[0]))
+        return results
+    except Exception as e:
+        error = str(e)
+
+
+def traeCantBinsPorFecha_variedad(fecha,variedad):
+    try:
+        with connections['Trazabilidad'].cursor() as cursor:
+            sql = """
+                DECLARE @@Fecha DATE;
+                DECLARE @@Variedad VARCHAR(255);
+                SET @@Fecha = %s;
+                SET @@Variedad = %s;
+                SELECT SUM(General.dbo.USR_MCLOTE.USR_LOTE_CANTBINS)
+                FROM            LoteCalidad INNER JOIN
+                                        General.dbo.USR_MCLOTE ON LoteCalidad.LoteNumero = General.dbo.USR_MCLOTE.USR_LOTE_NUMERO
+                WHERE        (CONVERT(DATE, LoteCalidad.FechaIngresoCalidad) = @@Fecha AND General.dbo.USR_MCLOTE.USR_VAR_ALIAS = @@Variedad)
+            """
+        cursor.execute(sql, [fecha,variedad])
+        consulta = cursor.fetchone()
+        if consulta:
+            cantidad = str(consulta[0])
+        return cantidad
+    except Exception as e:
+            print(e)
+    finally:
+        cursor.close()
+
+def traeChacrasPorVariedadFecha(variedad,fecha):
+    try:
+        with connections['General'].cursor() as cursor:
+            sql = """
+                DECLARE @@Variedad VARCHAR(255);
+                DECLARE @@Fecha DATE;
+                SET @@Variedad = %s;
+                SET @@Fecha = %s;
+                SELECT        DISTINCT USR_MCCHACRA.USR_CHAC_ALIAS, USR_MCCHACRA.USR_CHAC_NOMBRE
+                FROM            Trazabilidad.dbo.CalidadControl INNER JOIN
+                                        Trazabilidad.dbo.LoteCalidad INNER JOIN
+                                        USR_MCLOTE ON Trazabilidad.dbo.LoteCalidad.LoteNumero = USR_MCLOTE.USR_LOTE_NUMERO ON Trazabilidad.dbo.CalidadControl.idLote = USR_MCLOTE.USR_LOTE_NUMERO INNER JOIN
+                                        USR_MCMOVCAM ON USR_MCLOTE.USR_MC_NUMERO = USR_MCMOVCAM.USR_MC_NUMERO INNER JOIN
+                                        USR_MCCHACRA ON USR_MCMOVCAM.USR_CHAC_ALIAS = USR_MCCHACRA.USR_CHAC_ALIAS
+                WHERE        (USR_MCLOTE.USR_VAR_ALIAS = @@Variedad) AND (CONVERT(DATE, Trazabilidad.dbo.LoteCalidad.FechaIngresoCalidad) = @@Fecha)
+            """
+        cursor.execute(sql, [variedad,fecha])
+        consulta = cursor.fetchall()
+        if consulta:
+            results = [] 
+            for i in consulta:
+                results.append(str(i[0]))
+        return results
+    except Exception as e:
+            print(e)
+    finally:
+        cursor.close()
+
+def detalleGeneral(variedad,fecha,chacra):
+    try:
+        with connections['General'].cursor() as cursor:
+            sql = """
+                DECLARE @@Variedad VARCHAR(255);
+                DECLARE @@Fecha DATE;
+                DECLARE @@Productor VARCHAR(255);
+                SET @@Variedad = %s;
+                SET @@Fecha = %s;
+                SET @@Productor = %s;
+                SELECT        USR_MCLOTE_1.USR_LOTE_NUMERO AS LOTE, USR_MCCHACRA.USR_CHAC_NOMBRE AS PRODUCTOR, USR_MCVARIED.USR_VAR_NOMBRE AS VARIEDAD, USR_MCLOTE_1.USR_LOTE_CANTBINS AS CANT_BINS, 
+                                        CalidadControl_1.idCalidad AS ID_CALIDAD, USR_MCLOTE_1.USR_VAR_ALIAS AS ID_VARIEDAD,
+                                            (SELECT        SUM(USR_MCLOTE.USR_LOTE_CANTBINS) AS Expr1
+                                            FROM            Trazabilidad.dbo.CalidadControl INNER JOIN
+                                                                        Trazabilidad.dbo.LoteCalidad INNER JOIN
+                                                                        USR_MCLOTE ON Trazabilidad.dbo.LoteCalidad.LoteNumero = USR_MCLOTE.USR_LOTE_NUMERO ON Trazabilidad.dbo.CalidadControl.idLote = USR_MCLOTE.USR_LOTE_NUMERO
+                                            WHERE        (USR_MCLOTE.USR_VAR_ALIAS = @@VARIEDAD) AND (CONVERT(DATE, Trazabilidad.dbo.LoteCalidad.FechaIngresoCalidad) = @@FECHA)) AS TOTAL_BINS, 
+                                CONVERT(VARCHAR(10),CalidadControl_1.FechaCalidad, 103) AS FECHA
+                FROM            Trazabilidad.dbo.CalidadControl AS CalidadControl_1 INNER JOIN
+                                        Trazabilidad.dbo.LoteCalidad AS LoteCalidad_1 INNER JOIN
+                                        USR_MCLOTE AS USR_MCLOTE_1 INNER JOIN
+                                        USR_MCVARIED ON USR_MCLOTE_1.USR_VAR_ALIAS = USR_MCVARIED.USR_VAR_ALIAS ON LoteCalidad_1.LoteNumero = USR_MCLOTE_1.USR_LOTE_NUMERO ON 
+                                        CalidadControl_1.idLote = USR_MCLOTE_1.USR_LOTE_NUMERO INNER JOIN
+                                        USR_MCMOVCAM ON USR_MCLOTE_1.USR_MC_NUMERO = USR_MCMOVCAM.USR_MC_NUMERO INNER JOIN
+                                        USR_MCCHACRA ON USR_MCMOVCAM.USR_CHAC_ALIAS = USR_MCCHACRA.USR_CHAC_ALIAS
+                WHERE        (USR_MCLOTE_1.USR_VAR_ALIAS = @@VARIEDAD) 
+                                AND (CONVERT(DATE, LoteCalidad_1.FechaIngresoCalidad) = @@FECHA)
+                                AND USR_MCCHACRA.USR_CHAC_ALIAS = @@Productor
+                ORDER BY PRODUCTOR
+            """
+        cursor.execute(sql, [variedad,fecha,chacra])
+        consulta = cursor.fetchall()
+        return consulta
+    except Exception as e:
+            print(e)
+    finally:
+        cursor.close()
+
+
+def presiones(idCalidad):
+    try:
+        with connections['Trazabilidad'].cursor() as cursor:
+            sql = """
+                SELECT CONVERT(VARCHAR,CAST(MIN(Presion1) AS DECIMAL(18, 2))) AS MINIMA, CONVERT(VARCHAR,CAST((SUM(Presion1) + SUM(Presion2)) / (MAX(NroPresion) * 2) AS DECIMAL(18, 2))) AS PROMEDIO,
+		                CONVERT(VARCHAR,CAST(MAX(Presion2) AS DECIMAL(18, 2))) AS MAXIMA
+                FROM CalidadPresion
+                WHERE idCalidad = %s
+            """
+        cursor.execute(sql, [idCalidad])
+        consulta = cursor.fetchone()
+        if consulta:
+            min = str(consulta[0]).replace('.',',')
+            promedio = str(consulta[1]).replace('.',',')
+            max = str(consulta[2]).replace('.',',')
+        return min,promedio,max
+    except Exception as e:
+            print(e)
+    finally:
+        cursor.close()
+
+def detallesControl(idCalidad):
+    try:
+        with connections['Trazabilidad'].cursor() as cursor:
+            sql = """
+                SELECT CONVERT(VARCHAR,CAST(Solubles AS DECIMAL(18, 2))),CONVERT(VARCHAR,CAST(Almidon AS DECIMAL(18, 2))),
+                        CONVERT(VARCHAR,CAST(Acidez AS DECIMAL(18, 2)))
+                FROM CalidadControl
+                WHERE idCalidad = %s
+            """
+        cursor.execute(sql, [idCalidad])
+        consulta = cursor.fetchone()
+        if consulta:
+            solubles = str(consulta[0]).replace('.',',')
+            almidon = str(consulta[1]).replace('.',',')
+            acidez = str(consulta[2]).replace('.',',')
+        return solubles,almidon,acidez
+    except Exception as e:
+            print(e)
+    finally:
+        cursor.close()
+
+
+def traeNombreChacra(idChacra):
+    try:
+        with connections['General'].cursor() as cursor:
+            sql = """
+                SELECT USR_CHAC_NOMBRE
+                FROM USR_MCCHACRA
+                WHERE USR_CHAC_ALIAS = %s
+            """
+        cursor.execute(sql, [idChacra])
+        consulta = cursor.fetchone()
+        if consulta:
+            nombreChacra = str(consulta[0])
+        return nombreChacra
+    except Exception as e:
+            print(e)
+    finally:
+        cursor.close()
+
+def traeNombreVariedad(idVariedad):
+    try:
+        with connections['General'].cursor() as cursor:
+            sql = """
+                SELECT USR_VAR_NOMBRE
+                FROM USR_MCVARIED
+                WHERE USR_VAR_ALIAS = %s
+            """
+        cursor.execute(sql, [idVariedad])
+        consulta = cursor.fetchone()
+        if consulta:
+            nombreVariedad = str(consulta[0])
+        return nombreVariedad
+    except Exception as e:
+            print(e)
+    finally:
+        cursor.close()
+        
+def formatear_fecha(fecha_str):
+    fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d')
+    fecha_formateada = fecha_obj.strftime('%d/%m/%Y')
+    return fecha_formateada
+# def a(fecha):
+#     try:
+#         conexion = Trazabilidad()
+#         cursor = conexion.cursor()
+#         sql = ("""
+#                 DECLARE @@Fecha DATE;
+#                 SET @@Fecha = '""" + fecha + """';
+#                 SELECT        DISTINCT General.dbo.USR_MCLOTE.USR_VAR_ALIAS
+#                 FROM            LoteCalidad INNER JOIN
+#                                         General.dbo.USR_MCLOTE ON LoteCalidad.LoteNumero = General.dbo.USR_MCLOTE.USR_LOTE_NUMERO
+#                 WHERE        (CONVERT(DATE, LoteCalidad.FechaIngresoCalidad) = @@Fecha)
+#                 """)
+#         cursor.execute(sql)
+#         consulta = cursor.fetchall()
+#         if consulta:
+#             results = [] 
+#             for i in consulta:
+#                 results.append(str(i[0]))
+#         return results
+#     except Exception as e:
+#             print(e)
+#     finally:
+#         cursor.close()
+#         conexion.close()
+
+# def traeCantBinsPorFecha_variedad(fecha, variedad):
+#     try:
+#         conexion = Trazabilidad()
+#         cursor = conexion.cursor()
+#         sql = ("""
+#                 DECLARE @@Fecha DATE;
+#                 DECLARE @@Variedad VARCHAR(255);
+#                 SET @@Fecha = '""" + fecha + """';
+#                 SET @@Variedad = '""" + variedad + """';
+#                 SELECT SUM(General.dbo.USR_MCLOTE.USR_LOTE_CANTBINS)
+#                 FROM            LoteCalidad INNER JOIN
+#                                         General.dbo.USR_MCLOTE ON LoteCalidad.LoteNumero = General.dbo.USR_MCLOTE.USR_LOTE_NUMERO
+#                 WHERE        (CONVERT(DATE, LoteCalidad.FechaIngresoCalidad) = @@Fecha AND General.dbo.USR_MCLOTE.USR_VAR_ALIAS = @@Variedad)
+#                 """)
+#         cursor.execute(sql)
+#         consulta = cursor.fetchone()
+#         if consulta:
+#             cantidad = str(consulta[0])
+#         return cantidad
+#     except Exception as e:
+#             print(e)
+#     finally:
+#         cursor.close()
+#         conexion.close()
+
+# def traeChacrasPorVariedadFecha(variedad,fecha):
+#     try:
+#         conexion = General()
+#         cursor = conexion.cursor()
+#         sql = ("""
+#                 DECLARE @@Variedad VARCHAR(255);
+#                 DECLARE @@Fecha DATE;
+#                 SET @@Variedad = '""" + variedad + """';
+#                 SET @@Fecha = '""" + fecha + """';
+#                 SELECT        DISTINCT USR_MCCHACRA.USR_CHAC_ALIAS, USR_MCCHACRA.USR_CHAC_NOMBRE
+#                 FROM            Trazabilidad.dbo.CalidadControl INNER JOIN
+#                                         Trazabilidad.dbo.LoteCalidad INNER JOIN
+#                                         USR_MCLOTE ON Trazabilidad.dbo.LoteCalidad.LoteNumero = USR_MCLOTE.USR_LOTE_NUMERO ON Trazabilidad.dbo.CalidadControl.idLote = USR_MCLOTE.USR_LOTE_NUMERO INNER JOIN
+#                                         USR_MCMOVCAM ON USR_MCLOTE.USR_MC_NUMERO = USR_MCMOVCAM.USR_MC_NUMERO INNER JOIN
+#                                         USR_MCCHACRA ON USR_MCMOVCAM.USR_CHAC_ALIAS = USR_MCCHACRA.USR_CHAC_ALIAS
+#                 WHERE        (USR_MCLOTE.USR_VAR_ALIAS = @@Variedad) AND (CONVERT(DATE, Trazabilidad.dbo.LoteCalidad.FechaIngresoCalidad) = @@Fecha)
+#                 """)
+#         cursor.execute(sql)
+#         consulta = cursor.fetchall()
+#         if consulta:
+#             results = [] 
+#             for i in consulta:
+#                 results.append(str(i[0]))
+#         return results
+#     except Exception as e:
+#             print(e)
+#     finally:
+#         cursor.close()
+#         conexion.close()
+
+# def detalleGeneral(variedad,fecha,chacra):
+#     try:
+#         conexion = General()
+#         cursor = conexion.cursor()
+#         sql = ("""
+#                 DECLARE @@Variedad VARCHAR(255);
+#                 DECLARE @@Fecha DATE;
+#                 DECLARE @@Productor VARCHAR(255);
+#                 SET @@Variedad = '""" + variedad + """';
+#                 SET @@Fecha = '""" + fecha + """';
+#                 SET @@Productor = '""" + chacra + """';
+#                 SELECT        USR_MCLOTE_1.USR_LOTE_NUMERO AS LOTE, USR_MCCHACRA.USR_CHAC_NOMBRE AS PRODUCTOR, USR_MCVARIED.USR_VAR_NOMBRE AS VARIEDAD, USR_MCLOTE_1.USR_LOTE_CANTBINS AS CANT_BINS, 
+#                                         CalidadControl_1.idCalidad AS ID_CALIDAD, USR_MCLOTE_1.USR_VAR_ALIAS AS ID_VARIEDAD,
+#                                             (SELECT        SUM(USR_MCLOTE.USR_LOTE_CANTBINS) AS Expr1
+#                                             FROM            Trazabilidad.dbo.CalidadControl INNER JOIN
+#                                                                         Trazabilidad.dbo.LoteCalidad INNER JOIN
+#                                                                         USR_MCLOTE ON Trazabilidad.dbo.LoteCalidad.LoteNumero = USR_MCLOTE.USR_LOTE_NUMERO ON Trazabilidad.dbo.CalidadControl.idLote = USR_MCLOTE.USR_LOTE_NUMERO
+#                                             WHERE        (USR_MCLOTE.USR_VAR_ALIAS = @@VARIEDAD) AND (CONVERT(DATE, Trazabilidad.dbo.LoteCalidad.FechaIngresoCalidad) = @@FECHA)) AS TOTAL_BINS, 
+#                                 CONVERT(VARCHAR(10),CalidadControl_1.FechaCalidad, 103) AS FECHA
+#                 FROM            Trazabilidad.dbo.CalidadControl AS CalidadControl_1 INNER JOIN
+#                                         Trazabilidad.dbo.LoteCalidad AS LoteCalidad_1 INNER JOIN
+#                                         USR_MCLOTE AS USR_MCLOTE_1 INNER JOIN
+#                                         USR_MCVARIED ON USR_MCLOTE_1.USR_VAR_ALIAS = USR_MCVARIED.USR_VAR_ALIAS ON LoteCalidad_1.LoteNumero = USR_MCLOTE_1.USR_LOTE_NUMERO ON 
+#                                         CalidadControl_1.idLote = USR_MCLOTE_1.USR_LOTE_NUMERO INNER JOIN
+#                                         USR_MCMOVCAM ON USR_MCLOTE_1.USR_MC_NUMERO = USR_MCMOVCAM.USR_MC_NUMERO INNER JOIN
+#                                         USR_MCCHACRA ON USR_MCMOVCAM.USR_CHAC_ALIAS = USR_MCCHACRA.USR_CHAC_ALIAS
+#                 WHERE        (USR_MCLOTE_1.USR_VAR_ALIAS = @@VARIEDAD) 
+#                                 AND (CONVERT(DATE, LoteCalidad_1.FechaIngresoCalidad) = @@FECHA)
+#                                 AND USR_MCCHACRA.USR_CHAC_ALIAS = @@Productor
+#                 ORDER BY PRODUCTOR
+#                 """)
+#         cursor.execute(sql)
+#         consulta = cursor.fetchall()
+#         return consulta
+#     except Exception as e:
+#             print(e)
+#     finally:
+#         cursor.close()
+#         conexion.close()
+
+# def presiones(idCalidad):
+#     try:
+#         conexion = Trazabilidad()
+#         cursor = conexion.cursor()
+#         sql = ("""
+#                 SELECT CONVERT(VARCHAR,CAST(MIN(Presion1) AS DECIMAL(18, 2))) AS MINIMA, CONVERT(VARCHAR,CAST((SUM(Presion1) + SUM(Presion2)) / (MAX(NroPresion) * 2) AS DECIMAL(18, 2))) AS PROMEDIO,
+# 		                CONVERT(VARCHAR,CAST(MAX(Presion2) AS DECIMAL(18, 2))) AS MAXIMA
+#                 FROM CalidadPresion
+#                 WHERE idCalidad = '""" + idCalidad + """'
+#                 """)
+#         cursor.execute(sql)
+#         consulta = cursor.fetchone()
+#         if consulta:
+#             min = str(consulta[0]).replace('.',',')
+#             promedio = str(consulta[1]).replace('.',',')
+#             max = str(consulta[2]).replace('.',',')
+#         return min,promedio,max
+#     except Exception as e:
+#             print(e)
+#     finally:
+#         cursor.close()
+#         conexion.close()
+
+# def detallesControl(idCalidad):
+#     try:
+#         conexion = Trazabilidad()
+#         cursor = conexion.cursor()
+#         sql = ("""
+#                 SELECT CONVERT(VARCHAR,CAST(Solubles AS DECIMAL(18, 2))),CONVERT(VARCHAR,CAST(Almidon AS DECIMAL(18, 2))),
+#                         CONVERT(VARCHAR,CAST(Acidez AS DECIMAL(18, 2)))
+#                 FROM CalidadControl
+#                 WHERE idCalidad = '""" + idCalidad + """'
+#                 """)
+#         cursor.execute(sql)
+#         consulta = cursor.fetchone()
+#         if consulta:
+#             solubles = str(consulta[0]).replace('.',',')
+#             almidon = str(consulta[1]).replace('.',',')
+#             acidez = str(consulta[2]).replace('.',',')
+#         return solubles,almidon,acidez
+#     except Exception as e:
+#             print(e)
+#     finally:
+#         cursor.close()
+#         conexion.close()
+
+# def traeNombreChacra(idChacra):
+#     try:
+#         conexion = General()
+#         cursor = conexion.cursor()
+#         sql = ("""
+#                 SELECT USR_CHAC_NOMBRE
+#                 FROM USR_MCCHACRA
+#                 WHERE USR_CHAC_ALIAS = '""" + idChacra + """'
+#                 """)
+#         cursor.execute(sql)
+#         consulta = cursor.fetchone()
+#         if consulta:
+#             nombreChacra = str(consulta[0])
+#         return nombreChacra
+#     except Exception as e:
+#             print(e)
+#     finally:
+#         cursor.close()
+#         conexion.close()
+
+# def traeNombreVariedad(idVariedad):
+#     try:
+#         conexion = General()
+#         cursor = conexion.cursor()
+#         sql = ("""
+#                 SELECT USR_VAR_NOMBRE
+#                 FROM USR_MCVARIED
+#                 WHERE USR_VAR_ALIAS = '""" + idVariedad + """'
+#                 """)
+#         cursor.execute(sql)
+#         consulta = cursor.fetchone()
+#         if consulta:
+#             nombreVariedad = str(consulta[0])
+#         return nombreVariedad
+#     except Exception as e:
+#             print(e)
+#     finally:
+#         cursor.close()
+#         conexion.close()

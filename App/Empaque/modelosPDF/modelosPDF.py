@@ -1,5 +1,6 @@
 from fpdf import FPDF
 import base64
+from datetime import datetime
 
 
 ###DECODIFICADOR DE IMAGENES
@@ -10,6 +11,90 @@ def decode_base64_to_image(index, fecha, hora, id, base64_string):
         image.write(image_bytes)
     return nombre_imagen
 
+
+
+def formatear_fecha_actual():
+    # Obtiene la fecha actual del servidor
+    fecha_actual = datetime.now()
+
+    # Diccionario para mapear el número del día de la semana a su nombre
+    dias_semana = {
+        0: 'Lunes',
+        1: 'Martes',
+        2: 'Miércoles',
+        3: 'Jueves',
+        4: 'Viernes',
+        5: 'Sábado',
+        6: 'Domingo'
+    }
+
+    # Diccionario para mapear el número del mes a su nombre
+    meses = {
+        1: 'Enero',
+        2: 'Febrero',
+        3: 'Marzo',
+        4: 'Abril',
+        5: 'Mayo',
+        6: 'Junio',
+        7: 'Julio',
+        8: 'Agosto',
+        9: 'Septiembre',
+        10: 'Octubre',
+        11: 'Noviembre',
+        12: 'Diciembre'
+    }
+
+    # Extrae el día de la semana, día del mes, mes y año
+    nombre_dia_semana = dias_semana[fecha_actual.weekday()]
+    dia_mes = fecha_actual.day
+    nombre_mes = meses[fecha_actual.month]
+    año = fecha_actual.year
+
+    # Formatea la fecha
+    fecha_formateada = f"{nombre_dia_semana} {dia_mes} de {nombre_mes} del {año}"
+
+    return fecha_formateada
+
+class Reporte_Ingreso_Bascula(FPDF):
+    def header(self):
+        self.set_font('Arial', '', 15)
+        self.rect(x=10,y=14,w=190,h=19)
+        self.image('App/Empaque/data/images/Logo.png', x=10, y=17, w=10, h=6)
+        self.text(x=21, y=22, txt= 'EMPRESA ZETONE')
+        self.line(72,14,72,26)
+        self.set_font('Arial', 'B', 13)
+        self.text(x=73, y=22, txt= 'DEPARTAMENTO DE CALIDAD')
+        self.set_font('Arial', '', 8)
+        self.text(x=144, y=18, txt= formatear_fecha_actual())
+        self.set_font('Arial', '', 10)
+        self.text(x=146, y=25, txt= 'Tipo de Documento:')
+        self.set_font('Arial', 'B', 10)
+        self.text(x=180, y=25, txt= 'REPORTE')
+        self.line(10,26,200,26)
+        self.set_font('Arial', '', 10)
+        self.text(x=16, y=31, txt= 'Título del Documento:')
+        self.set_font('Arial', 'B', 13)
+        self.text(x=78, y=31, txt= 'INGRESO BÁSCULA')
+        self.line(143,14,143,33)
+        self.set_font('Arial', 'B', 10)
+        self.text(x=146, y=32, txt= 'Código: PLE30')
+        self.ln(30)
+
+    def footer(self):
+        self.set_font('Arial', 'B', 10)
+        self.set_y(-18)
+        self.cell(0, 10, 'Página ' + str(self.page_no()) + '/{nb}', 0, 0, 'R')
+        self.rect(x=10,y=278,w=190,h=15.5)
+        self.text(x=28, y=282, txt= 'Realizó:')
+        self.text(x=22, y=290, txt= 'Nicol Villegas')
+        self.line(70,278,70,293)
+        self.text(x=100, y=282, txt= 'Revisó:')
+        self.text(x=92, y=288, txt= 'Eduardo Córdoba')
+        self.line(150,278,150,293)
+        self.text(x=152.5, y=282, txt= 'Versión:')
+        self.text(x=156.5, y=288, txt= '0.1')
+        self.line(170,278,170,293)
+        self.ln(275)
 
 ##CONTROL DE CAMARAS
 class control_camaras_PDF(FPDF):
