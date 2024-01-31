@@ -1032,6 +1032,7 @@ def traeChacrasPorVariedadFecha(variedad,fecha):
                 results = [] 
                 for i in consulta:
                     results.append(str(i[0]))
+            InsertaDataPrueba("traeChacrasPorVariedadFecha", str(results))
             return results
     except Exception as e:
         error = str(e)
