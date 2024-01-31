@@ -690,63 +690,69 @@ def post_busqueda_reporte_camaras(request):
 
             InsertaDataPrueba(fecha, str(variedadesDia))
             if variedadesDia:
-                pdf = Reporte_Ingreso_Bascula()
-                pdf.alias_nb_pages()
-                pdf.add_page()
-                for variedad in variedadesDia:
-                    #print(variedad + " ##### VARIEDAD #####") ### VARIEDAD GRANDE
-                    nombreVariedad = traeNombreVariedad(variedad)
-                    InsertaDataPrueba(fecha, str(nombreVariedad))
-                    cantidadBins = traeCantBinsPorFecha_variedad(fecha,variedad)
-                    InsertaDataPrueba(fecha, str(cantidadBins))
-                    #### CADA VEZ QUE CAMBIO LA VARIEDAD #### ENCABEZADO
-                    pdf.set_fill_color(186, 233, 175)
-                    pdf.set_font('Arial', 'B', 16)
-                    pdf.cell(w=100, h=8, txt= str(nombreVariedad), border='', align='L', fill=True)
-                    pdf.set_font('Arial', 'B', 9)
-                    pdf.multi_cell(w=0, h=8, txt= "TOTAL BINS: " + str(cantidadBins) + " - Fecha: " + str(formatear_fecha(fecha)), border='', align='R', fill=True)
-                    pdf.multi_cell(w=0, h=2, txt= "", border='', align='R', fill=0)
+                try:
+                    pdf = Reporte_Ingreso_Bascula()
+                    pdf.alias_nb_pages()
+                    pdf.add_page()
+                    for variedad in variedadesDia:
+                        #print(variedad + " ##### VARIEDAD #####") ### VARIEDAD GRANDE
+                        nombreVariedad = traeNombreVariedad(variedad)
+                        InsertaDataPrueba(fecha, str(nombreVariedad))
+                        cantidadBins = traeCantBinsPorFecha_variedad(fecha,variedad)
+                        InsertaDataPrueba(fecha, str(cantidadBins))
+                        #### CADA VEZ QUE CAMBIO LA VARIEDAD #### ENCABEZADO
+                        pdf.set_fill_color(186, 233, 175)
+                        pdf.set_font('Arial', 'B', 16)
+                        pdf.cell(w=100, h=8, txt= str(nombreVariedad), border='', align='L', fill=True)
+                        pdf.set_font('Arial', 'B', 9)
+                        pdf.multi_cell(w=0, h=8, txt= "TOTAL BINS: " + str(cantidadBins) + " - Fecha: " + str(formatear_fecha(fecha)), border='', align='R', fill=True)
+                        pdf.multi_cell(w=0, h=2, txt= "", border='', align='R', fill=0)
 
-                    chacrasPorVariedad = traeChacrasPorVariedadFecha(variedad,fecha)
-                    InsertaDataPrueba(fecha, str(chacrasPorVariedad))
-                    for chacra in chacrasPorVariedad:
-                        #print(chacra + " ##### CHACRA #####") ### ID CHACRA 
-                        Listados = detalleGeneral(variedad,fecha,chacra)
-                        nombreChacra = traeNombreChacra(chacra)
-                        pdf.set_font('Arial', 'B', 12)
-                        pdf.multi_cell(w=0, h=7, txt= "CHACRA: " +  str(nombreChacra) , border='LTR', align='L', fill=0)
-                        pdf.set_font('Arial', '', 8)
-                        pdf.cell(w=40, h=5, txt= "", border='LT', align='C', fill=True)
-                        pdf.cell(w=55, h=5, txt= "FIRMEZA DE PULPA (lbs)", border='LTR', align='C', fill=True)
-                        pdf.multi_cell(w=0, h=5, txt= "", border='LTR', align='C', fill=True)
-                        pdf.cell(w=20, h=5, txt= "LOTE", border='TLRB', align='C', fill=True)
-                        pdf.cell(w=20, h=5, txt= "CANT. BINS", border='TLRB', align='C', fill=True)
-                        pdf.cell(w=15, h=5, txt= "MIN", border='TLRB', align='C', fill=True)
-                        pdf.cell(w=25, h=5, txt= "PROMEDIO", border='TLRB', align='C', fill=True)
-                        pdf.cell(w=15, h=5, txt= "MAX", border='TLRB', align='C', fill=True)
-                        pdf.cell(w=30, h=5, txt= "SOLUBLES", border='TLRB', align='C', fill=True)
-                        pdf.cell(w=30, h=5, txt= "ALMIDON", border='TLRB', align='C', fill=True)
-                        pdf.multi_cell(w=0, h=5, txt= "ACIDEZ", border='TLRB', align='C', fill=True)
-                        for lista in Listados:
-                            #print(str(lista[4]))
-                            min,promedio,max = presiones(str(lista[4]))
-                            solubles,almidon,acidez = detallesControl(str(lista[4]))
+                        chacrasPorVariedad = traeChacrasPorVariedadFecha(variedad,fecha)
+                        InsertaDataPrueba(fecha, str(chacrasPorVariedad))
+                        for chacra in chacrasPorVariedad:
+                            #print(chacra + " ##### CHACRA #####") ### ID CHACRA 
+                            Listados = detalleGeneral(variedad,fecha,chacra)
+                            nombreChacra = traeNombreChacra(chacra)
+                            pdf.set_font('Arial', 'B', 12)
+                            pdf.multi_cell(w=0, h=7, txt= "CHACRA: " +  str(nombreChacra) , border='LTR', align='L', fill=0)
+                            pdf.set_font('Arial', '', 8)
+                            pdf.cell(w=40, h=5, txt= "", border='LT', align='C', fill=True)
+                            pdf.cell(w=55, h=5, txt= "FIRMEZA DE PULPA (lbs)", border='LTR', align='C', fill=True)
+                            pdf.multi_cell(w=0, h=5, txt= "", border='LTR', align='C', fill=True)
+                            pdf.cell(w=20, h=5, txt= "LOTE", border='TLRB', align='C', fill=True)
+                            pdf.cell(w=20, h=5, txt= "CANT. BINS", border='TLRB', align='C', fill=True)
+                            pdf.cell(w=15, h=5, txt= "MIN", border='TLRB', align='C', fill=True)
+                            pdf.cell(w=25, h=5, txt= "PROMEDIO", border='TLRB', align='C', fill=True)
+                            pdf.cell(w=15, h=5, txt= "MAX", border='TLRB', align='C', fill=True)
+                            pdf.cell(w=30, h=5, txt= "SOLUBLES", border='TLRB', align='C', fill=True)
+                            pdf.cell(w=30, h=5, txt= "ALMIDON", border='TLRB', align='C', fill=True)
+                            pdf.multi_cell(w=0, h=5, txt= "ACIDEZ", border='TLRB', align='C', fill=True)
+                            for lista in Listados:
+                                #print(str(lista[4]))
+                                min,promedio,max = presiones(str(lista[4]))
+                                solubles,almidon,acidez = detallesControl(str(lista[4]))
 
-                            pdf.cell(w=20, h=5, txt= str(lista[0]), border='LB', align='C', fill=0)
-                            pdf.cell(w=20, h=5, txt= str(lista[3]), border='LB', align='C', fill=0)
-                            pdf.cell(w=15, h=5, txt= str(min), border='LB', align='C', fill=0)
-                            pdf.cell(w=25, h=5, txt= str(promedio), border='LB', align='C', fill=0)
-                            pdf.cell(w=15, h=5, txt= str(max), border='LB', align='C', fill=0)
-                            pdf.cell(w=30, h=5, txt= str(solubles), border='LB', align='C', fill=0)
-                            pdf.cell(w=30, h=5, txt= str(almidon), border='LB', align='C', fill=0)
-                            pdf.multi_cell(w=0, h=5, txt= str(acidez), border='LRB', align='C', fill=0)
-                        pdf.multi_cell(w=0, h=8, txt= "", border='', align='C', fill=0)
+                                pdf.cell(w=20, h=5, txt= str(lista[0]), border='LB', align='C', fill=0)
+                                pdf.cell(w=20, h=5, txt= str(lista[3]), border='LB', align='C', fill=0)
+                                pdf.cell(w=15, h=5, txt= str(min), border='LB', align='C', fill=0)
+                                pdf.cell(w=25, h=5, txt= str(promedio), border='LB', align='C', fill=0)
+                                pdf.cell(w=15, h=5, txt= str(max), border='LB', align='C', fill=0)
+                                pdf.cell(w=30, h=5, txt= str(solubles), border='LB', align='C', fill=0)
+                                pdf.cell(w=30, h=5, txt= str(almidon), border='LB', align='C', fill=0)
+                                pdf.multi_cell(w=0, h=5, txt= str(acidez), border='LRB', align='C', fill=0)
+                            pdf.multi_cell(w=0, h=8, txt= "", border='', align='C', fill=0)
 
-                name_fecha = str(fecha).replace('-','')
-                name = "Ingreso_Bascula_" + name_fecha + '.pdf'
-                pdf.output('App/Empaque/data/pdf/' + name, 'F')
-                jsonList = json.dumps({'message': 'Success', 'pdf': name}) 
-                return JsonResponse(jsonList, safe=False)
+                    name_fecha = str(fecha).replace('-','')
+                    name = "Ingreso_Bascula_" + name_fecha + '.pdf'
+                    pdf.output('App/Empaque/data/pdf/' + name, 'F')
+                    jsonList = json.dumps({'message': 'Success', 'pdf': name}) 
+                    return JsonResponse(jsonList, safe=False)
+                except Exception as e:
+                    error = str(e)
+                    InsertaDataPrueba("PDF", error)
+                    jsonList = json.dumps({'message': error}) 
+                    return JsonResponse(jsonList, safe=False)
                 
             else:
                 jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
