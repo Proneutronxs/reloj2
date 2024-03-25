@@ -19,5 +19,8 @@ path('horarios/muestra-legajos-departamentos/', views.llamaLegajos_Departamentos
 path('horarios/carga-combox-horarios/', views.llamaTurnosHorarios, name="carga-combox-horarios"),
 
 
+path('formulario-quejas/comentario/', views.guardaFormulario, name="guarda_comentario_quejas"),
+
+
 
 ]

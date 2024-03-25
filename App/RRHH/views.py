@@ -204,7 +204,27 @@ def llamaTurnosHorarios(request):
         return JsonResponse({'Message': 'Error', 'Nota': data})
 
 
+@csrf_exempt
+def guardaFormulario(request):
+    if request.method == 'POST':
+        comentario = str(request.POST.get('comment')).upper()
+        # try:
+        #     with connections['PS_Time'].cursor() as cursor:
+        #         sql = "INSERT INTO P_Departamentos (Departamento) VALUES (%s)"
+        #         cursor.execute(sql,[departamento])
 
+        #     data = "El Departamento se guardó correctamente."
+            
+        # except Exception as e:
+        #     data = str(e)
+        #     return JsonResponse({'Message': 'Error', 'Nota': data})
+        # finally:
+        #     cursor.close()
+        #     connections['PS_Time'].close()
+        return JsonResponse({'Message': 'Success', 'Nota': comentario})
+    else:
+        data = "No se pudo resolver la Petición"
+        return JsonResponse({'Message': 'Error', 'Nota': data})
 
 
 
