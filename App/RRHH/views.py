@@ -207,7 +207,7 @@ def llamaTurnosHorarios(request):
 @csrf_exempt
 def guardaFormulario(request):
     if request.method == 'POST':
-        comentario = str(request.POST.get('comment')).upper()
+        comentario = str(request.POST.get('commentForm')).upper()
         # try:
         #     with connections['PS_Time'].cursor() as cursor:
         #         sql = "INSERT INTO P_Departamentos (Departamento) VALUES (%s)"
