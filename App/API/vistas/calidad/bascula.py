@@ -12,7 +12,7 @@ from django.shortcuts import render
 from django.db import connections
 
 
-##### TRAE DATOS DE INICIO DESTINO, RESPONSABLE, DEFECTOS, TRATAMIENTO,CONDICIÓN CATEGORÍA
+##### TRAE DATOS DE INICIO DESTINO, RESPONSABLE, DEFECTOS, TRATAMIENTO,CONDICIÓN CATEGORÍA###
 @csrf_exempt
 def dataInicial(request):
     if request.method == 'GET':
