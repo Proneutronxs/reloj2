@@ -329,18 +329,31 @@ def post_busqueda_reporte_camaras(request):
                                 pdf.set_font('Times', 'I', 10)
                                 user = str(i[53])
                                 if user == "Nicole" or user == "nicole":
-                                    pdf.set_font('Times', 'BI', 10)
+                                    pdf.set_font('Times', 'BI', 12)
                                     pdf.text(x=20, y=288, txt= 'Nicole')
                                 else:
                                     pdf.text(x=20, y=288, txt= user)#USER
                                 ###FOTOS
                                 bulto = str(i[0])
                                 try:
+                                    imagen_codificada = pluBASE64(bulto)
+                                    if imagen_codificada != '0':
+                                        imagen = base64.b64decode(imagen_codificada)
+                                        nombre = "plu_image_" + str(bulto) + ".jpeg"
+                                        with open('App/API/media/images/Calidad/reportes_empaque/' + nombre , "wb") as image:
+                                            image.write(imagen)
                                     pdf.image('App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg', x=160, y=58, w=15, h=15)
+                                            #  App/API/media/images/Calidad/reportes_empaque
                                 except:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=65, txt='NOT IMAGE')
                                 try:
+                                    imagen_codificada = cajaBASE64(bulto)
+                                    if imagen_codificada != '0':
+                                        imagen = base64.b64decode(imagen_codificada)
+                                        nombre = "caja_image_" + str(bulto) + ".jpeg"
+                                        with open('App/API/media/images/Calidad/reportes_empaque/' + nombre , "wb") as image:
+                                            image.write(imagen)
                                     pdf.image('App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg', x=146, y=82, w=45, h=70)
                                 except:
                                     pdf.set_font('Arial', '', 12)
@@ -409,11 +422,23 @@ def post_busqueda_reporte_camaras(request):
                                 ruta_caja = 'App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg'
                                 ruta_plu = 'App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg'
                                 try:
+                                    imagen_codificada = pluBASE64(bulto)
+                                    if imagen_codificada != '0':
+                                        imagen = base64.b64decode(imagen_codificada)
+                                        nombre = "plu_image_" + str(bulto) + ".jpeg"
+                                        with open('App/API/media/images/Calidad/reportes_empaque/' + nombre , "wb") as image:
+                                            image.write(imagen)
                                     pdf.image('App/API/media/images/Calidad/reportes_empaque/plu_image_' + bulto + '.jpeg', x=160, y=178, w=15, h=15)
                                 except:
                                     pdf.set_font('Arial', '', 12)
                                     pdf.text(x=155, y=188, txt='NOT IMAGE')
                                 try:
+                                    imagen_codificada = cajaBASE64(bulto)
+                                    if imagen_codificada != '0':
+                                        imagen = base64.b64decode(imagen_codificada)
+                                        nombre = "caja_image_" + str(bulto) + ".jpeg"
+                                        with open('App/API/media/images/Calidad/reportes_empaque/' + nombre , "wb") as image:
+                                            image.write(imagen)
                                     pdf.image('App/API/media/images/Calidad/reportes_empaque/caja_image_' + bulto + '.jpeg', x=146, y=201, w=45, h=70)
                                 except:
                                     pdf.set_font('Arial', '', 12)
@@ -908,7 +933,6 @@ def modelo(fecha):
             jsonList = json.dumps({'message':'Not Found'}) 
             return JsonResponse(jsonList, safe=False)
     except Exception as e:
-        print(e)
         error = str(e)
         jsonList = json.dumps({'message': error}) 
         return JsonResponse(jsonList, safe=False)
@@ -934,7 +958,6 @@ def recolecta_horas_control_camaras(request, fecha):
             return JsonResponse(jsonList, safe=False)
             
     except Exception as e:
-        print(e)
         error = str(e)
         jsonList = json.dumps({'message': error}) 
         return JsonResponse(jsonList, safe=False)
@@ -965,6 +988,51 @@ def consultaVariedad(fecha,idGalpon):
     finally:
         cursor.close()
         conexion.close()
+
+def pluBASE64(bulto):
+    try:
+        conexion = zetoneApp()
+        cursor = conexion.cursor()
+        sql = (""" SELECT FotoPlu
+                    FROM FotoPLU
+                    WHERE IdCaja = '""" + bulto + """' """)
+        cursor.execute(sql)
+        consulta = cursor.fetchone()
+        if consulta:
+            imagen = str(consulta[0])
+            return imagen
+        else:
+            imagen = "0"
+            return imagen
+    except Exception as e:
+            imagen = "0"
+            return imagen
+    finally:
+        cursor.close()
+        conexion.close()
+
+def cajaBASE64(bulto):
+    try:
+        conexion = zetoneApp()
+        cursor = conexion.cursor()
+        sql = (""" SELECT FotoCaja
+                    FROM FotoPLU
+                    WHERE IdCaja = '""" + bulto + """' """)
+        cursor.execute(sql)
+        consulta = cursor.fetchone()
+        if consulta:
+            imagen = str(consulta[0])
+            return imagen
+        else:
+            imagen = "0"
+            return imagen
+    except Exception as e:
+            imagen = "0"
+            return imagen
+    finally:
+        cursor.close()
+        conexion.close()
+
 
 
 

@@ -71,6 +71,7 @@ def image_plu(request):
     if request.method == 'POST' and request.POST.get('plu'):
         nombre_post = request.POST.get('id')
         imagen_codificada = request.POST.get('plu')
+        
         imagen = base64.b64decode(imagen_codificada)
         nombre = "plu_image_" + str(nombre_post) + ".jpeg"
         with open('App/API/media/images/Calidad/reportes_empaque/' + nombre , "wb") as image:
