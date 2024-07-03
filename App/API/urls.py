@@ -1,6 +1,6 @@
 from django.urls import path
 from App.API.vistas.calidad import calidad, bascula 
-
+from App.API.vistas.Rondin import rondin
 urlpatterns = [
     ######################### CALIDAD EMPAQUE ###################################
 
@@ -29,4 +29,17 @@ urlpatterns = [
     path('calidad-bascula/inserta-data/', bascula.Ejecuta_Procedimientos, name='ejecuta_procedimientos'),
 
     path('calidad-bascula/ver-data/', bascula.resultadosInsert, name='resultadosInsert'),
+
+
+
+
+
+    path('calidad-empaque/subir-imagen/', calidad.upload_image_from_directory, name='subir_imagen_directorio'),
+
+
+
+    ####RONDIN
+
+    path('rondin-empaque/recibe-fichadas/', rondin.insert_fichada_rondin, name='recibe_fichadas_rondin'),
+
 ]

@@ -1,6 +1,9 @@
 
+from django.db import connections
 from django.http import JsonResponse
 from App.ZTime.conexion import *
+import requests
+from requests.auth import HTTPBasicAuth
 import json
 import os
 from django.http import HttpResponse, Http404
@@ -291,3 +294,166 @@ def pruebas_sql(request):
         finally:
             cursorZT.close()
             ZT.close()
+
+
+
+############## REPORTES DE CALIDAD EMPAQUE ##########
+
+
+
+# NEXTCLOUD_URL = 'http://191.97.47.105/remote.php/webdav/Imagenes-Calidad/'
+# NEXTCLOUD_USER = 'jchambi@zetone.com.ar'
+# NEXTCLOUD_PASSWORD = 'Sideswipe348'
+
+# def upload_to_nextcloud(file_path, file_name):
+#     url = NEXTCLOUD_URL + file_name
+#     with open(file_path, 'rb') as file_data:
+#         response = requests.put(
+#             url,
+#             data=file_data,
+#             auth=HTTPBasicAuth(NEXTCLOUD_USER, NEXTCLOUD_PASSWORD)
+#         )
+#     if response.status_code == 201:
+#         return True, url    
+#     else:
+#         return False, response.content
+
+
+# @csrf_exempt
+# def upload_image_from_directory(request):
+#     if request.method == 'POST':
+#         try:
+#             data = json.loads(request.body.decode('utf-8'))
+#             if 'filename' in data:
+#                 file_name = data['filename']
+#                 directory_path = 'App/API/media/images/Calidad/reportes_empaque/'  # Cambia esto al directorio correcto
+#                 file_path = os.path.join(directory_path, file_name)                
+#                 if os.path.exists(file_path):
+#                     success, result = upload_to_nextcloud(file_path, file_name)
+#                     if success:
+#                         return JsonResponse({'status': 'success', 'url': result})
+#                     else:
+#                         return JsonResponse({'status': 'error', 'message': result})
+#                 else:
+#                     return JsonResponse({'status': 'error', 'message': 'File not found'})
+#             else:
+#                 return JsonResponse({'status': 'error', 'message': 'Invalid request: filename not found'})
+#         except json.JSONDecodeError as e:
+#             return JsonResponse({'status': 'error', 'message': 'Invalid JSON format'})
+#     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+
+
+@csrf_exempt
+def upload_image(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        
+        if 'image' in data and 'filename' in data:
+            image_data = data['image']
+            file_name = data['filename']
+            image_decoded = base64.b64decode(image_data)
+            
+            file_path = f'/tmp/{file_name}'
+            with open(file_path, 'wb') as temp_file:
+                temp_file.write(image_decoded)
+            
+            success, result = upload_to_nextcloud(file_path, file_name)
+            os.remove(file_path) 
+
+            if success:
+                return JsonResponse({'status': 'success', 'url': result})
+            else:
+                return JsonResponse({'status': 'error', 'message': result})
+        return JsonResponse({'status': 'error', 'message': 'Invalid request'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+
+
+
+
+NEXTCLOUD_URL = 'http://191.97.47.105/remote.php/webdav/Imagenes-Calidad/'
+NEXTCLOUD_USER = 'jchambi@zetone.com.ar'
+NEXTCLOUD_PASSWORD = 'Sideswipe348'
+
+def upload_to_nextcloud(file_path, file_name):
+    url = NEXTCLOUD_URL + file_name
+    with open(file_path, 'rb') as file_data:
+        response = requests.put(
+            url,
+            data=file_data,
+            auth=HTTPBasicAuth(NEXTCLOUD_USER, NEXTCLOUD_PASSWORD)
+        )
+    
+    if response.status_code == 201:
+        print("ESCRIBE")
+        public_link = generate_public_link(file_name)
+        if public_link:
+            return True, public_link
+        else:
+            return False, 'Error al generar el enlace público'
+    elif response.status_code == 204:
+        print("SOBRE-ESCRIBE")
+        public_link = generate_public_link(file_name)
+        if public_link:
+            return True, public_link
+        else:
+            return False, 'Error al generar el enlace público'
+    else:
+        return False, response.content.decode('utf-8')
+
+def generate_public_link(file_name):
+    params = {
+        'shareType': 3,  # Enlace público
+        'permissions': 1  # Solo lectura
+    }
+    headers = {
+        'OCS-APIRequest': 'true',
+        'Content-Type': 'application/json'
+    }
+    share_url = 'http://191.97.47.105/ocs/v2.php/apps/files_sharing/api/v1/shares/'
+    response = requests.post(share_url, auth=HTTPBasicAuth(NEXTCLOUD_USER, NEXTCLOUD_PASSWORD), headers=headers, params=params)
+    if response.status_code == 200:
+        share_data = response.json()
+        if 'ocs' in share_data and 'data' in share_data['ocs']:
+            return share_data['ocs']['data']['url']
+    return None
+
+@csrf_exempt
+def upload_image_from_directory(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            if 'filename' in data:
+                file_name = data['filename']
+                directory_path = 'App/API/media/images/Calidad/reportes_empaque/'  # Directorio donde está la imagen
+                file_path = os.path.join(directory_path, file_name)
+                
+                if os.path.exists(file_path):
+                    success, result = upload_to_nextcloud(file_path, file_name)
+                    if success:
+                        return JsonResponse({'status': 'success', 'url': result})
+                    else:
+                        return JsonResponse({'status': 'error', 'message': result})
+                else:
+                    return JsonResponse({'status': 'error', 'message': 'File not found'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Invalid request: filename not found'})
+        except json.JSONDecodeError as e:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON format'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

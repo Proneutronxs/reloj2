@@ -101,8 +101,18 @@ DATABASES = {
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
-    }
-    ,
+    },
+    'MyZetto': {
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'MyZetto',
+        'USER': 'sa',
+        'HOST': '191.97.47.105',##10.32.26.34
+        'PASSWORD': 'Sideswipe348',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    },
     'Trazabilidad': {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'Trazabilidad',
