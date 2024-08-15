@@ -78,13 +78,14 @@ WSGI_APPLICATION = 'ZetoneTime.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+ip = '191.97.47.114'
 
 DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'ZetoneTime',
         'USER': 'sa',
-        'HOST': '191.97.47.105',##10.32.26.34
+        'HOST': ip,##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
@@ -95,7 +96,7 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'PS_Time',
         'USER': 'sa',
-        'HOST': '191.97.47.105',##10.32.26.34
+        'HOST': ip,##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
@@ -106,7 +107,7 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'MyZetto',
         'USER': 'sa',
-        'HOST': '191.97.47.105',##10.32.26.34
+        'HOST': ip,##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
