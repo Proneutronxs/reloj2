@@ -48,7 +48,11 @@ def devuelveLegajoNombre(request):
             legajo = str(json.loads(body)['Legajo'])
             try:
                 with connections['Softland'].cursor() as cursor:
-                    sql = """ SELECT SJMLGH_NROLEG AS LEGAJO, CONVERT(VARCHAR(25),SJMLGH_NOMBRE) AS NOMBRES FROM SJMLGH WHERE SJMLGH_NROLEG = %s """
+                    sql = """ 
+                            SELECT SJMLGH_NROLEG AS LEGAJO, CONVERT(VARCHAR(25),SJMLGH_NOMBRE) AS NOMBRES 
+                            FROM [10.32.26.5].Softland.dbo.SJMLGH 
+                            WHERE SJMLGH_NROLEG = %s
+                         """
                     values = (legajo)
                     cursor.execute(sql, values)  
                     results = cursor.fetchone()
