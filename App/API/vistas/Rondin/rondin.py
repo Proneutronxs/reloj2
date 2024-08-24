@@ -185,7 +185,7 @@ def listadoPuntos():
         with connections['PsRondin'].cursor() as cursor:
             sql = """ 
                     SELECT CodPunto, PuntoNombre
-                    M PS_Puntos
+                    FROM PS_Puntos
                     """
             cursor.execute(sql)  
             results = cursor.fetchall()
