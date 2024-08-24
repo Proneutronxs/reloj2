@@ -120,7 +120,7 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'MyZetto',
         'USER': 'sa',
-        'HOST': '191.97.47.114',##10.32.26.34
+        'HOST': '10.32.26.34',##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {

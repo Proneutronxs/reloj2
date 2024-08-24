@@ -39,6 +39,29 @@ def insert_fichada_rondin(request):
             return JsonResponse({'Message': 'Error', 'Nota': error})
     else:
         return JsonResponse({'Message': 'No se pudo resolver la petición.'})
+    
+@csrf_exempt
+def insertaRegistrosRondin(request):
+    if request.method == 'POST':
+        try:
+            body = request.body.decode('utf-8')
+            datos = json.loads(body)['Data']
+            print(datos)
+            for item in datos:
+                registro = item['Registro']
+                legajo = item['Legajo']
+                ubicacion = item['Ubicacion']
+                punto = item['Sector']
+                fecha = item['FechaAlta']
+                insertaRegistroNuevo(registro,legajo,ubicacion,punto,fecha)
+            nota = "Los registros se guardaron exitosamente."
+            return JsonResponse({'Message': 'Success', 'Nota': nota})
+        except Exception as e:
+            error = str(e)
+            return JsonResponse({'Message': 'Error', 'Nota': error})
+    else:
+        return JsonResponse({'Message': 'No se pudo resolver la petición.'})
+
 
 @csrf_exempt
 def devuelveLegajoNombre(request):
@@ -70,9 +93,51 @@ def devuelveLegajoNombre(request):
     else:
         return JsonResponse({'Message': 'No se pudo resolver la petición.'})
 
+@csrf_exempt
+def devuelveNombreSector(request):
+    if request.method == 'POST':
+        try:
+            body = request.body.decode('utf-8')
+            codigo = str(json.loads(body)['CodUbicacion'])
+            try:
+                with connections['PsRondin'].cursor() as cursor:
+                    sql = """ 
+                            SELECT CodUbicacion, UbicacionNombre
+                            FROM PS_Ubicacion
+                            WHERE CodUbicacion = %s
+                         """
+                    cursor.execute(sql, [codigo])  
+                    results = cursor.fetchone()
+                    if results:
+                        CodUbicacion = str(results[0])
+                        NombreUbicacion = str(results[1])
+                        return JsonResponse({'Message': 'Success', 'Codigo': CodUbicacion, 'Nombre':NombreUbicacion})
+                    else:
+                        return JsonResponse({'Message': 'Error', 'Nota': 'No se encontraron datos con ese Código.'})
+            except Exception as e:
+                error = str(e)
+                return JsonResponse({'Message': 'Error', 'Nota': error})
+        except Exception as e:
+            error = str(e)
+            return JsonResponse({'Message': 'Error', 'Nota': error})
+    else:
+        return JsonResponse({'Message': 'No se pudo resolver la petición.'})
 
     
 
+def insertaRegistroNuevo(idInterno,idLegajo,idUbicacion,idPunto,fechaAlta):
+
+    try:
+        with connections['PsRondin'].cursor() as cursor:
+            sql = "INSERT INTO PS_Registros (RegistroInterno, CodLegajo, CodUbicacion, CodPunto, FechaAlta) VALUES (%s, %s, %s, %s, %s)"
+            values = (idInterno,idLegajo,idUbicacion,idPunto,fechaAlta)
+            cursor.execute(sql, values)  
+    except Exception as e:
+        error = str(e)
+        print(error)
+    finally:
+        cursor.close()
+        connections['PsRondin'].close()     
 
 def insertaFichadaSql(sereno,planta,punto,fecha,hora,pasos):
     try:
