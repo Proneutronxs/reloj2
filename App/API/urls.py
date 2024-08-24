@@ -40,7 +40,7 @@ urlpatterns = [
 
     ####RONDIN
 
-    path('rondin-empaque/recibe-fichadas/', rondin.insert_fichada_rondin, name='recibe_fichadas_rondin'),
+    #path('rondin-empaque/recibe-fichadas/', rondin.insert_fichada_rondin, name='recibe_fichadas_rondin'),
 
     path('rondin-empaque/recibe-registros/', rondin.insertaRegistrosRondin, name='rondin_recibe_registros'),
 
