@@ -41,13 +41,13 @@ def buscaRegistros(request):
                                             ELSE CONVERT(VARCHAR(25),(SELECT Nombre FROM ZetoneTime.dbo.Legajos WHERE Legajos = PS_Registros.CodLegajo)) END AS LEGAJO, 
                                     PS_Ubicacion.UbicacionNombre AS UBICACIÓN, 
                                     CASE WHEN PS_Puntos.PuntoNombre IS NULL THEN 'PUNTO SIN REGISTRAR' ELSE PS_Puntos.PuntoNombre END AS LUGAR_PUNTO, 
-                                    (CONVERT(VARCHAR(10),PS_Registros.FechaLectura, 103) + ' - ' + CONVERT(VARCHAR(8),PS_Registros.FechaLectura, 108) + ' Hs.') AS FECHA_LECTURA
+                                    CONVERT(VARCHAR(10),PS_Registros.FechaLectura, 103) AS FECHA, CONVERT(VARCHAR(8),PS_Registros.FechaLectura, 108) AS HORA
                             FROM            PS_Registros INNER JOIN
                                                     PS_Ubicacion ON PS_Registros.CodUbicacion = PS_Ubicacion.CodUbicacion LEFT JOIN
                                                     PS_Puntos ON PS_Registros.CodPunto = PS_Puntos.CodPunto
                             WHERE CONVERT(DATE, PS_Registros.FechaLectura) >= @@Inicio AND CONVERT(DATE, PS_Registros.FechaLectura) <= @@Final
                                     AND PS_Ubicacion.CodUbicacion = @@Ubicacion
-                            ORDER BY FECHA_LECTURA
+                            ORDER BY FECHA
                          """
                     cursor.execute(sql, [inicio,final,ubicacion])  
                     results = cursor.fetchall()
@@ -58,11 +58,12 @@ def buscaRegistros(request):
                             ubi = str(row[1])
                             punto = str(row[2])
                             fecha = str(row[3])
-                            registro = {'Nombre':nombre, 'Ubicacion': ubi, 'Punto':punto, 'Fecha':fecha}
+                            hora = str(row[4])
+                            registro = {'Nombre':nombre, 'Ubicacion': ubi, 'Punto':punto, 'Fecha':fecha, 'Hora':hora}
                             listado.append(registro)
                         return JsonResponse({'Message': 'Success', 'Data': listado})
                     else:
-                        return JsonResponse({'Message': 'Error', 'Nota': 'No se encontraron datos con ese número de Legajo.'})
+                        return JsonResponse({'Message': 'Error', 'Nota': 'No se encontraron datos.'})
             except Exception as e:
                 error = str(e)
                 return JsonResponse({'Message': 'Error', 'Nota': error})  
