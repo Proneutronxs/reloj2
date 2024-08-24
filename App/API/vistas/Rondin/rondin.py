@@ -179,7 +179,7 @@ def insertaFichadaSql(sereno,planta,punto,fecha,hora,pasos):
         cursor.close()
         connections['MyZetto'].close()     
 
-def listadoPuntos(legajo):
+def listadoPuntos():
     listado = []
     try:
         with connections['PsRondin'].cursor() as cursor:
@@ -187,8 +187,8 @@ def listadoPuntos(legajo):
                     SELECT CodPunto, PuntoNombre
                     M PS_Puntos
                     """
-            cursor.execute(sql, [legajo])  
-            results = cursor.fetchoall()
+            cursor.execute(sql)  
+            results = cursor.fetchall()
             if results:
                 for row in results:
                     CodPunto = str(row[0])
