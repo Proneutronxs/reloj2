@@ -27,7 +27,7 @@ def buscaRegistros(request):
             final = str(json.loads(body)['Final'])
             ubicacion = str(json.loads(body)['Ubicacion'])
             try:
-                with connections['Softland'].cursor() as cursor:
+                with connections['PsRondin'].cursor() as cursor:
                     sql = """ 
                             SELECT        CASE WHEN CONVERT(VARCHAR(25),(SELECT Nombre FROM ZetoneTime.dbo.Legajos WHERE Legajos = PS_Registros.CodLegajo)) IS NULL THEN 'NO ENCONTRADO' 
                                             ELSE CONVERT(VARCHAR(25),(SELECT Nombre FROM ZetoneTime.dbo.Legajos WHERE Legajos = PS_Registros.CodLegajo)) END AS LEGAJO, 
