@@ -129,7 +129,7 @@ def insertaRegistroNuevo(idInterno,idLegajo,idUbicacion,idPunto,fechaAlta):
 
     try:
         with connections['PsRondin'].cursor() as cursor:
-            sql = "INSERT INTO PS_Registros (RegistroInterno, CodLegajo, CodUbicacion, CodPunto, FechaAlta) VALUES (%s, %s, %s, %s, %s)"
+            sql = "INSERT INTO PS_Registros (RegistroInterno, CodLegajo, CodUbicacion, CodPunto, FechaLectura, FechaAlta) VALUES (%s, %s, %s, %s, %s, GETDATE())"
             values = (idInterno,idLegajo,idUbicacion,idPunto,fechaAlta)
             cursor.execute(sql, values)  
     except Exception as e:
