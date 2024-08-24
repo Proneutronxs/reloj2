@@ -42,4 +42,6 @@ urlpatterns = [
 
     path('rondin-empaque/recibe-fichadas/', rondin.insert_fichada_rondin, name='recibe_fichadas_rondin'),
 
+    path('rondin-empaque/envia-sereno/', rondin.devuelveLegajoNombre, name='rondin_envia_sereno'),
+
 ]

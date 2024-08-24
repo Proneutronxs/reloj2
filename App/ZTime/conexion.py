@@ -1,6 +1,6 @@
 import pyodbc
 
-server3 = "191.97.47.105"
+server3 = "191.97.47.114"
 db3 = "ZetoneTime"
 user3 = "sa"
 psw3 = "Sideswipe348"
@@ -27,7 +27,7 @@ def zkbiotime():
         print(e)
 
 
-serverApp = "191.97.47.105"
+serverApp = "191.97.47.114"
 dbApp = "Zetoneapp"
 userApp = "sa"
 pswApp = "Sideswipe348"

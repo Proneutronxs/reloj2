@@ -372,7 +372,7 @@ def upload_image(request):
 
 
 
-NEXTCLOUD_URL = 'http://191.97.47.105/remote.php/webdav/Imagenes-Calidad/'
+NEXTCLOUD_URL = 'http://191.97.47.114/remote.php/webdav/Imagenes-Calidad/'
 NEXTCLOUD_USER = 'jchambi@zetone.com.ar'
 NEXTCLOUD_PASSWORD = 'Sideswipe348'
 

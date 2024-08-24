@@ -84,7 +84,7 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'ZetoneTime',
         'USER': 'sa',
-        'HOST': '191.97.47.105',##10.32.26.34
+        'HOST': '191.97.47.114',##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
@@ -95,24 +95,38 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'PS_Time',
         'USER': 'sa',
-        'HOST': '191.97.47.105',##10.32.26.34
+        'HOST': '191.97.47.114',##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
-    },
+    }
+    ,
+    'PsRondin': {
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'PS_Rondin',
+        'USER': 'sa',
+        'HOST': '191.97.47.114',##10.32.26.34
+        'PASSWORD': 'Sideswipe348',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    }
+    ,
     'MyZetto': {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'MyZetto',
         'USER': 'sa',
-        'HOST': '191.97.47.105',##10.32.26.34
+        'HOST': '191.97.47.114',##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
-    },
+    }
+    ,
     'Trazabilidad': {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'Trazabilidad',
@@ -130,6 +144,18 @@ DATABASES = {
         'NAME': 'General',
         'USER': 'sa',
         'HOST': '10.32.26.8',
+        'PASSWORD': 'Florencia1976',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    }
+    ,
+    'Softland': {
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'General',
+        'USER': 'sa',
+        'HOST': '10.32.26.5',
         'PASSWORD': 'Florencia1976',
         'PORT': '',
         'OPTIONS': {

@@ -29,6 +29,7 @@ urlpatterns = [
     path('administracion/', include('App.Frio.urls')),
     path('empaque/', include('App.Empaque.urls')),
     path('api/', include('App.API.urls')),
+    path('redirect-api/api/', include('App.API.urls')),
     path('rrhh/', include('App.RRHH.urls')),
 
     path('accounts/login/', views.inicioSesion, name="login"),
