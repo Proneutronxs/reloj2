@@ -60,10 +60,7 @@ def devuelveLegajoNombre(request):
                         return JsonResponse({'Message': 'Error', 'Nota': 'No se encontraron datos con ese número de Legajo.'})
             except Exception as e:
                 error = str(e)
-                return JsonResponse({'Message': 'Error', 'Nota': error})
-            finally:
-                cursor.close()
-                connections['Softland'].close()     
+                return JsonResponse({'Message': 'Error', 'Nota': error})  
         except Exception as e:
             error = str(e)
             return JsonResponse({'Message': 'Error', 'Nota': error})
