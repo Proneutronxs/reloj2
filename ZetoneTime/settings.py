@@ -154,7 +154,7 @@ DATABASES = {
     ,
     'Softland': {
         'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'Sofland',
+        'NAME': 'Softland',
         'USER': 'sa',
         'HOST': '10.32.26.5',
         'PASSWORD': 'Florencia1976',
