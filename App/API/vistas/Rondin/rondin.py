@@ -29,6 +29,14 @@ def buscaRegistros(request):
             try:
                 with connections['PsRondin'].cursor() as cursor:
                     sql = """ 
+                            DELCLARE @@Inicio DATE;
+                            DELCLARE @@Final DATE;
+                            DELCLARE @@Ubicacion VARCHAR(255);
+
+                            SET @@Inicio = %s;
+                            SET @@Final = %s;
+                            SET @@Ubicacion = %s;
+
                             SELECT        CASE WHEN CONVERT(VARCHAR(25),(SELECT Nombre FROM ZetoneTime.dbo.Legajos WHERE Legajos = PS_Registros.CodLegajo)) IS NULL THEN 'NO ENCONTRADO' 
                                             ELSE CONVERT(VARCHAR(25),(SELECT Nombre FROM ZetoneTime.dbo.Legajos WHERE Legajos = PS_Registros.CodLegajo)) END AS LEGAJO, 
                                     PS_Ubicacion.UbicacionNombre AS UBICACIÓN, 
@@ -37,12 +45,12 @@ def buscaRegistros(request):
                             FROM            PS_Registros INNER JOIN
                                                     PS_Ubicacion ON PS_Registros.CodUbicacion = PS_Ubicacion.CodUbicacion LEFT JOIN
                                                     PS_Puntos ON PS_Registros.CodPunto = PS_Puntos.CodPunto
-                            WHERE CONVERT(DATE, PS_Registros.FechaLectura) >= %s AND CONVERT(DATE, PS_Registros.FechaLectura) <= %s
-                                    AND PS_Ubicacion.CodUbicacion = %s
+                            WHERE CONVERT(DATE, PS_Registros.FechaLectura) >= @@Inicio AND CONVERT(DATE, PS_Registros.FechaLectura) <= @@Final
+                                    AND PS_Ubicacion.CodUbicacion = @@Ubicacion
                             ORDER BY FECHA_LECTURA
                          """
                     cursor.execute(sql, [inicio,final,ubicacion])  
-                    results = cursor.fetchoall()
+                    results = cursor.fetchall()
                     listado = []
                     if results:
                         for row in results:
