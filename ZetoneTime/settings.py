@@ -85,7 +85,7 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'ZetoneTime',
         'USER': 'sa',
-        'HOST': '191.97.47.114',##10.32.26.34
+        'HOST': '10.32.26.34',##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
@@ -96,7 +96,7 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'PS_Time',
         'USER': 'sa',
-        'HOST': '191.97.47.114',##10.32.26.34
+        'HOST': '10.32.26.34',##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
@@ -108,7 +108,7 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'PS_Rondin',
         'USER': 'sa',
-        'HOST': '191.97.47.114',##10.32.26.34
+        'HOST': '10.32.26.34',##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {

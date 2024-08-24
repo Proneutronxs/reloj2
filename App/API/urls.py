@@ -48,4 +48,6 @@ urlpatterns = [
 
     path('rondin-empaque/envia-ubicacion/', rondin.devuelveNombreSector, name='rondin_envia_ubicacion'),
 
+    path('rondin-empaque/busca-resgistros/', rondin.buscaRegistros, name='rondin_busca_registros'),
+
 ]

@@ -19,21 +19,45 @@ from django.shortcuts import render
 
 
 @csrf_exempt
-def insert_fichada_rondin(request):
+def buscaRegistros(request):
     if request.method == 'POST':
         try:
             body = request.body.decode('utf-8')
-            datos = json.loads(body)['Data']
-            for item in datos:
-                legajo = item['Legajo']
-                planta = item['Planta']
-                punto = item['Punto']
-                fecha = item['Fecha']
-                hora = item['Hora']
-                paso = item['Paso']
-                insertaFichadaSql(legajo,planta,punto,fecha,hora,paso)
-            nota = "Los registros se guardaron exitosamente."
-            return JsonResponse({'Message': 'Success', 'Nota': nota})
+            inicio = str(json.loads(body)['Inicio'])
+            final = str(json.loads(body)['Final'])
+            ubicacion = str(json.loads(body)['Ubicacion'])
+            try:
+                with connections['Softland'].cursor() as cursor:
+                    sql = """ 
+                            SELECT        CASE WHEN CONVERT(VARCHAR(25),(SELECT Nombre FROM ZetoneTime.dbo.Legajos WHERE Legajos = PS_Registros.CodLegajo)) IS NULL THEN 'NO ENCONTRADO' 
+                                            ELSE CONVERT(VARCHAR(25),(SELECT Nombre FROM ZetoneTime.dbo.Legajos WHERE Legajos = PS_Registros.CodLegajo)) END AS LEGAJO, 
+                                    PS_Ubicacion.UbicacionNombre AS UBICACIÓN, 
+                                    CASE WHEN PS_Puntos.PuntoNombre IS NULL THEN 'PUNTO SIN REGISTRAR' ELSE PS_Puntos.PuntoNombre END AS LUGAR_PUNTO, 
+                                    (CONVERT(VARCHAR(10),PS_Registros.FechaLectura, 103) + ' - ' + CONVERT(VARCHAR(8),PS_Registros.FechaLectura, 108) + ' Hs.') AS FECHA_LECTURA
+                            FROM            PS_Registros INNER JOIN
+                                                    PS_Ubicacion ON PS_Registros.CodUbicacion = PS_Ubicacion.CodUbicacion LEFT JOIN
+                                                    PS_Puntos ON PS_Registros.CodPunto = PS_Puntos.CodPunto
+                            WHERE CONVERT(DATE, PS_Registros.FechaLectura) >= %s AND CONVERT(DATE, PS_Registros.FechaLectura) <= %s
+                                    AND PS_Ubicacion.CodUbicacion = %s
+                            ORDER BY FECHA_LECTURA
+                         """
+                    cursor.execute(sql, [inicio,final,ubicacion])  
+                    results = cursor.fetchoall()
+                    listado = []
+                    if results:
+                        for row in results:
+                            nombre = str(row[0])
+                            ubi = str(row[1])
+                            punto = str(row[2])
+                            fecha = str(row[3])
+                            registro = {'Nombre':nombre, 'Ubicacion': ubi, 'Punto':punto, 'Fecha':fecha}
+                            listado.append(registro)
+                        return JsonResponse({'Message': 'Success', 'Data': listado})
+                    else:
+                        return JsonResponse({'Message': 'Error', 'Nota': 'No se encontraron datos con ese número de Legajo.'})
+            except Exception as e:
+                error = str(e)
+                return JsonResponse({'Message': 'Error', 'Nota': error})  
         except Exception as e:
             error = str(e)
             return JsonResponse({'Message': 'Error', 'Nota': error})
@@ -46,7 +70,6 @@ def insertaRegistrosRondin(request):
         try:
             body = request.body.decode('utf-8')
             datos = json.loads(body)['Data']
-            print(datos)
             for item in datos:
                 registro = item['Registro']
                 legajo = item['Legajo']
@@ -81,7 +104,11 @@ def devuelveLegajoNombre(request):
                     if results:
                         CodLegajo = str(results[0])
                         CodNombre = str(results[1])
-                        return JsonResponse({'Message': 'Success', 'Legajo': CodLegajo, 'Nombre':CodNombre})
+                        if listadoPuntos():
+                            listado = listadoPuntos()
+                        else:
+                            listado = [{'CodPunto': 'NONE', 'CodNombre': 'NONE'}]
+                        return JsonResponse({'Message': 'Success', 'Legajo': CodLegajo, 'Nombre':CodNombre, 'DataPuntos': listado})
                     else:
                         return JsonResponse({'Message': 'Error', 'Nota': 'No se encontraron datos con ese número de Legajo.'})
             except Exception as e:
@@ -151,6 +178,29 @@ def insertaFichadaSql(sereno,planta,punto,fecha,hora,pasos):
     finally:
         cursor.close()
         connections['MyZetto'].close()     
+
+def listadoPuntos(legajo):
+    listado = []
+    try:
+        with connections['PsRondin'].cursor() as cursor:
+            sql = """ 
+                    SELECT CodPunto, PuntoNombre
+                    M PS_Puntos
+                    """
+            cursor.execute(sql, [legajo])  
+            results = cursor.fetchoall()
+            if results:
+                for row in results:
+                    CodPunto = str(row[0])
+                    CodNombre = str(row[1])
+                    punto = {'CodPunto': CodPunto, 'CodNombre': CodNombre}
+                    listado.append(punto)
+                return listado
+            else:
+                return listado
+    except Exception as e:
+        error = str(e)
+        #print(error)
 
 
 
