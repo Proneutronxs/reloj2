@@ -29,9 +29,9 @@ def buscaRegistros(request):
             try:
                 with connections['PsRondin'].cursor() as cursor:
                     sql = """ 
-                            DELCLARE @@Inicio DATE;
-                            DELCLARE @@Final DATE;
-                            DELCLARE @@Ubicacion VARCHAR(255);
+                            DECLARE @@Inicio DATE;
+                            DECLARE @@Final DATE;
+                            DECLARE @@Ubicacion VARCHAR(255);
 
                             SET @@Inicio = %s;
                             SET @@Final = %s;
