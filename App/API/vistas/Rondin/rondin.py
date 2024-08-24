@@ -53,8 +53,7 @@ def devuelveLegajoNombre(request):
                             FROM [10.32.26.5].Softland.dbo.SJMLGH 
                             WHERE SJMLGH_NROLEG = %s
                          """
-                    values = (legajo)
-                    cursor.execute(sql, values)  
+                    cursor.execute(sql, [legajo])  
                     results = cursor.fetchone()
                     if results:
                         CodLegajo = str(results[0])
