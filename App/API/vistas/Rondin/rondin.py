@@ -46,7 +46,7 @@ def buscaRegistros(request):
                                                     PS_Ubicacion ON PS_Registros.CodUbicacion = PS_Ubicacion.CodUbicacion LEFT JOIN
                                                     PS_Puntos ON PS_Registros.CodPunto = PS_Puntos.CodPunto
                             WHERE CONVERT(DATE, PS_Registros.FechaLectura) >= @@Inicio AND CONVERT(DATE, PS_Registros.FechaLectura) <= @@Final
-                                    AND PS_Ubicacion.CodUbicacion = @@Ubicacion
+                                    AND ('PS-000' = @@Ubicacion OR PS_Ubicacion.CodUbicacion = @@Ubicacion)
                             ORDER BY FECHA
                          """
                     cursor.execute(sql, [inicio,final,ubicacion])  
