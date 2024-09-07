@@ -1,5 +1,5 @@
 from django.urls import path
-from App.API.vistas.calidad import calidad, bascula 
+from App.API.vistas.calidad import calidad, bascula, empaque
 from App.API.vistas.Rondin import rondin
 urlpatterns = [
     ######################### CALIDAD EMPAQUE ###################################
@@ -18,9 +18,9 @@ urlpatterns = [
     path('calidad/presiones/mostrar', calidad.muestra_presiones, name='muestra_presiones'),
     path('calidad/presiones/promedio', calidad.promedio_presiones, name='promedio_presiones'),
 
-    ######################## URLS CALIDAD BASCULA ###########################
+    ######################## ENDPOINTS CALIDAD BASCULA ###########################
 
-    path('calidad-bascula/data-inicial/', bascula.dataInicial, name='inserta_presiones'),
+    path('calidad-bascula/data-inicial/', bascula.dataInicial, name='bascula_data_inicial'),
 
     path('calidad-bascula/data-lotes/', bascula.traeLotes, name='trae_lotes'),
 
@@ -29,10 +29,6 @@ urlpatterns = [
     path('calidad-bascula/inserta-data/', bascula.Ejecuta_Procedimientos, name='ejecuta_procedimientos'),
 
     path('calidad-bascula/ver-data/', bascula.resultadosInsert, name='resultadosInsert'),
-
-
-
-
 
     path('calidad-empaque/subir-imagen/', calidad.upload_image_from_directory, name='subir_imagen_directorio'),
 
@@ -49,5 +45,13 @@ urlpatterns = [
     path('rondin-empaque/envia-ubicacion/', rondin.devuelveNombreSector, name='rondin_envia_ubicacion'),
 
     path('rondin-empaque/busca-resgistros/', rondin.buscaRegistros, name='rondin_busca_registros'),
+
+
+    ######################## ENDPOINTS CALIDAD CONTROL EMPAQUE ###########################
+
+    path('calidad-empaque/busqueda-caja/', bascula.dataInicial, name='calidad_empaque_busqueda_caja'),
+
+
+
 
 ]
