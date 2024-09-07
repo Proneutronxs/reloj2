@@ -12,7 +12,7 @@ from django.db import connections
 
 
 @csrf_exempt
-def traeLotes(request):
+def busquedaCaja(request):
     if request.method == 'POST':
         body = request.body.decode('utf-8')
         caja = str(json.loads(body)['caja'])
