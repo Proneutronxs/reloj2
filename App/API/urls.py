@@ -49,7 +49,7 @@ urlpatterns = [
 
     ######################## ENDPOINTS CALIDAD CONTROL EMPAQUE ###########################
 
-    path('calidad-empaque/busqueda-caja/', bascula.busquedaCaja, name='calidad_empaque_busqueda_caja'),
+    path('calidad-empaque/busqueda-caja/', empaque.busquedaCaja, name='calidad_empaque_busqueda_caja'),
 
 
 
