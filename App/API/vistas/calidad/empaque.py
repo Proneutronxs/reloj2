@@ -242,7 +242,7 @@ def busquedaCajaDia(request):
                 sql = """ 
                         SELECT IdCaja, numeroCaja 
                         FROM DefectosCaja
-                        WHERE (IdCaja >  AND fecha = %s)
+                        WHERE (IdCaja > 17988845 AND fecha = %s)
                     """
                 cursor.execute(sql, values)
                 results = cursor.fetchone()
