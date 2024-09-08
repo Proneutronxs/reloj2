@@ -142,7 +142,7 @@ def guardaCaja(request):
         falta_boro = str(data['FaltaBoro'])
         maquina = str(data['Maquina'])
         usuario = str(data['Usuario'])
-        if consultaExisteCaja(caja):
+        if consultaExisteCaja(id_caja):
             try:
                 if insertaCaja(id_caja,caja,fecha,hora,peso_neto,peso_bruto,plu,observaciones,deformadas,tamaño_incorrecto,falta_color,russeting,heladas,
                             roce_bins,asoleado,quemado_sol,fitotoxicidad,rolado,golpes,heridas,heridas_viejas,cracking,bitterpit,granizo,daño_insecto,pedunculo,desvio,
@@ -169,7 +169,7 @@ def guardaCaja(request):
                 }
                 return JsonResponse(response_data)
         else:
-            data = "La Caja ya se guardó."
+            data = "La Caja ya existe en el reporte."
             return JsonResponse({'Message': 'Error', 'Nota': data})
     else:
         response_data = {
@@ -184,7 +184,7 @@ def insertaCaja(IdCaja, numeroCaja, Fecha, Hora, PesoNeto, PesoBruto, PLU, Obser
         with connections['ZetoneApp'].cursor() as cursor:
             sql = """
                     INSERT INTO DefectosCaja (IdCaja, numeroCaja, Fecha, Hora, PesoNeto, PesoBruto, PLU, Observaciones, Deformadas, TamañoIncorrecto, FaltaDeColor, Russeting, Heladas,roceBins, Asoleado, QuemadoPorSol, Fitotoxicidad, Rolado, Golpes, Heridas, HeridasViejas, Cracking, Bitterpit, Granizo, DañoPorInsecto, FaltaDePedunculo, DesvioDeClasificacion, SegundaFlor, Madurez, Deshidratacion, Decaimiento, MohoHumedo, MohoSeco, MohoAcuoso, Rameado, FirmezaPulpaMax, FirmezaPulpaMin, FirmezaPulpaPromedio, faltaDeBoro, Maquina, Usuario) 
-                    Values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                    Values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                 """
             cursor.execute(sql, values)
             return True
