@@ -312,7 +312,7 @@ def consultaCajaUpdate(IdCaja):
                                 General.dbo.USR_MCLOTE ON LoteEtiquetado.id_lote = General.dbo.USR_MCLOTE.USR_LOTE_NUMERO INNER JOIN 
                                 General.dbo.USR_MCCUADRO ON General.dbo.USR_MCLOTE.USR_CUAD_ALIAS = General.dbo.USR_MCCUADRO.USR_CUAD_ALIAS INNER JOIN 
                                 Embalador ON Bulto.id_embalador = Embalador.Id_embalador INNER JOIN General.dbo.USR_MCCHACRA ON General.dbo.USR_MCCUADRO.USR_CHAC_ALIAS = General.dbo.USR_MCCHACRA.USR_CHAC_ALIAS
-                        WHERE (Id_bulto > 17988845 AND Bulto.numero_bulto = %s)
+                        WHERE (Id_bulto > 17988845 AND Id_bulto = %s)
                 """
             cursor.execute(sql, values)
             results = cursor.fetchone()
@@ -417,7 +417,7 @@ def busquedaCajaUpdate(request):
         dataCaja = consultaCajaUpdate(caja)
         dataDefectos = consultaDefectosCajaUpdate(caja)
         dataImagenes = []
-        if  dataCaja:
+        if  dataCaja and dataDefectos:
             pluFoto = consultaImagenes(caja, "P")
             cajaFoto = consultaImagenes(caja,"C") 
             dataImagenes = [pluFoto, cajaFoto]
