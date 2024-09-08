@@ -94,7 +94,6 @@ def consultaExisteCaja(IdCaja):
     except Exception as e:
         error = str(e)
         return True
-    
 
 @csrf_exempt
 def guardaCaja(request):
@@ -177,7 +176,6 @@ def guardaCaja(request):
         }
         return JsonResponse(response_data)
     
-
 def insertaCaja(IdCaja, numeroCaja, Fecha, Hora, PesoNeto, PesoBruto, PLU, Observaciones, Deformadas, TamañoIncorrecto, FaltaDeColor, Russeting, Heladas, 
                 roceBins, Asoleado, QuemadoPorSol, Fitotoxicidad, Rolado, Golpes, Heridas, HeridasViejas, Cracking, Bitterpit, Granizo, DañoPorInsecto, 
                 FaltaDePedunculo, DesvioDeClasificacion, SegundaFlor, Madurez, Deshidratacion, Decaimiento, MohoHumedo, MohoSeco, MohoAcuoso, Rameado, 
@@ -209,8 +207,7 @@ def insertaImagen(IdCaja, Imagen, Tipo,):
     except Exception as e:
         error = str(e)
         InsertaDataError("INSERTA IMAGEN", error)
-        return False
-    
+        return False    
 
 def InsertaDataError(funcion,json):
 
@@ -232,3 +229,242 @@ def InsertaDataError(funcion,json):
         return 8
     finally:
         connections['default'].close()
+
+@csrf_exempt
+def busquedaCajaDia(request):
+    if request.method == 'POST':
+        body = request.body.decode('utf-8')
+        fecha = str(json.loads(body)['Fecha'])
+        values = [fecha]
+        Data = []
+        try:
+            with connections['ZetoneApp'].cursor() as cursor:
+                sql = """ 
+                        SELECT IdCaja, numeroCaja 
+                        FROM DefectosCaja
+                        WHERE (IdCaja >  AND fecha = %s)
+                    """
+                cursor.execute(sql, values)
+                results = cursor.fetchone()
+                if results:
+                    idBulto = str(results[0])
+                    marca = str(results[1])
+                    calidad = str(results[2])
+                    data = {'Id':idBulto, 'Marca':marca, 'Calidad':calidad}
+                    Data.append(data)
+                    return JsonResponse({'Message': 'Success', 'Caja': Data})
+                else:
+                    data = "No se encontraron Datos."
+                    return JsonResponse({'Message': 'Error', 'Nota': data}) 
+        except Exception as e:
+            error = str(e)
+            response_data = {
+                'Message': 'Error',
+                'Nota': error
+            }
+            return JsonResponse(response_data)
+        finally:
+            connections['ZetoneApp'].close()
+    else:
+        response_data = {
+            'Message': 'No se pudo resolver la petición.'
+        }
+        return JsonResponse(response_data)
+    
+def consultaImagenes(IdCaja,Tipo):
+    values = [IdCaja,Tipo]
+    imagen64 = "0"
+    try:
+        with connections['ZetoneApp'].cursor() as cursor:
+            sql = """
+                    SELECT Imagen FROM Imagenes_Cajas_Calidad WHERE IdCaja = %s AND Tipo = %s
+                """
+            cursor.execute(sql, values)
+            results = cursor.fetchone()
+            if results:
+                imagen64 = str(results[0])
+                return imagen64
+            return imagen64
+    except Exception as e:
+        error = str(e)
+        InsertaDataError("CONSULTA IMAGEN", error)
+        return imagen64
+
+def consultaCajaUpdate(IdCaja):
+    values = [IdCaja]
+    Data = []
+    try:
+        with connections['ZetoneApp'].cursor() as cursor:
+            sql = """
+                    SELECT Id_bulto AS id, Marca.Nombre_marca AS Marca, Calidad.nombre_calidad AS Calidad, Variedad.nombre_variedad AS Variedad, 
+                                Especie.nombre_especie AS Especie, CASE WHEN Bulto.id_galpon = '8' THEN 'MANZANA' WHEN Bulto.id_galpon = '5' THEN 'PERA' ELSE 'OTRO' END AS Galpon, 
+                                Envase.nombre_envase AS Envase, Calibre.nombre_calibre AS Calibre, 
+                                General.dbo.USR_MCCUADRO.USR_CUAD_UMI AS UMI, General.dbo.USR_MCCUADRO.USR_CUAD_UP AS UP, Embalador.nombre_embalador AS Embalador, 
+                                General.dbo.USR_MCLOTE.USR_LOTE_NUMERO AS Lote, CONVERT(varchar(10), Bulto.fecha_alta_bulto, 103) AS Fecha, CONVERT(varchar(8), 
+                                Bulto.fecha_alta_bulto, 108) AS Hora
+                        FROM Especie INNER JOIN 
+                                Variedad ON Especie.id_especie = Variedad.id_especie INNER JOIN 
+                                Bulto INNER JOIN 
+                                Configuracion ON Bulto.id_configuracion = Configuracion.id_configuracion INNER JOIN 
+                                Marca ON Configuracion.id_marca = Marca.id_marca INNER JOIN 
+                                Calidad ON Configuracion.id_calidad = Calidad.Id_calidad ON Variedad.Id_variedad = Configuracion.id_variedad INNER JOIN 
+                                Envase ON Configuracion.id_envase = Envase.id_envase INNER JOIN Calibre ON Configuracion.id_calibre = Calibre.Id_calibre INNER JOIN 
+                                LoteEtiquetado ON Bulto.id_loteEtiquetado = LoteEtiquetado.id_loteEtiquetado INNER JOIN 
+                                General.dbo.USR_MCLOTE ON LoteEtiquetado.id_lote = General.dbo.USR_MCLOTE.USR_LOTE_NUMERO INNER JOIN 
+                                General.dbo.USR_MCCUADRO ON General.dbo.USR_MCLOTE.USR_CUAD_ALIAS = General.dbo.USR_MCCUADRO.USR_CUAD_ALIAS INNER JOIN 
+                                Embalador ON Bulto.id_embalador = Embalador.Id_embalador INNER JOIN General.dbo.USR_MCCHACRA ON General.dbo.USR_MCCUADRO.USR_CHAC_ALIAS = General.dbo.USR_MCCHACRA.USR_CHAC_ALIAS
+                        WHERE (Id_bulto > 17988845 AND Bulto.numero_bulto = %s)
+                """
+            cursor.execute(sql, values)
+            results = cursor.fetchone()
+            if results:
+                idBulto = str(results[0])
+                marca = str(results[1])
+                calidad = str(results[2])
+                variedad = str(results[3])
+                especie = str(results[4])
+                galpon = str(results[5])
+                envase = str(results[6])
+                calibre = str(results[7])
+                umi = str(results[8])
+                up = str(results[9])
+                embalador = str(results[10])
+                lote = str(results[11])
+                fecha = str(results[12])
+                hora = str(results[13])
+                data = {'Id':idBulto, 'Marca':marca, 'Calidad':calidad, 'Variedad':variedad, 'Especie':especie, 'Galpon':galpon,'Envase':envase, 'Calibre':calibre, 'Umi':umi, 'Up':up,
+                        'Embalador':embalador, 'Lote':lote, 'Fecha':fecha, 'Hora':hora}
+                Data.append(data)
+                return Data
+            return Data
+    except Exception as e:
+        error = str(e)
+        InsertaDataError("CONSULTA CAJA UPDATE", error)
+        return Data
+
+def consultaDefectosCajaUpdate(IdCaja):
+    values = [IdCaja]
+    Data = []
+    try:
+        with connections['ZetoneApp'].cursor() as cursor:
+            sql = """
+                    SELECT IdCaja, CONVERT(varchar(10), Fecha, 3) AS Fecha, CONVERT(varchar(8), Hora, 108) AS Hora, PesoNeto, PesoBruto, PLU, Observaciones, 
+                            Deformadas, TamañoIncorrecto, FaltaDeColor, Russeting, Heladas, roceBins, Asoleado, QuemadoPorSol, Fitotoxicidad, Rolado, Golpes, 
+                            Heridas, HeridasViejas, Cracking, Bitterpit, Granizo, DañoPorInsecto, FaltaDePedunculo, DesvioDeClasificacion, SegundaFlor, Madurez, 
+                            Deshidratacion, Decaimiento, MohoHumedo, MohoSeco, MohoAcuoso, FirmezaPulpaMax, FirmezaPulpaMin, FirmezaPulpaPromedio, faltaDeBoro, Maquina, Rameado
+                    FROM DefectosCaja
+                    WHERE IdCaja = %s
+                """
+            cursor.execute(sql, values)
+            results = cursor.fetchone()
+            if results:
+                idBulto = str(results[0])
+                fecha = str(results[1])
+                hora = str(results[2])
+                pNeto = str(results[3])
+                pBruto = str(results[4])
+                plu = str(results[5])
+                obs = str(results[6])
+                deformadas = str(results[7])
+                tIncorrecto = str(results[8])
+                fColor = str(results[9])
+                russeting = str(results[10])
+                heladas = str(results[11])
+                roceBins = str(results[12])
+                asoleado = str(results[13])
+                quemado = str(results[14])
+                fito = str(results[15])
+                rolado = str(results[16])
+                golpes = str(results[17])
+                heridas = str(results[18])
+                hViejas = str(results[19])
+                craking = str(results[20])
+                bitter = str(results[21])
+                granizo = str(results[22])
+                dañoInsecto = str(results[23])
+                fPedunculo = str(results[24])
+                desvio = str(results[25])
+                sFlor = str(results[26])
+                madurez = str(results[27])
+                deshidratacion = str(results[28])
+                decaimiento = str(results[29])
+                mHumedo = str(results[30]) 
+                mSeco = str(results[31])
+                mAcuoso = str(results[32])
+                pulpaMax = str(results[33])
+                pulpaMin = str(results[34])
+                pulpaPro = str(results[35])
+                fBoro = str(results[36])
+                maquina = str(results[37])
+                rameado = str(results[38])
+                data = {'Id':idBulto, 'Fecha':fecha, 'Hora':hora, 'Neto':pNeto, 'Bruto':pBruto, 'PLU':plu, 'Obs':obs, 'Deformada':deformadas, 'Incorrecto':tIncorrecto, 'Color':fColor,
+                        'Russeting':russeting, 'Heladas':heladas, 'RBins':roceBins, 'Asoleado':asoleado, 'Quemado':quemado, 'Fitotoxicidad':fito, 'Rolado':rolado, 'Golpes':golpes,
+                        'Heridad':heridas, 'HViejas':hViejas, 'Craking':craking, 'Bitterpit':bitter, 'Granizo':granizo, 'DañoInsecto':dañoInsecto, 'Pedunculo':fPedunculo, 'Desvio':desvio,
+                        'SFlor':sFlor, 'Madurez':madurez, 'Deshidratacion': deshidratacion, 'Decaimiento':decaimiento, 'MHumedo':mHumedo, 'MSeco':mSeco, 'MAcuoso':mAcuoso, 'PulpaMax':pulpaMax,
+                        'PulpaMin':pulpaMin, 'PulpaPro':pulpaPro, 'Boro':fBoro,'Maquina':maquina, 'Rameado':rameado}
+                Data.append(data)
+                return Data
+            return Data
+    except Exception as e:
+        error = str(e)
+        InsertaDataError("CONSULTA DEFECTOS CAJA UPDATE", error)
+        return Data
+
+@csrf_exempt
+def busquedaCajaUpdate(request):
+    if request.method == 'POST':
+        body = request.body.decode('utf-8')
+        caja = str(json.loads(body)['Caja'])
+        dataCaja = []
+        dataDefectos = []
+        dataImagenes = []
+        if  dataCaja and dataDefectos:
+            pluFoto = consultaImagenes(caja, "P")
+            cajaFoto = consultaImagenes(caja,"C") 
+            dataImagenes = [pluFoto, cajaFoto]
+            return JsonResponse({'Message': 'Success', 'DataCaja': dataCaja, 'DataDefectos':dataDefectos, 'DataImagenes':dataImagenes})
+        else:
+            data = "No se encontraron Datos."
+            return JsonResponse({'Message': 'Error', 'Nota': data}) 
+    else:
+        response_data = {
+            'Message': 'No se pudo resolver la petición.'
+        }
+        return JsonResponse(response_data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

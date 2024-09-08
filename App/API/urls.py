@@ -53,5 +53,9 @@ urlpatterns = [
 
     path('calidad-empaque/enviar-caja/', empaque.guardaCaja, name='calidad_empaque_guarda_caja'),
 
+    path('calidad-empaque/busqueda-dia-caja/', empaque.busquedaCajaDia, name='calidad_empaque_busqueda_dia_caja'),
+
+    path('calidad-empaque/busqueda-update-caja/', empaque.busquedaCajaUpdate, name='calidad_empaque_busqueda_update_caja'),
+
 
 ]
