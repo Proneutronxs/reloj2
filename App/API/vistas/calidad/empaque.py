@@ -293,7 +293,7 @@ def consultaCajaUpdate(IdCaja):
     values = [IdCaja]
     Data = []
     try:
-        with connections['ZetoneApp'].cursor() as cursor:
+        with connections['Trazabilidad'].cursor() as cursor:
             sql = """
                     SELECT Id_bulto AS id, Marca.Nombre_marca AS Marca, Calidad.nombre_calidad AS Calidad, Variedad.nombre_variedad AS Variedad, 
                                 Especie.nombre_especie AS Especie, CASE WHEN Bulto.id_galpon = '8' THEN 'MANZANA' WHEN Bulto.id_galpon = '5' THEN 'PERA' ELSE 'OTRO' END AS Galpon, 
