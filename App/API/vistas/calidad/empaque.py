@@ -190,6 +190,7 @@ def insertaCaja(IdCaja, numeroCaja, Fecha, Hora, PesoNeto, PesoBruto, PLU, Obser
             return True
     except Exception as e:
         error = str(e)
+        InsertaDataError("INSERTA CAJA", error)
         return False
     
 def insertaImagen(IdCaja, Imagen, Tipo,):
@@ -204,4 +205,27 @@ def insertaImagen(IdCaja, Imagen, Tipo,):
             return True
     except Exception as e:
         error = str(e)
+        InsertaDataError("INSERTA IMAGEN", error)
         return False
+    
+
+def InsertaDataError(funcion,json):
+
+    values = [funcion,json]
+    try:
+        with connections['default'].cursor() as cursor:
+            sql = """ INSERT INTO Data_Json (Funcion,FechaAlta,Json) VALUES (%s,GETDATE(),%s) """
+            cursor.execute(sql, values)
+            cursor.execute("SELECT @@ROWCOUNT AS AffectedRows")
+            affected_rows = cursor.fetchone()[0]
+
+            if affected_rows > 0:
+                return 1
+            else:
+                return 0
+
+    except Exception as e:
+        error = str(e)
+        return 8
+    finally:
+        connections['default'].close()
