@@ -417,7 +417,7 @@ def busquedaCajaUpdate(request):
         dataCaja = consultaCajaUpdate(caja)
         dataDefectos = consultaDefectosCajaUpdate(caja)
         dataImagenes = []
-        if  dataCaja and dataDefectos:
+        if  dataCaja:
             pluFoto = consultaImagenes(caja, "P")
             cajaFoto = consultaImagenes(caja,"C") 
             dataImagenes = [pluFoto, cajaFoto]
