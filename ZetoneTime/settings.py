@@ -163,6 +163,18 @@ DATABASES = {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
     }
+    ,
+    'ZetoneApp': {
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'Zetoneapp',
+        'USER': 'sa',
+        'HOST': '10.32.26.34',
+        'PASSWORD': 'Sideswipe348',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    }
 }
 
 
