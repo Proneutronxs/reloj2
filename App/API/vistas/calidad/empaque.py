@@ -248,9 +248,8 @@ def busquedaCajaDia(request):
                 results = cursor.fetchone()
                 if results:
                     idBulto = str(results[0])
-                    marca = str(results[1])
-                    calidad = str(results[2])
-                    data = {'Id':idBulto, 'Marca':marca, 'Calidad':calidad}
+                    numCaja = str(results[1])
+                    data = {'IdBulto':idBulto, 'NumCaja':numCaja}
                     Data.append(data)
                     return JsonResponse({'Message': 'Success', 'Caja': Data})
                 else:
