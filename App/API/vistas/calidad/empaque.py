@@ -414,8 +414,8 @@ def busquedaCajaUpdate(request):
     if request.method == 'POST':
         body = request.body.decode('utf-8')
         caja = str(json.loads(body)['Caja'])
-        dataCaja = []
-        dataDefectos = []
+        dataCaja = consultaCajaUpdate(caja)
+        dataDefectos = consultaDefectosCajaUpdate(caja)
         dataImagenes = []
         if  dataCaja and dataDefectos:
             pluFoto = consultaImagenes(caja, "P")
