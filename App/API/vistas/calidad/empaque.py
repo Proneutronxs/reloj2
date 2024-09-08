@@ -80,7 +80,7 @@ def busquedaCaja(request):
         return JsonResponse(response_data)
     
 def consultaExisteCaja(IdCaja):
-    values = [IdCaja]
+    values = (IdCaja,)
     try:
         with connections['ZetoneApp'].cursor() as cursor:
             sql = """
@@ -194,7 +194,7 @@ def insertaCaja(IdCaja, numeroCaja, Fecha, Hora, PesoNeto, PesoBruto, PLU, Obser
         return False
     
 def insertaImagen(IdCaja, Imagen, Tipo,):
-    values = [IdCaja, Tipo, Imagen]
+    values = (IdCaja, Tipo, Imagen)
     try:
         with connections['ZetoneApp'].cursor() as cursor:
             sql = """
