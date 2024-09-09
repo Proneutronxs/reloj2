@@ -15,7 +15,7 @@ from django.db import connections
 def busquedaCaja(request):
     if request.method == 'POST':
         body = request.body.decode('utf-8')
-        caja = str(json.loads(body)['caja'])
+        caja = str(json.loads(body)['Caja'])
         values = [caja]
         Data = []
         try:
@@ -399,7 +399,7 @@ def consultaDefectosCajaUpdate(IdCaja):
                 rameado = str(results[38])
                 data = {'Id':idBulto, 'Fecha':fecha, 'Hora':hora, 'Neto':pNeto, 'Bruto':pBruto, 'PLU':plu, 'Obs':obs, 'Deformada':deformadas, 'Incorrecto':tIncorrecto, 'Color':fColor,
                         'Russeting':russeting, 'Heladas':heladas, 'RBins':roceBins, 'Asoleado':asoleado, 'Quemado':quemado, 'Fitotoxicidad':fito, 'Rolado':rolado, 'Golpes':golpes,
-                        'Heridad':heridas, 'HViejas':hViejas, 'Craking':craking, 'Bitterpit':bitter, 'Granizo':granizo, 'DañoInsecto':dañoInsecto, 'Pedunculo':fPedunculo, 'Desvio':desvio,
+                        'Heridas':heridas, 'HViejas':hViejas, 'Craking':craking, 'Bitterpit':bitter, 'Granizo':granizo, 'DañoInsecto':dañoInsecto, 'Pedunculo':fPedunculo, 'Desvio':desvio,
                         'SFlor':sFlor, 'Madurez':madurez, 'Deshidratacion': deshidratacion, 'Decaimiento':decaimiento, 'MHumedo':mHumedo, 'MSeco':mSeco, 'MAcuoso':mAcuoso, 'PulpaMax':pulpaMax,
                         'PulpaMin':pulpaMin, 'PulpaPro':pulpaPro, 'Boro':fBoro,'Maquina':maquina, 'Rameado':rameado}
                 Data.append(data)
