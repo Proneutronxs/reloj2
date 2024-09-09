@@ -242,16 +242,17 @@ def busquedaCajaDia(request):
                 sql = """ 
                         SELECT IdCaja, numeroCaja 
                         FROM DefectosCaja
-                        WHERE (IdCaja > 17988845 AND fecha = %s)
+                        WHERE CONVERT(DATE, Fecha) = %s
                     """
                 cursor.execute(sql, values)
-                results = cursor.fetchone()
+                results = cursor.fetchall()
                 if results:
-                    idBulto = str(results[0])
-                    numCaja = str(results[1])
-                    data = {'IdBulto':idBulto, 'NumCaja':numCaja}
-                    Data.append(data)
-                    return JsonResponse({'Message': 'Success', 'Caja': Data})
+                    for row in results:
+                        idBulto = str(row[0])
+                        numCaja = str(row[1])
+                        data = {'IdBulto':idBulto, 'NumCaja':numCaja}
+                        Data.append(data)
+                        return JsonResponse({'Message': 'Success', 'Caja': Data})
                 else:
                     data = "No se encontraron Datos."
                     return JsonResponse({'Message': 'Error', 'Nota': data}) 
