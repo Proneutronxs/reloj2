@@ -421,7 +421,7 @@ def busquedaCajaUpdate(request):
         if  dataCaja and dataDefectos:
             pluFoto = consultaImagenes(caja, "P")
             cajaFoto = consultaImagenes(caja,"C") 
-            dataImagenes = [pluFoto, cajaFoto]
+            dataImagenes = [{'Plu':pluFoto, 'Caja':cajaFoto}]
             return JsonResponse({'Message': 'Success', 'DataCaja': dataCaja, 'DataDefectos':dataDefectos, 'DataImagenes':dataImagenes})
         else:
             data = "No se encontraron Datos."
