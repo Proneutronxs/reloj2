@@ -252,7 +252,7 @@ def busquedaCajaDia(request):
                         numCaja = str(row[1])
                         data = {'IdBulto':idBulto, 'NumCaja':numCaja}
                         Data.append(data)
-                        return JsonResponse({'Message': 'Success', 'Caja': Data})
+                    return JsonResponse({'Message': 'Success', 'Cajas': Data})
                 else:
                     data = "No se encontraron Datos."
                     return JsonResponse({'Message': 'Error', 'Nota': data}) 
