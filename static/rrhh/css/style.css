@@ -650,13 +650,13 @@ input[type="checkbox"].input-checkbox {
 }
 
 .tbc-imagen-plu {
-  width: 1em;
-  height: 1em;
+  width: 5em;
+  height: 5em;
   border: 1px solid #000;
 }
 .tbc-imagen-caja {
-  width: 3em;
-  height: 5em;
+  width: 16em;
+  height: 24em;
   border: 1px solid #000;
 }
 
