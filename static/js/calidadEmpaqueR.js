@@ -159,7 +159,6 @@ const buscarCajas = async () => {
                                         <div class="tbc-image-plu">
                                             <p>Imagen PLU</p>
                                             <img src="${datos.FotoPlu !== '0' ? 'http://191.97.47.114:8000/api/calidad/caja/${datos.FotoPlu}' : 'http://191.97.47.114:8000/api/calidad/caja/nodisponible.png'}" alt="Imagen PLU" class="tbc-imagen">
-                                            <img src="http://191.97.47.114:8000/api/calidad/caja/${datos.FotoPlu}" alt="Imagen PLU" class="tbc-imagen">
                                         </div>
                                         <div class="tbc-image-caja">
                                             <p>Imagen Caja</p>
