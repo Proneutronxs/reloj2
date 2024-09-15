@@ -158,11 +158,12 @@ const buscarCajas = async () => {
                                     <div class="tbc-right-section">
                                         <div class="tbc-image-plu">
                                             <p>Imagen PLU</p>
-                                            <img src="{% static 'imagenes/plu_18127091.jpeg' %}" alt="Imagen PLU" class="tbc-imagen">
+                                            <img src="${datos.FotoPlu !== '0' ? 'http://191.97.47.114:8000/api/calidad/caja/${datos.FotoPlu}' : 'http://191.97.47.114:8000/api/calidad/caja/nodisponible.png'}" alt="Imagen PLU" class="tbc-imagen">
+                                            <img src="http://191.97.47.114:8000/api/calidad/caja/${datos.FotoPlu}" alt="Imagen PLU" class="tbc-imagen">
                                         </div>
                                         <div class="tbc-image-caja">
                                             <p>Imagen Caja</p>
-                                            <img src="{% static 'imagenes/caja_18127091.jpeg' %}" alt="Imagen Caja" class="tbc-imagen">
+                                            <img src="${datos.FotoCaja !== '0' ? 'http://191.97.47.114:8000/api/calidad/caja/${datos.FotoCaja}' : 'http://191.97.47.114:8000/api/calidad/caja/nodisponible.png'}" alt="Imagen Caja" class="tbc-imagen">
                                         </div>
                                     </div>
                                 </div>
