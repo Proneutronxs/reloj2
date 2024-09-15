@@ -11,15 +11,25 @@ from App.Empaque.modelosPDF.modelosPDF import *
 import os
 import matplotlib.pyplot as plt
 from django.db import connections
-
 from App.Empaque.forms import *
-##LOGIN
 from django.contrib.auth.decorators import login_required
-# Create your views here.
+
 
 @login_required
 def indexEmpaque(request):
     return render (request, 'Empaque/Inicio/index.html')
+
+@login_required
+def newIndexEmpaque(request):
+    return render (request, 'Empaque/Inicio/indexEmpaque.html')
+
+@login_required
+def newReportes(request):
+    return render (request, 'Empaque/Reportes/newReportes.html')
+
+@login_required
+def ReportesEmpaqueCalidad(request):
+    return render (request, 'Empaque/Reportes/calidadEmpaqueR.html')
 
 @login_required
 def reportes_camaras(request):
@@ -105,7 +115,6 @@ def delete_jpeg_files_control_camaras():
     for filename in os.listdir(directory):
         if filename.endswith('.JPEG'):
             os.remove(os.path.join(directory, filename))
-
 
 def consultaTopCaja(fecha):
     try:
@@ -216,18 +225,18 @@ def post_busqueda_reporte_camaras(request):
                             index = index + 1
                     fecha = fechaReporte.replace('/', '')
                     name = "Reporte_Control_Cámaras_" + fecha + '.pdf'
-                    pdf.output('App/Empaque/data/pdf/' + name, 'F') 
-                    delete_jpeg_files_control_camaras() 
-                    jsonList = json.dumps({'message': 'Success', 'pdf': name}) 
+                    pdf.output('App/Empaque/data/pdf/' + name, 'F')
+                    delete_jpeg_files_control_camaras()
+                    jsonList = json.dumps({'message': 'Success', 'pdf': name})
                     return JsonResponse(jsonList, safe=False)
 
                 else:
-                    jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
+                    jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)})
                     return JsonResponse(jsonList, safe=False)
-                
+
             except Exception as e:
                 error = "Ocurrió un error: " + str(e)
-                jsonList = json.dumps({'message': error}) 
+                jsonList = json.dumps({'message': error})
                 return JsonResponse(jsonList, safe=False)
         elif str(Tipo) == "Control Empaque":
             Top_Caja = consultaTopCaja(fecha)
@@ -446,20 +455,20 @@ def post_busqueda_reporte_camaras(request):
                                 index = 0
                         name_pdf = "Control_Empaque_" + str(fecha) + ".pdf"
                         pdf.output('App/Empaque/data/pdf/' + name_pdf, 'F')
-                        jsonList = json.dumps({'message': 'Success', 'pdf': name_pdf}) 
+                        jsonList = json.dumps({'message': 'Success', 'pdf': name_pdf})
                         return JsonResponse(jsonList, safe=False)
                     else:
-                        jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
+                        jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)})
                         return JsonResponse(jsonList, safe=False)
                 except Exception as e:
                     error = "Ocurrió un error: " + str(e)
-                    jsonList = json.dumps({'message': error}) 
+                    jsonList = json.dumps({'message': error})
                     return JsonResponse(jsonList, safe=False)
                 finally:
                     cursor.close()
                     conexion.close()
             else:
-                jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
+                jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)})
                 return JsonResponse(jsonList, safe=False)
         elif str(Tipo) == "Control Descarte":
             try:
@@ -631,14 +640,14 @@ def post_busqueda_reporte_camaras(request):
                     name_fecha = str(fecha).replace('-','')
                     name = "Control_Descarte_" + name_fecha + '.pdf'
                     pdf.output('App/Empaque/data/pdf/' + name, 'F')
-                    jsonList = json.dumps({'message': 'Success', 'pdf': name}) 
+                    jsonList = json.dumps({'message': 'Success', 'pdf': name})
                     return JsonResponse(jsonList, safe=False)
                 else:
-                    jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
+                    jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)})
                     return JsonResponse(jsonList, safe=False)
             except Exception as e:
                     error = "Ocurrió un error: " + str(e)
-                    jsonList = json.dumps({'message': error}) 
+                    jsonList = json.dumps({'message': error})
                     return JsonResponse(jsonList, safe=False)
             finally:
                 cursor.close()
@@ -646,10 +655,10 @@ def post_busqueda_reporte_camaras(request):
         elif str(Tipo) == "Control Presiones":
             if  listaHoras(fecha) == 5:
                 error = "Ocurrió un error en la conexión."
-                jsonList = json.dumps({'message': error}) 
+                jsonList = json.dumps({'message': error})
                 return JsonResponse(jsonList, safe=False)
             elif listaHoras(fecha) == 0:
-                jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
+                jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)})
                 return JsonResponse(jsonList, safe=False)
             else:
                 ##CONSIGUIÓ LAS HORAS
@@ -707,7 +716,7 @@ def post_busqueda_reporte_camaras(request):
                 name = "Control_Presiones_" + name_fecha + '.pdf'
                 pdf.output('App/Empaque/data/pdf/' + name, 'F')
                 delete_png_files()
-                jsonList = json.dumps({'message': 'Success', 'pdf': name}) 
+                jsonList = json.dumps({'message': 'Success', 'pdf': name})
                 return JsonResponse(jsonList, safe=False)
         elif str(Tipo) == "Ingreso Bascula":
 
@@ -736,7 +745,7 @@ def post_busqueda_reporte_camaras(request):
                         chacrasPorVariedad = traeChacrasPorVariedadFecha(variedad,fecha)
                         InsertaDataPrueba(fecha, str(chacrasPorVariedad))
                         for chacra in chacrasPorVariedad:
-                            #print(chacra + " ##### CHACRA #####") ### ID CHACRA 
+                            #print(chacra + " ##### CHACRA #####") ### ID CHACRA
                             Listados = detalleGeneral(variedad,fecha,chacra)
                             nombreChacra = traeNombreChacra(chacra)
                             pdf.set_font('Arial', 'B', 12)
@@ -771,22 +780,21 @@ def post_busqueda_reporte_camaras(request):
                     name_fecha = str(fecha).replace('-','')
                     name = "Ingreso_Bascula_" + name_fecha + '.pdf'
                     pdf.output('App/Empaque/data/pdf/' + name, 'F')
-                    jsonList = json.dumps({'message': 'Success', 'pdf': name}) 
+                    jsonList = json.dumps({'message': 'Success', 'pdf': name})
                     return JsonResponse(jsonList, safe=False)
                 except Exception as e:
                     error = str(e)
                     InsertaDataPrueba("PDF", error)
-                    jsonList = json.dumps({'message': error}) 
+                    jsonList = json.dumps({'message': error})
                     return JsonResponse(jsonList, safe=False)
-                
+
             else:
-                jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)}) 
+                jsonList = json.dumps({'message': 'No se encontraron Reportes para la fecha: ' + str(fecha)})
                 return JsonResponse(jsonList, safe=False)
     else:
         error = "Ocurrió un error: "
-        jsonList = json.dumps({'message': error}) 
+        jsonList = json.dumps({'message': error})
         return JsonResponse(jsonList, safe=False)
-    
 
 def data_x(fecha,hora):
     try:
@@ -910,7 +918,7 @@ def modelo(fecha):
         consultaPDF = cursorZetoneApp.fetchone()
         if consultaPDF:
             pdf = "Reporte_Camaras_Calidad_.pdf"
-            jsonList = json.dumps({'message':'Success', 'pdf': pdf}) 
+            jsonList = json.dumps({'message':'Success', 'pdf': pdf})
             return JsonResponse(jsonList, safe=False)
         else:
             data_camaras = []
@@ -919,27 +927,26 @@ def modelo(fecha):
                 cursorZetoApp = ZetoApp.cursor()
                 consulta_data_camaras = ("SELECT Fecha, Hora, Observaciones, Usuario FROM Reporte_Control_Camaras WHERE Fecha='" + str(fecha) + "'")
                 cursorZetoApp.execute(consulta_data_camaras)
-                
+
             except Exception as e:
                 print(e)
                 error = str(e)
-                jsonList = json.dumps({'message': error}) 
+                jsonList = json.dumps({'message': error})
                 return JsonResponse(jsonList, safe=False)
             finally:
                 cursorZetoApp.close()
                 ZetoApp.close()
 
 
-            jsonList = json.dumps({'message':'Not Found'}) 
+            jsonList = json.dumps({'message':'Not Found'})
             return JsonResponse(jsonList, safe=False)
     except Exception as e:
         error = str(e)
-        jsonList = json.dumps({'message': error}) 
+        jsonList = json.dumps({'message': error})
         return JsonResponse(jsonList, safe=False)
     finally:
         cursorZetoneApp.close()
         ZetoneApp.close()
-
 
 def recolecta_horas_control_camaras(request, fecha):
     try:
@@ -954,18 +961,18 @@ def recolecta_horas_control_camaras(request, fecha):
                 lista_horas.append(i)
                 print(i)
         else:
-            jsonList = json.dumps({'message':'No se encontraron reportes'}) 
+            jsonList = json.dumps({'message':'No se encontraron reportes'})
             return JsonResponse(jsonList, safe=False)
-            
+
     except Exception as e:
         error = str(e)
-        jsonList = json.dumps({'message': error}) 
+        jsonList = json.dumps({'message': error})
         return JsonResponse(jsonList, safe=False)
     finally:
         cursorZetoneApp.close()
-        ZetoneApp.close()    
+        ZetoneApp.close()
 
-### CONSULTA VARIEDAD PRESIONES 
+### CONSULTA VARIEDAD PRESIONES
 def consultaVariedad(fecha,idGalpon):
     try:
         conexion = zetoneApp()
@@ -1053,14 +1060,13 @@ def traeVeriedades_Fecha(fecha):
             cursor.execute(sql, [fecha])
             consulta = cursor.fetchall()
             if consulta:
-                results = [] 
+                results = []
                 for i in consulta:
                     results.append(str(i[0]))
             return results
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("traeVeriedades_Fecha", error)
-
 
 def traeCantBinsPorFecha_variedad(fecha,variedad):
     try:
@@ -1103,7 +1109,7 @@ def traeChacrasPorVariedadFecha(variedad,fecha):
             cursor.execute(sql, [variedad,fecha])
             consulta = cursor.fetchall()
             if consulta:
-                results = [] 
+                results = []
                 for i in consulta:
                     results.append(str(i[0]))
             InsertaDataPrueba("traeChacrasPorVariedadFecha", str(results))
@@ -1122,22 +1128,22 @@ def detalleGeneral(variedad,fecha,chacra):
                 SET @@Variedad = %s;
                 SET @@Fecha = %s;
                 SET @@Productor = %s;
-                SELECT        USR_MCLOTE_1.USR_LOTE_NUMERO AS LOTE, USR_MCCHACRA.USR_CHAC_NOMBRE AS PRODUCTOR, USR_MCVARIED.USR_VAR_NOMBRE AS VARIEDAD, USR_MCLOTE_1.USR_LOTE_CANTBINS AS CANT_BINS, 
+                SELECT        USR_MCLOTE_1.USR_LOTE_NUMERO AS LOTE, USR_MCCHACRA.USR_CHAC_NOMBRE AS PRODUCTOR, USR_MCVARIED.USR_VAR_NOMBRE AS VARIEDAD, USR_MCLOTE_1.USR_LOTE_CANTBINS AS CANT_BINS,
                                         CalidadControl_1.idCalidad AS ID_CALIDAD, USR_MCLOTE_1.USR_VAR_ALIAS AS ID_VARIEDAD,
                                             (SELECT        SUM(USR_MCLOTE.USR_LOTE_CANTBINS) AS Expr1
                                             FROM            Trazabilidad.dbo.CalidadControl INNER JOIN
                                                                         Trazabilidad.dbo.LoteCalidad INNER JOIN
                                                                         USR_MCLOTE ON Trazabilidad.dbo.LoteCalidad.LoteNumero = USR_MCLOTE.USR_LOTE_NUMERO ON Trazabilidad.dbo.CalidadControl.idLote = USR_MCLOTE.USR_LOTE_NUMERO
-                                            WHERE        (USR_MCLOTE.USR_VAR_ALIAS = @@VARIEDAD) AND (CONVERT(DATE, Trazabilidad.dbo.LoteCalidad.FechaIngresoCalidad) = @@FECHA)) AS TOTAL_BINS, 
+                                            WHERE        (USR_MCLOTE.USR_VAR_ALIAS = @@VARIEDAD) AND (CONVERT(DATE, Trazabilidad.dbo.LoteCalidad.FechaIngresoCalidad) = @@FECHA)) AS TOTAL_BINS,
                                 CONVERT(VARCHAR(10),CalidadControl_1.FechaCalidad, 103) AS FECHA
                 FROM            Trazabilidad.dbo.CalidadControl AS CalidadControl_1 INNER JOIN
                                         Trazabilidad.dbo.LoteCalidad AS LoteCalidad_1 INNER JOIN
                                         USR_MCLOTE AS USR_MCLOTE_1 INNER JOIN
-                                        USR_MCVARIED ON USR_MCLOTE_1.USR_VAR_ALIAS = USR_MCVARIED.USR_VAR_ALIAS ON LoteCalidad_1.LoteNumero = USR_MCLOTE_1.USR_LOTE_NUMERO ON 
+                                        USR_MCVARIED ON USR_MCLOTE_1.USR_VAR_ALIAS = USR_MCVARIED.USR_VAR_ALIAS ON LoteCalidad_1.LoteNumero = USR_MCLOTE_1.USR_LOTE_NUMERO ON
                                         CalidadControl_1.idLote = USR_MCLOTE_1.USR_LOTE_NUMERO INNER JOIN
                                         USR_MCMOVCAM ON USR_MCLOTE_1.USR_MC_NUMERO = USR_MCMOVCAM.USR_MC_NUMERO INNER JOIN
                                         USR_MCCHACRA ON USR_MCMOVCAM.USR_CHAC_ALIAS = USR_MCCHACRA.USR_CHAC_ALIAS
-                WHERE        (USR_MCLOTE_1.USR_VAR_ALIAS = @@VARIEDAD) 
+                WHERE        (USR_MCLOTE_1.USR_VAR_ALIAS = @@VARIEDAD)
                                 AND (CONVERT(DATE, LoteCalidad_1.FechaIngresoCalidad) = @@FECHA)
                                 AND USR_MCCHACRA.USR_CHAC_ALIAS = @@Productor
                 ORDER BY PRODUCTOR
@@ -1148,7 +1154,6 @@ def detalleGeneral(variedad,fecha,chacra):
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("detalleGeneral", error)
-
 
 def presiones(idCalidad):
     try:
@@ -1190,7 +1195,6 @@ def detallesControl(idCalidad):
         error = str(e)
         InsertaDataPrueba("detallesControl", error)
 
-
 def traeNombreChacra(idChacra):
     try:
         with connections['General'].cursor() as cursor:
@@ -1224,7 +1228,7 @@ def traeNombreVariedad(idVariedad):
     except Exception as e:
         error = str(e)
         InsertaDataPrueba("traeNombreVariedad", error)
-        
+
 def formatear_fecha(fecha_str):
     fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d')
     fecha_formateada = fecha_obj.strftime('%d/%m/%Y')
@@ -1250,6 +1254,367 @@ def InsertaDataPrueba(funcion,json):
         return 8
     finally:
         connections['default'].close()
+
+def decodificaImagen(IdBulto,tipo):
+    nombre1 = "_caja.jpeg"
+    if tipo == 'P':
+        nombre1 = "_plu.jpeg"
+    imagen = base64.b64decode(traeTextImagen(IdBulto,tipo))
+    nombre = "new_calidad_image_"+ str(IdBulto) + nombre1
+    with open('App/API/media/images/Calidad/reportes_empaque/' + nombre , "wb") as image:
+        image.write(imagen)
+    return nombre
+
+
+def vizualizarImagen(request, nombre):
+    ruta_imagenes = 'App/API/media/images/Calidad/reportes_empaque/'
+
+    ruta_completa = os.path.join(ruta_imagenes, nombre)
+
+    if os.path.exists(ruta_completa):
+        with open(ruta_completa, 'rb') as archivo_imagen:
+            respuesta = HttpResponse(archivo_imagen.read(), content_type='image/jpeg')
+            respuesta['Content-Disposition'] = 'inline; filename=' + os.path.basename(ruta_completa)
+            return respuesta
+    else:
+        return HttpResponse(status=404)
+
+@csrf_exempt
+def consultaCajas(request):
+    if request.method == 'POST':
+        inicio = str(request.POST.get('Inicio'))
+        final = str(request.POST.get('Final'))
+        empaque = str(request.POST.get('Empaque'))
+        values = [inicio,final,empaque]
+        try:
+            with connections['Trazabilidad'].cursor() as cursor:
+                sql = """
+                    DECLARE @@Inicio DATE;
+                    DECLARE @@Final DATE;
+                    DECLARE @@Galpon INT;
+
+                    SET @@Inicio = %s
+                    SET @@Final = %s
+                    SET @@Galpon = %s
+
+                    SELECT
+                        Bulto.Id_bulto AS id, Marca.Nombre_marca AS Marca, Calidad.nombre_calidad AS Calidad,
+                        Variedad.nombre_variedad AS Variedad, Especie.nombre_especie AS Especie,
+                        CASE WHEN Bulto.id_galpon = '8' THEN 'MANZANA' WHEN Bulto.id_galpon = '5' THEN 'PERA' ELSE 'OTRO' END AS Galpon,
+                        Envase.nombre_envase AS Envase,Calibre.nombre_calibre AS Calibre, General.dbo.USR_MCCUADRO.USR_CUAD_UMI AS UMI,
+                        General.dbo.USR_MCCUADRO.USR_CUAD_UP AS UP, Embalador.nombre_embalador AS Embalador, General.dbo.USR_MCLOTE.USR_LOTE_NUMERO AS Lote,
+                        CONVERT(varchar(10), Bulto.fecha_alta_bulto, 103) AS Fecha, CONVERT(varchar(8), Bulto.fecha_alta_bulto, 108) AS Hora,
+                        Caja.NumeroCaja, CONVERT(varchar(10), Caja.Fecha, 3) AS Caja_Fecha, CONVERT(varchar(8), Caja.Hora, 108) AS Caja_Hora,
+                        Caja.PesoNeto, Caja.PesoBruto, Caja.PLU, Caja.Observaciones, Caja.Deformadas, Caja.TamañoIncorrecto, Caja.FaltaDeColor,
+                        Caja.Russeting, Caja.Heladas, Caja.roceBins, Caja.Asoleado, Caja.QuemadoPorSol, Caja.Fitotoxicidad, Caja.Rolado,
+                        Caja.Golpes, Caja.Heridas, Caja.HeridasViejas, Caja.Cracking, Caja.Bitterpit, Caja.Granizo, Caja.DañoPorInsecto,
+                        Caja.FaltaDePedunculo, Caja.DesvioDeClasificacion, Caja.SegundaFlor, Caja.Madurez, Caja.Deshidratacion, Caja.Decaimiento,
+                        Caja.MohoHumedo, Caja.MohoSeco, Caja.MohoAcuoso, Caja.FirmezaPulpaMax, Caja.FirmezaPulpaMin, Caja.FirmezaPulpaPromedio,
+                        Caja.faltaDeBoro, Caja.Maquina, Caja.Rameado
+                    FROM
+                        Especie INNER JOIN
+                        Variedad ON Especie.id_especie = Variedad.id_especie INNER JOIN
+                        Bulto INNER JOIN
+                        Configuracion ON Bulto.id_configuracion = Configuracion.id_configuracion INNER JOIN
+                        Marca ON Configuracion.id_marca = Marca.id_marca INNER JOIN
+                        Calidad ON Configuracion.id_calidad = Calidad.Id_calidad
+                            ON Variedad.Id_variedad = Configuracion.id_variedad INNER JOIN
+                        Envase ON Configuracion.id_envase = Envase.id_envase INNER JOIN
+                        Calibre ON Configuracion.id_calibre = Calibre.Id_calibre INNER JOIN
+                        LoteEtiquetado ON Bulto.id_loteEtiquetado = LoteEtiquetado.id_loteEtiquetado INNER JOIN
+                        General.dbo.USR_MCLOTE ON LoteEtiquetado.id_lote = General.dbo.USR_MCLOTE.USR_LOTE_NUMERO INNER JOIN
+                        General.dbo.USR_MCCUADRO ON General.dbo.USR_MCLOTE.USR_CUAD_ALIAS = General.dbo.USR_MCCUADRO.USR_CUAD_ALIAS INNER JOIN
+                        Embalador ON Bulto.id_embalador = Embalador.Id_embalador INNER JOIN
+                        General.dbo.USR_MCCHACRA ON General.dbo.USR_MCCUADRO.USR_CHAC_ALIAS = General.dbo.USR_MCCHACRA.USR_CHAC_ALIAS INNER JOIN
+                        [ZETONE-APP].[Zetoneapp].[dbo].[DefectosCaja] AS Caja ON Bulto.Id_bulto = Caja.IdCaja
+                    WHERE
+                        (Bulto.Id_bulto > 17988845)
+                        AND CONVERT(DATE,Caja.Fecha) >= @@Inicio
+                        AND CONVERT(DATE,Caja.Fecha) <= @@Final
+                        AND (@@Galpon = '0' OR Bulto.id_galpon = @@Galpon)
+                     """
+                cursor.execute(sql, values)
+                results = cursor.fetchall()
+                if results:
+                    listadoCaja = []
+                    for row in results:
+                        idBulto = str(row[0])
+                        nombreCaja = '0'
+                        nombrePlu = '0'
+                        if extraeImagen(idBulto,"C") != '0':
+                            nombreCaja = extraeImagen(idBulto,"C")
+                        if extraeImagen(idBulto,"P") != '0':
+                            nombrePlu = extraeImagen(idBulto,"P")
+                        datos = {
+                            "idBulto": str(row[0]),
+                            "Marca": str(row[1]),
+                            "Calidad": str(row[2]),
+                            "Variedad": str(row[3]),
+                            "Especie": str(row[4]),
+                            "Galpon": str(row[5]),
+                            "Envase": str(row[6]),
+                            "Calibre": str(row[7]),
+                            "UMI": str(row[8]),
+                            "UP": str(row[9]),
+                            "Embalador": str(row[10]),
+                            "Lote": str(row[11]),
+                            "Fecha": str(row[12]),
+                            "Hora": str(row[13]),
+                            "IdCaja": str(row[14]),
+                            "Caja_Fecha": str(row[15]),
+                            "Caja_Hora": str(row[16]),
+                            "PesoNeto": str(row[17]),
+                            "PesoBruto": str(row[18]),
+                            "PLU": str(row[19]),
+                            "Observaciones": str(row[20]),
+                            "Deformadas": str(row[21]),
+                            "TamañoIncorrecto": str(row[22]),
+                            "FaltaDeColor": str(row[23]),
+                            "Russeting": str(row[24]),
+                            "Heladas": str(row[25]),
+                            "roceBins": str(row[26]),
+                            "Asoleado": str(row[27]),
+                            "QuemadoPorSol": str(row[28]),
+                            "Fitotoxicidad": str(row[29]),
+                            "Rolado": str(row[30]),
+                            "Golpes": str(row[31]),
+                            "Heridas": str(row[32]),
+                            "HeridasViejas": str(row[33]),
+                            "Cracking": str(row[34]),
+                            "Bitterpit": str(row[35]),
+                            "Granizo": str(row[36]),
+                            "DañoPorInsecto": str(row[37]),
+                            "FaltaDePedunculo": str(row[38]),
+                            "DesvioDeClasificacion": str(row[39]),
+                            "SegundaFlor": str(row[40]),
+                            "Madurez": str(row[41]),
+                            "Deshidratacion": str(row[42]),
+                            "Decaimiento": str(row[43]),
+                            "MohoHumedo": str(row[44]),
+                            "MohoSeco": str(row[45]),
+                            "MohoAcuoso": str(row[46]),
+                            "FirmezaPulpaMax": str(row[47]),
+                            "FirmezaPulpaMin": str(row[48]),
+                            "FirmezaPulpaPromedio": str(row[49]),
+                            "faltaDeBoro": str(row[50]),
+                            "Maquina": str(row[51]),
+                            "Rameado": str(row[52]),
+                            "FotoCaja": nombreCaja,
+                            "FotoPlu": nombrePlu                            
+                        }
+                        listadoCaja.append(datos)
+                    return JsonResponse({'Message': 'Success', 'DataCaja': listadoCaja})
+                else:
+                    data = "No se encontraron Datos."
+                    return JsonResponse({'Message': 'Error', 'Nota': data}) 
+        except Exception as e:
+            error = str(e)
+            response_data = {'Message': 'Error','Nota': error}
+            return JsonResponse(response_data)
+        finally:
+            connections['Trazabilidad'].close()
+    else:
+        response_data = {
+            'Message': 'No se pudo resolver la petición.'
+        }
+        return JsonResponse(response_data)
+
+def extraeImagen(IdBulto, Tipo):
+    values = [IdBulto, Tipo]
+    try:
+        with connections['ZetoneApp'].cursor() as cursor:
+            sql = """
+                DECLARE @@IdCaja INT;
+                DECLARE @@Tipo VARCHAR(2);
+                SET @@IdCaja = %s;
+                SET @@Tipo = %s;
+                SELECT CASE
+                    WHEN  NOT EXISTS (
+                        SELECT 1
+                        FROM Imagenes_Cajas_Calidad
+                        WHERE IdCaja =@@IdCaja AND Tipo = @@Tipo) THEN '0'
+                    WHEN (SELECT NombreImagen
+                        FROM Imagenes_Cajas_Calidad
+                        WHERE IdCaja = @@IdCaja AND Tipo = @@Tipo) IS NULL THEN '1'
+                    ELSE (SELECT NombreImagen
+                        FROM Imagenes_Cajas_Calidad
+                        WHERE IdCaja = @@IdCaja AND Tipo = @@Tipo)
+                END AS CAJA
+            """
+            cursor.execute(sql, values)
+            consulta = cursor.fetchone()
+            if consulta:
+                if str(consulta[0]) == '0':
+                    return '0'
+                elif str(consulta[0]) == '1':
+                    nombre = decodificaImagen(IdBulto,Tipo)
+                    actualizanombreImagen(nombre,IdBulto,Tipo)
+                    return nombre
+                else:
+                    return str(consulta[0])
+    except Exception as e:
+        error = str(e)
+        InsertaDataPrueba("EXTRAE IMAGEN", error)
+        return '0'
+
+def traeTextImagen(IdBulto,Tipo):
+    try:
+        with connections['ZetoneApp'].cursor() as cursor:
+            sql = """
+                SELECT Imagen
+                FROM Imagenes_Cajas_Calidad
+                WHERE IdCaja = %s AND Tipo = %s
+            """
+            cursor.execute(sql, [IdBulto,Tipo])
+            consulta = cursor.fetchone()
+            if consulta:
+                return str(consulta[0])
+    except Exception as e:
+        error = str(e)
+        InsertaDataPrueba("traeTextImagen", error)
+        return "0"
+    
+def actualizanombreImagen(nombre,IdBulto,Tipo):
+    try:
+        with connections['ZetoneApp'].cursor() as cursor:
+            sql = """
+                UPDATE Imagenes_Cajas_Calidad SET NombreImagen = %s WHERE IdCaja = %s AND Tipo = %s
+            """
+            cursor.execute(sql, [nombre,IdBulto,Tipo])
+            consulta = cursor.fetchone()
+            if consulta:
+                return str(consulta[0])
+    except Exception as e:
+        error = str(e)
+        InsertaDataPrueba("Actualiza Nombre", error)
+
+def consultaDefectosCaja(IdCaja):
+    values = [IdCaja]
+    Data = []
+    try:
+        with connections['ZetoneApp'].cursor() as cursor:
+            sql = """
+                    SELECT IdCaja, CONVERT(varchar(10), Fecha, 3) AS Fecha, CONVERT(varchar(8), Hora, 108) AS Hora, PesoNeto, PesoBruto, PLU, Observaciones,
+                            Deformadas, TamañoIncorrecto, FaltaDeColor, Russeting, Heladas, roceBins, Asoleado, QuemadoPorSol, Fitotoxicidad, Rolado, Golpes,
+                            Heridas, HeridasViejas, Cracking, Bitterpit, Granizo, DañoPorInsecto, FaltaDePedunculo, DesvioDeClasificacion, SegundaFlor, Madurez,
+                            Deshidratacion, Decaimiento, MohoHumedo, MohoSeco, MohoAcuoso, FirmezaPulpaMax, FirmezaPulpaMin, FirmezaPulpaPromedio, faltaDeBoro, Maquina, Rameado
+                    FROM DefectosCaja
+                    WHERE IdCaja = %s
+                """
+            cursor.execute(sql, values)
+            results = cursor.fetchone()
+            if results:
+                idBulto = str(results[0])
+                fecha = str(results[1])
+                hora = str(results[2])
+                pNeto = str(results[3])
+                pBruto = str(results[4])
+                plu = str(results[5])
+                obs = str(results[6])
+                deformadas = str(results[7])
+                tIncorrecto = str(results[8])
+                fColor = str(results[9])
+                russeting = str(results[10])
+                heladas = str(results[11])
+                roceBins = str(results[12])
+                asoleado = str(results[13])
+                quemado = str(results[14])
+                fito = str(results[15])
+                rolado = str(results[16])
+                golpes = str(results[17])
+                heridas = str(results[18])
+                hViejas = str(results[19])
+                craking = str(results[20])
+                bitter = str(results[21])
+                granizo = str(results[22])
+                dañoInsecto = str(results[23])
+                fPedunculo = str(results[24])
+                desvio = str(results[25])
+                sFlor = str(results[26])
+                madurez = str(results[27])
+                deshidratacion = str(results[28])
+                decaimiento = str(results[29])
+                mHumedo = str(results[30])
+                mSeco = str(results[31])
+                mAcuoso = str(results[32])
+                pulpaMax = str(results[33])
+                pulpaMin = str(results[34])
+                pulpaPro = str(results[35])
+                fBoro = str(results[36])
+                maquina = str(results[37])
+                rameado = str(results[38])
+                data = {'Id':idBulto, 'Fecha':fecha, 'Hora':hora, 'Neto':pNeto, 'Bruto':pBruto, 'PLU':plu, 'Obs':obs, 'Deformada':deformadas, 'Incorrecto':tIncorrecto, 'Color':fColor,
+                        'Russeting':russeting, 'Heladas':heladas, 'RBins':roceBins, 'Asoleado':asoleado, 'Quemado':quemado, 'Fitotoxicidad':fito, 'Rolado':rolado, 'Golpes':golpes,
+                        'Heridas':heridas, 'HViejas':hViejas, 'Craking':craking, 'Bitterpit':bitter, 'Granizo':granizo, 'DañoInsecto':dañoInsecto, 'Pedunculo':fPedunculo, 'Desvio':desvio,
+                        'SFlor':sFlor, 'Madurez':madurez, 'Deshidratacion': deshidratacion, 'Decaimiento':decaimiento, 'MHumedo':mHumedo, 'MSeco':mSeco, 'MAcuoso':mAcuoso, 'PulpaMax':pulpaMax,
+                        'PulpaMin':pulpaMin, 'PulpaPro':pulpaPro, 'Boro':fBoro,'Maquina':maquina, 'Rameado':rameado}
+                Data.append(data)
+                return Data
+            return Data
+    except Exception as e:
+        error = str(e)
+        InsertaDataError("CONSULTA DEFECTOS CAJA UPDATE", error)
+        return Data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def InsertaDataError(funcion,json):
+
+    values = [funcion,json]
+    try:
+        with connections['default'].cursor() as cursor:
+            sql = """ INSERT INTO Data_Json (Funcion,FechaAlta,Json) VALUES (%s,GETDATE(),%s) """
+            cursor.execute(sql, values)
+            cursor.execute("SELECT @@ROWCOUNT AS AffectedRows")
+            affected_rows = cursor.fetchone()[0]
+
+            if affected_rows > 0:
+                return 1
+            else:
+                return 0
+
+    except Exception as e:
+        error = str(e)
+        return 8
+    finally:
+        connections['default'].close()
+
+
 # def a(fecha):
 #     try:
 #         conexion = Trazabilidad()
@@ -1265,7 +1630,7 @@ def InsertaDataPrueba(funcion,json):
 #         cursor.execute(sql)
 #         consulta = cursor.fetchall()
 #         if consulta:
-#             results = [] 
+#             results = []
 #             for i in consulta:
 #                 results.append(str(i[0]))
 #         return results
@@ -1320,7 +1685,7 @@ def InsertaDataPrueba(funcion,json):
 #         cursor.execute(sql)
 #         consulta = cursor.fetchall()
 #         if consulta:
-#             results = [] 
+#             results = []
 #             for i in consulta:
 #                 results.append(str(i[0]))
 #         return results
@@ -1341,22 +1706,22 @@ def InsertaDataPrueba(funcion,json):
 #                 SET @@Variedad = '""" + variedad + """';
 #                 SET @@Fecha = '""" + fecha + """';
 #                 SET @@Productor = '""" + chacra + """';
-#                 SELECT        USR_MCLOTE_1.USR_LOTE_NUMERO AS LOTE, USR_MCCHACRA.USR_CHAC_NOMBRE AS PRODUCTOR, USR_MCVARIED.USR_VAR_NOMBRE AS VARIEDAD, USR_MCLOTE_1.USR_LOTE_CANTBINS AS CANT_BINS, 
+#                 SELECT        USR_MCLOTE_1.USR_LOTE_NUMERO AS LOTE, USR_MCCHACRA.USR_CHAC_NOMBRE AS PRODUCTOR, USR_MCVARIED.USR_VAR_NOMBRE AS VARIEDAD, USR_MCLOTE_1.USR_LOTE_CANTBINS AS CANT_BINS,
 #                                         CalidadControl_1.idCalidad AS ID_CALIDAD, USR_MCLOTE_1.USR_VAR_ALIAS AS ID_VARIEDAD,
 #                                             (SELECT        SUM(USR_MCLOTE.USR_LOTE_CANTBINS) AS Expr1
 #                                             FROM            Trazabilidad.dbo.CalidadControl INNER JOIN
 #                                                                         Trazabilidad.dbo.LoteCalidad INNER JOIN
 #                                                                         USR_MCLOTE ON Trazabilidad.dbo.LoteCalidad.LoteNumero = USR_MCLOTE.USR_LOTE_NUMERO ON Trazabilidad.dbo.CalidadControl.idLote = USR_MCLOTE.USR_LOTE_NUMERO
-#                                             WHERE        (USR_MCLOTE.USR_VAR_ALIAS = @@VARIEDAD) AND (CONVERT(DATE, Trazabilidad.dbo.LoteCalidad.FechaIngresoCalidad) = @@FECHA)) AS TOTAL_BINS, 
+#                                             WHERE        (USR_MCLOTE.USR_VAR_ALIAS = @@VARIEDAD) AND (CONVERT(DATE, Trazabilidad.dbo.LoteCalidad.FechaIngresoCalidad) = @@FECHA)) AS TOTAL_BINS,
 #                                 CONVERT(VARCHAR(10),CalidadControl_1.FechaCalidad, 103) AS FECHA
 #                 FROM            Trazabilidad.dbo.CalidadControl AS CalidadControl_1 INNER JOIN
 #                                         Trazabilidad.dbo.LoteCalidad AS LoteCalidad_1 INNER JOIN
 #                                         USR_MCLOTE AS USR_MCLOTE_1 INNER JOIN
-#                                         USR_MCVARIED ON USR_MCLOTE_1.USR_VAR_ALIAS = USR_MCVARIED.USR_VAR_ALIAS ON LoteCalidad_1.LoteNumero = USR_MCLOTE_1.USR_LOTE_NUMERO ON 
+#                                         USR_MCVARIED ON USR_MCLOTE_1.USR_VAR_ALIAS = USR_MCVARIED.USR_VAR_ALIAS ON LoteCalidad_1.LoteNumero = USR_MCLOTE_1.USR_LOTE_NUMERO ON
 #                                         CalidadControl_1.idLote = USR_MCLOTE_1.USR_LOTE_NUMERO INNER JOIN
 #                                         USR_MCMOVCAM ON USR_MCLOTE_1.USR_MC_NUMERO = USR_MCMOVCAM.USR_MC_NUMERO INNER JOIN
 #                                         USR_MCCHACRA ON USR_MCMOVCAM.USR_CHAC_ALIAS = USR_MCCHACRA.USR_CHAC_ALIAS
-#                 WHERE        (USR_MCLOTE_1.USR_VAR_ALIAS = @@VARIEDAD) 
+#                 WHERE        (USR_MCLOTE_1.USR_VAR_ALIAS = @@VARIEDAD)
 #                                 AND (CONVERT(DATE, LoteCalidad_1.FechaIngresoCalidad) = @@FECHA)
 #                                 AND USR_MCCHACRA.USR_CHAC_ALIAS = @@Productor
 #                 ORDER BY PRODUCTOR

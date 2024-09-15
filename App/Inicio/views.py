@@ -83,7 +83,6 @@ def cambiar_password(request):
         data = "No se pudo resolver la petición"
         return JsonResponse({'Message': 'Error', 'Nota': data})
 
-
 ##FUNCIÓN DE RETORNO DE USUARIO
 def user_permissions(user, permissions):
     try:
@@ -117,6 +116,11 @@ def repassword(request):
 @login_required
 def inicioMenu(request):
     return render (request, 'Inicio/inicio.html')
+
+@login_required
+def newIndex(request):
+    return render (request, 'Inicio/newIndex.html')
+
 
 
 #FUNCION DE PERMISO GENERAL 

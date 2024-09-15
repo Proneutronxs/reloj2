@@ -411,7 +411,7 @@ def generate_public_link(file_name):
         'OCS-APIRequest': 'true',
         'Content-Type': 'application/json'
     }
-    share_url = 'http://191.97.47.105/ocs/v2.php/apps/files_sharing/api/v1/shares/'
+    share_url = 'http://191.97.47.114/ocs/v2.php/apps/files_sharing/api/v1/shares/'
     response = requests.post(share_url, auth=HTTPBasicAuth(NEXTCLOUD_USER, NEXTCLOUD_PASSWORD), headers=headers, params=params)
     if response.status_code == 200:
         share_data = response.json()

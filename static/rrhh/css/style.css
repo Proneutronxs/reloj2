@@ -471,6 +471,33 @@ input[type="checkbox"].input-checkbox {
 }
 
 
+.popup {
+  position: fixed;
+  bottom: 2rem;
+  right: -300px;
+  width: 250px;
+  height: auto;
+  background-color: #f0f0f0;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.551);
+  padding: 10px;
+  transition: right 0.3s ease;
+}
+
+.popup.active {
+  right: 0;
+}
+
+.close {
+  float: right;
+  cursor: pointer;
+}
+
+#openPopup {
+  margin-top: 20px;
+}
+
+
+
 /* Estilos de la clase columna-centrada */
 .columna-centrada {
   display: flex;
@@ -492,12 +519,153 @@ input[type="checkbox"].input-checkbox {
   padding-top: 15px;
 }
 
+.contenedor-restante{
+  position: absolute; /* O relative, dependiendo de tu estructura */
+  top: 60px; /* Ajusta este valor según el alto de tu menú header */
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 60px); /* 100vh es el alto total de la pantalla, ajusta el valor según el alto de tu menú header */
+  /* overflow: auto;  */
+}
+
+.cr-panel-control {
+  width: 80%;
+  margin: 20px auto;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.cr-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cr-col-3 {
+  width: 25%;
+  margin-right: 20px;
+}
+
+.cr-label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.cr-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.cr-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.cr-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cr-button:hover {
+  background-color: #3e8e41;
+}
+
+.fondo-items {
+  background-color: #d9ead3;
+}
 
 
 
 
 
 
+
+.tbc-header {
+  background-color: #d9ead3;
+  padding: 10px;
+  border-bottom: 2px solid #000;
+}
+
+.tbc-header table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.tbc-header td {
+  text-align: center;
+  font-weight: bold;
+  padding: 5px;
+}
+
+.tbc-content {
+  display: flex;
+  padding: 20px;
+}
+
+.tbc-left-section {
+  width: 60%;
+}
+
+.tbc-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.tbc-info-table td {
+  padding: 8px;
+  border: 1px solid #000;
+  text-align: center;
+}
+
+.tbc-defects table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tbc-defects td {
+  padding: 8px;
+  border: 1px solid #000;
+}
+
+.tbc-right-section {
+  width: 40%;
+  text-align: center;
+}
+
+.tbc-image-plu, .tbc-image-caja {
+  margin-bottom: 20px;
+}
+
+.tbc-imagen {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #000;
+}
+
+.box-border{
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid #000;
+}
+
+.tbc-listado-cajas{
+  padding: 25px;
+  max-height: calc(100vh - 60px - 130px);
+  overflow: auto; 
+}
 
 
 

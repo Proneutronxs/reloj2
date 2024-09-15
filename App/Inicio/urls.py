@@ -3,7 +3,9 @@ from App.Inicio import views
 
 urlpatterns = [
 
-    path('', views.inicioMenu, name="inicio_principal"),
+    path('old/', views.inicioMenu, name="inicio_principal"),
+
+    path('', views.newIndex, name="new_principal"),
 
     path('repassword/', views.repassword, name="repassword"),
 

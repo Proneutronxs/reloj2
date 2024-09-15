@@ -78,7 +78,6 @@ const change_password = async () => {
             mostrarInfo(nota,color) 
         }
     } catch (error) {
-        console.log(error)
         var nota = "Se produjo un error al procesar la solicitud.";
         var color = "red";
         mostrarInfo(nota,color); 
@@ -88,9 +87,6 @@ const change_password = async () => {
 document.getElementById("closePopup").addEventListener("click", function() {
     document.getElementById("popup").classList.remove("active");
 });
-
-
-
 
 function mostrarInfo(Message,Color) {
     document.getElementById("popup").classList.add("active");

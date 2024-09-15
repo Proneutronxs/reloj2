@@ -78,14 +78,15 @@ WSGI_APPLICATION = 'ZetoneTime.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-ip = '191.97.47.114'
+# ip = '191.97.47.114'
+ip = '10.32.26.34'
 
 DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'ZetoneTime',
         'USER': 'sa',
-        'HOST': '10.32.26.34',##10.32.26.34
+        'HOST': ip,##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
@@ -96,7 +97,7 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'PS_Time',
         'USER': 'sa',
-        'HOST': '10.32.26.34',##10.32.26.34
+        'HOST': ip,##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
@@ -108,7 +109,7 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'PS_Rondin',
         'USER': 'sa',
-        'HOST': '10.32.26.34',##10.32.26.34
+        'HOST': ip,##10.32.26.34
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
@@ -120,7 +121,19 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'MyZetto',
         'USER': 'sa',
-        'HOST': '10.32.26.34',##10.32.26.34
+        'HOST': ip,##10.32.26.34
+        'PASSWORD': 'Sideswipe348',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    }
+    ,
+    'ZetoneApp': {
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'Zetoneapp',
+        'USER': 'sa',
+        'HOST': ip,
         'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
@@ -158,18 +171,6 @@ DATABASES = {
         'USER': 'sa',
         'HOST': '10.32.26.8',
         'PASSWORD': 'Florencia1976',
-        'PORT': '',
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
-        },
-    }
-    ,
-    'ZetoneApp': {
-        'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'Zetoneapp',
-        'USER': 'sa',
-        'HOST': '10.32.26.34',
-        'PASSWORD': 'Sideswipe348',
         'PORT': '',
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',

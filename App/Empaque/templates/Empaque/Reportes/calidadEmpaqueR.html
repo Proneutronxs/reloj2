@@ -1,0 +1,46 @@
+{% extends "Empaque/Reportes/newReportes.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="encabezado" style="background-color: #001327">
+    <div class="text" style="font-size: 20px;">REPORTE CALIDAD EMPAQUE</div>
+</div>
+
+<div class="contenedor-restante">
+    <div class="cr-panel-control">
+        <div class="cr-row">
+            <div class="cr-col-3">
+                <label for="cr-fecha-desde" class="cr-label">Desde:</label>
+                <input type="date" onclick="this.showPicker();" id="fechaInicio" class="cr-input">
+            </div>
+            <div class="cr-col-3">
+                <label for="cr-fecha-hasta" class="cr-label">Hasta:</label>
+                <input type="date" onclick="this.showPicker();" id="fechaFinal" class="cr-input">
+            </div>
+            <div class="cr-col-3">
+                <label for="cr-empaques" class="cr-label">Empaque:</label>
+                <select id="selector_empaque" class="cr-select">
+                    <option value="0">Todo</option>
+                    <option value="5">Pera</option>
+                    <option value="8">Manzana</option>
+                </select>
+            </div>
+            <div class="cr-col-3">
+                <label for="cr-button" class="cr-label">‎ </label>
+                <button class="cr-button" id="cr-buscar">Buscar</button>
+            </div>
+            <div class="cr-col-3">
+                <label for="cr-button" class="cr-label">‎ </label>
+                <button class="cr-button" id="cr-descargar">Descargar</button>
+            </div>
+        </div>
+    </div>
+    <div class="tbc-listado-cajas" id="listadoCajas">
+        
+    </div>
+</div>
+
+<script src="{%static 'js/calidadEmpaqueR.js' %}"></script>
+{% endblock %}

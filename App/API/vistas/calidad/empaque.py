@@ -297,23 +297,23 @@ def consultaCajaUpdate(IdCaja):
         with connections['Trazabilidad'].cursor() as cursor:
             sql = """
                     SELECT Id_bulto AS id, Marca.Nombre_marca AS Marca, Calidad.nombre_calidad AS Calidad, Variedad.nombre_variedad AS Variedad, 
-                                Especie.nombre_especie AS Especie, CASE WHEN Bulto.id_galpon = '8' THEN 'MANZANA' WHEN Bulto.id_galpon = '5' THEN 'PERA' ELSE 'OTRO' END AS Galpon, 
-                                Envase.nombre_envase AS Envase, Calibre.nombre_calibre AS Calibre, 
-                                General.dbo.USR_MCCUADRO.USR_CUAD_UMI AS UMI, General.dbo.USR_MCCUADRO.USR_CUAD_UP AS UP, Embalador.nombre_embalador AS Embalador, 
-                                General.dbo.USR_MCLOTE.USR_LOTE_NUMERO AS Lote, CONVERT(varchar(10), Bulto.fecha_alta_bulto, 103) AS Fecha, CONVERT(varchar(8), 
-                                Bulto.fecha_alta_bulto, 108) AS Hora
-                        FROM Especie INNER JOIN 
-                                Variedad ON Especie.id_especie = Variedad.id_especie INNER JOIN 
-                                Bulto INNER JOIN 
-                                Configuracion ON Bulto.id_configuracion = Configuracion.id_configuracion INNER JOIN 
-                                Marca ON Configuracion.id_marca = Marca.id_marca INNER JOIN 
-                                Calidad ON Configuracion.id_calidad = Calidad.Id_calidad ON Variedad.Id_variedad = Configuracion.id_variedad INNER JOIN 
-                                Envase ON Configuracion.id_envase = Envase.id_envase INNER JOIN Calibre ON Configuracion.id_calibre = Calibre.Id_calibre INNER JOIN 
-                                LoteEtiquetado ON Bulto.id_loteEtiquetado = LoteEtiquetado.id_loteEtiquetado INNER JOIN 
-                                General.dbo.USR_MCLOTE ON LoteEtiquetado.id_lote = General.dbo.USR_MCLOTE.USR_LOTE_NUMERO INNER JOIN 
-                                General.dbo.USR_MCCUADRO ON General.dbo.USR_MCLOTE.USR_CUAD_ALIAS = General.dbo.USR_MCCUADRO.USR_CUAD_ALIAS INNER JOIN 
-                                Embalador ON Bulto.id_embalador = Embalador.Id_embalador INNER JOIN General.dbo.USR_MCCHACRA ON General.dbo.USR_MCCUADRO.USR_CHAC_ALIAS = General.dbo.USR_MCCHACRA.USR_CHAC_ALIAS
-                        WHERE (Id_bulto > 17988845 AND Id_bulto = %s)
+                            Especie.nombre_especie AS Especie, CASE WHEN Bulto.id_galpon = '8' THEN 'MANZANA' WHEN Bulto.id_galpon = '5' THEN 'PERA' ELSE 'OTRO' END AS Galpon, 
+                            Envase.nombre_envase AS Envase, Calibre.nombre_calibre AS Calibre, 
+                            General.dbo.USR_MCCUADRO.USR_CUAD_UMI AS UMI, General.dbo.USR_MCCUADRO.USR_CUAD_UP AS UP, Embalador.nombre_embalador AS Embalador, 
+                            General.dbo.USR_MCLOTE.USR_LOTE_NUMERO AS Lote, CONVERT(varchar(10), Bulto.fecha_alta_bulto, 103) AS Fecha, CONVERT(varchar(8), 
+                            Bulto.fecha_alta_bulto, 108) AS Hora
+                    FROM Especie INNER JOIN 
+                            Variedad ON Especie.id_especie = Variedad.id_especie INNER JOIN 
+                            Bulto INNER JOIN 
+                            Configuracion ON Bulto.id_configuracion = Configuracion.id_configuracion INNER JOIN 
+                            Marca ON Configuracion.id_marca = Marca.id_marca INNER JOIN 
+                            Calidad ON Configuracion.id_calidad = Calidad.Id_calidad ON Variedad.Id_variedad = Configuracion.id_variedad INNER JOIN 
+                            Envase ON Configuracion.id_envase = Envase.id_envase INNER JOIN Calibre ON Configuracion.id_calibre = Calibre.Id_calibre INNER JOIN 
+                            LoteEtiquetado ON Bulto.id_loteEtiquetado = LoteEtiquetado.id_loteEtiquetado INNER JOIN 
+                            General.dbo.USR_MCLOTE ON LoteEtiquetado.id_lote = General.dbo.USR_MCLOTE.USR_LOTE_NUMERO INNER JOIN 
+                            General.dbo.USR_MCCUADRO ON General.dbo.USR_MCLOTE.USR_CUAD_ALIAS = General.dbo.USR_MCCUADRO.USR_CUAD_ALIAS INNER JOIN 
+                            Embalador ON Bulto.id_embalador = Embalador.Id_embalador INNER JOIN General.dbo.USR_MCCHACRA ON General.dbo.USR_MCCUADRO.USR_CHAC_ALIAS = General.dbo.USR_MCCHACRA.USR_CHAC_ALIAS
+                    WHERE (Id_bulto > 17988845 AND Id_bulto = %s)
                 """
             cursor.execute(sql, values)
             results = cursor.fetchone()

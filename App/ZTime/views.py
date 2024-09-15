@@ -21,13 +21,11 @@ def fechaNombre(fecha):
     dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
     meses = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
     now = datetime.now()
-    #stringFecha = str(now.day) + "-" + str(now.month) + "-" + str(now.year)
     di = datetime.strptime(str(fecha), "%d/%m/%Y")
     dianum = now.day
     mes = meses[now.month]
     año = now.year
     diaNombre = dias[di.weekday()]
-    #fecha = (diaNombre + ", " + str(dianum) + " de " + str(mes) + " del " + str(año))
     return diaNombre
 
 ### RENDERIZADO 
@@ -894,7 +892,6 @@ def download_Excel(self):
         lista_estado= [{'Info':e, 'Info2': respuesta}]
         estado = [lista_estado]
         return HttpResponse(estado)
-
 
 def descargar_archivo(request): 
  
