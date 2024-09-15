@@ -668,7 +668,7 @@ input[type="checkbox"].input-checkbox {
 
 .tbc-listado-cajas{
   padding: 25px;
-  max-height: calc(100vh - 60px - 130px);
+  max-height: calc(100vh - 60px - 110px);
   overflow: auto; 
 }
 
