@@ -649,9 +649,14 @@ input[type="checkbox"].input-checkbox {
   margin-bottom: 20px;
 }
 
-.tbc-imagen {
-  max-width: 100%;
-  height: auto;
+.tbc-imagen-plu {
+  width: 1em;
+  height: 1em;
+  border: 1px solid #000;
+}
+.tbc-imagen-caja {
+  width: 3em;
+  height: 5em;
   border: 1px solid #000;
 }
 

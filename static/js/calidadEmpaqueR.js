@@ -34,6 +34,8 @@ const buscarCajas = async () => {
         if (data.Message == "Success") {
             let detalles = ``;
             data.DataCaja.forEach((datos) => {
+                console.log(datos.FotoPlu);
+                console.log(datos.FotoCaja);
                 detalles += `
                             <div class="box-border">
                                 <div class="tbc-header">
@@ -158,11 +160,11 @@ const buscarCajas = async () => {
                                     <div class="tbc-right-section">
                                         <div class="tbc-image-plu">
                                             <p>Imagen PLU</p>
-                                            <img src="${datos.FotoPlu !== '0' ? 'http://191.97.47.114:8000/api/calidad/caja/${datos.FotoPlu}' : 'http://191.97.47.114:8000/api/calidad/caja/nodisponible.png'}" alt="Imagen PLU" class="tbc-imagen">
+                                            <img src="${datos.FotoPlu !== '0' ? 'http://191.97.47.114:8000/api/calidad/caja/${datos.FotoPlu}' : 'http://191.97.47.114:8000/api/calidad/caja/nodisponible.png'}" alt="Imagen PLU" class="tbc-imagen-plu">
                                         </div>
                                         <div class="tbc-image-caja">
                                             <p>Imagen Caja</p>
-                                            <img src="${datos.FotoCaja !== '0' ? 'http://191.97.47.114:8000/api/calidad/caja/${datos.FotoCaja}' : 'http://191.97.47.114:8000/api/calidad/caja/nodisponible.png'}" alt="Imagen Caja" class="tbc-imagen">
+                                            <img src="${datos.FotoCaja !== '0' ? 'http://191.97.47.114:8000/api/calidad/caja/${datos.FotoCaja}' : 'http://191.97.47.114:8000/api/calidad/caja/nodisponible.png'}" alt="Imagen Caja" class="tbc-imagen-caja">
                                         </div>
                                     </div>
                                 </div>
