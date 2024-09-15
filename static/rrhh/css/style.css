@@ -530,7 +530,7 @@ input[type="checkbox"].input-checkbox {
 
 .cr-panel-control {
   width: 80%;
-  margin: 20px auto;
+  margin: 10px auto;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -650,13 +650,13 @@ input[type="checkbox"].input-checkbox {
 }
 
 .tbc-imagen-plu {
-  width: 5em;
-  height: 5em;
+  width: 8em;
+  height: 8em;
   border: 1px solid #000;
 }
 .tbc-imagen-caja {
-  width: 22em;
-  height: 30em;
+  width: 24em;
+  height: 32em;
   border: 1px solid #000;
 }
 
