@@ -973,6 +973,7 @@ def recolecta_horas_control_camaras(request, fecha):
         ZetoneApp.close()
 
 ### CONSULTA VARIEDAD PRESIONES
+
 def consultaVariedad(fecha,idGalpon):
     try:
         conexion = zetoneApp()
@@ -1040,11 +1041,7 @@ def cajaBASE64(bulto):
         cursor.close()
         conexion.close()
 
-
-
-
 #### CONSULTA PARTES NUEVAS!!!!
-
 
 def traeVeriedades_Fecha(fecha):
     try:
@@ -1264,7 +1261,6 @@ def decodificaImagen(IdBulto,tipo):
     with open('App/API/media/images/Calidad/reportes_empaque/' + nombre , "wb") as image:
         image.write(imagen)
     return nombre
-
 
 def vizualizarImagen(request, nombre):
     ruta_imagenes = 'App/API/media/images/Calidad/reportes_empaque/'

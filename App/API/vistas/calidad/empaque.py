@@ -155,7 +155,6 @@ def guardaCaja(request):
                             insertaImagen(id_caja, imagen_caja, "C")
                         if imagen_plu != "0":
                             insertaImagen(id_caja, imagen_plu, "P")
-                    
                     return JsonResponse({'Message': 'Success', 'Nota':'La Caja se guardó correctamente.'})
                 else:
                     data = "Ocurrió un error al intentar guardar la Caja."
@@ -432,15 +431,147 @@ def busquedaCajaUpdate(request):
         }
         return JsonResponse(response_data)
 
+def actualizaCaja(IdCaja, PesoNeto, PesoBruto, PLU, Observaciones, Deformadas, TamañoIncorrecto, FaltaDeColor, Russeting, Heladas, 
+                roceBins, Asoleado, QuemadoPorSol, Fitotoxicidad, Rolado, Golpes, Heridas, HeridasViejas, Cracking, Bitterpit, Granizo, DañoPorInsecto, 
+                FaltaDePedunculo, DesvioDeClasificacion, SegundaFlor, Madurez, Deshidratacion, Decaimiento, MohoHumedo, MohoSeco, MohoAcuoso, Rameado, 
+                FirmezaPulpaMax, FirmezaPulpaMin, FirmezaPulpaPromedio, faltaDeBoro, Maquina, Usuario):
+    values = (PesoNeto, PesoBruto, PLU, Observaciones, Deformadas, TamañoIncorrecto, FaltaDeColor, Russeting, Heladas, 
+              roceBins, Asoleado, QuemadoPorSol, Fitotoxicidad, Rolado, Golpes, Heridas, HeridasViejas, Cracking, Bitterpit, Granizo, DañoPorInsecto, 
+              FaltaDePedunculo, DesvioDeClasificacion, SegundaFlor, Madurez, Deshidratacion, Decaimiento, MohoHumedo, MohoSeco, MohoAcuoso, Rameado, 
+              FirmezaPulpaMax, FirmezaPulpaMin, FirmezaPulpaPromedio, faltaDeBoro, Maquina, Usuario, IdCaja)
+    try:
+        with connections['ZetoneApp'].cursor() as cursor:
+            sql = """
+                    UPDATE DefectosCaja 
+                    SET PesoNeto = %s, PesoBruto = %s, PLU = %s, Observaciones = %s, Deformadas = %s, TamañoIncorrecto = %s, FaltaDeColor = %s, Russeting = %s, Heladas = %s,
+                        roceBins = %s, Asoleado = %s, QuemadoPorSol = %s, Fitotoxicidad = %s, Rolado = %s, Golpes = %s, Heridas = %s, HeridasViejas = %s, Cracking = %s,
+                        Bitterpit = %s, Granizo = %s, DañoPorInsecto = %s, FaltaDePedunculo = %s, DesvioDeClasificacion = %s, SegundaFlor = %s, Madurez = %s, Deshidratacion = %s,
+                        Decaimiento = %s, MohoHumedo = %s, MohoSeco = %s, Moh Usuario = %s
+                    WHERE IdCaja = %s
+                """
+            cursor.execute(sql, values)
+            return True
+    except Exception as e:
+        error = str(e)
+        InsertaDataError("ACTUALIZA CAJA", error)
+        return False
 
+@csrf_exempt
+def actualizarCaja(request):
+    if request.method == 'POST':
+        body = request.body.decode('utf-8')
+        data = json.loads(body)
+        id_caja = str(data['IdCaja'])
+        peso_neto = str(data['PesoNeto'])
+        peso_bruto = str(data['PesoBruto'])
+        plu = str(data['Plu'])
+        observaciones = str(data['Observaciones'])
+        deformadas = str(data['Deformadas'])
+        tamaño_incorrecto = str(data['TamañoIncorrecto'])
+        falta_color = str(data['FaltaColor'])
+        russeting = str(data['Russeting'])
+        heladas = str(data['Heladas'])
+        roce_bins = str(data['RoceBins'])
+        asoleado = str(data['Asoleado'])
+        quemado_sol = str(data['QuemadoSol'])
+        fitotoxicidad = str(data['Fitotoxicidad'])
+        rolado = str(data['Rolado'])
+        golpes = str(data['Golpes'])
+        heridas = str(data['Heridas'])
+        heridas_viejas = str(data['HeridasViejas'])
+        cracking = str(data['Cracking'])
+        bitterpit = str(data['Bitterpit'])
+        granizo = str(data['Granizo'])
+        daño_insecto = str(data['DañoInsecto'])
+        pedunculo = str(data['Pedunculo'])
+        desvio = str(data['Desvio'])
+        segunda_flor = str(data['SegundaFlor'])
+        madurez = str(data['Madurez'])
+        deshidratacion = str(data['Deshidratacion'])
+        decaimiento = str(data['Decaimiento'])
+        moho_humedo = str(data['MohoHumedo'])
+        moho_seco = str(data['MohoSeco'])
+        moho_acuoso = str(data['MohoAcuoso'])
+        rameado = str(data['Rameado'])
+        firmeza_max = str(data['FirmezaMax'])
+        firmeza_min = str(data['FirmezaMin'])
+        firmeza_pro = str(data['FirmezaPro'])
+        falta_boro = str(data['FaltaBoro'])
+        maquina = str(data['Maquina'])
+        usuario = str(data['Usuario'])
+        try:
+            if actualizaCaja(id_caja, peso_neto, peso_bruto, plu, observaciones, deformadas, tamaño_incorrecto, falta_color, russeting, heladas, 
+            roce_bins, asoleado, quemado_sol, fitotoxicidad, rolado, golpes, heridas, heridas_viejas, cracking, bitterpit, granizo, daño_insecto, 
+            pedunculo, desvio, segunda_flor, madurez, deshidratacion, decaimiento, moho_humedo, moho_seco, moho_acuoso, rameado, 
+            firmeza_max, firmeza_min, firmeza_pro, falta_boro, maquina, usuario):
+                imagenes = data['Imagenes']
+                for imagen in imagenes:
+                    imagen_caja = str(imagen['ImagenCaja'])
+                    imagen_plu = str(imagen['ImagenPlu'])
+                    if imagen_caja != "0":
+                        updateImagen(id_caja, imagen_caja, "C")
+                        decodificaImagen(id_caja,"C",imagen_caja)
+                    if imagen_plu != "0":
+                        updateImagen(id_caja, imagen_plu, "P")
+                        decodificaImagen(id_caja,"P",imagen_plu)
+                return JsonResponse({'Message': 'Success', 'Nota':'La Caja se guardó correctamente.'})
+            else:
+                data = "Ocurrió un error al intentar guardar la Caja."
+                return JsonResponse({'Message': 'Error', 'Nota': data}) 
+        except Exception as e:
+            error = str(e)
+            response_data = {
+                'Message': 'Error',
+                'Nota': error
+            }
+            return JsonResponse(response_data)
+    else:
+        response_data = {
+            'Message': 'No se pudo resolver la petición.'
+        }
+        return JsonResponse(response_data)
 
+def decodificaImagen(IdBulto,tipo,imagen):
+    nombre1 = "_caja.jpeg"
+    if tipo == 'P':
+        nombre1 = "_plu.jpeg"
+    imagen = base64.b64decode(imagen)
+    nombre = "new_calidad_image_"+ str(IdBulto) + nombre1
+    with open('App/API/media/images/Calidad/reportes_empaque/' + nombre , "wb") as image:
+        image.write(imagen)
+    return nombre
 
+def updateImagen(IdCaja, Imagen, Tipo):
+    values = [IdCaja, Tipo, Imagen]
+    try:
+        with connections['ZetoneApp'].cursor() as cursor:
+            sql = """
+                    DECLARE @@IdCaja INT;
+                    DECLARE @@Tipo VARCHAR(3);
+                    DECLARE @@Imagen NTEXT;
 
+                    SET @@IdCaja = %s;
+                    SET @@Tipo = %s;
+                    SET @@Imagen = %s;
 
-
-
-
-
+                    IF EXISTS (SELECT 1 FROM Imagenes_Cajas_Calidad WHERE IdCaja = @@IdCaja AND Tipo = @@Tipo)
+                    BEGIN
+                        UPDATE Imagenes_Cajas_Calidad
+                        SET Imagen = @@Imagen
+                        WHERE IdCaja = @@IdCaja AND Tipo = @@Tipo
+                    END
+                    ELSE
+                    BEGIN
+                        INSERT INTO Imagenes_Cajas_Calidad (IdCaja, Tipo, Imagen)
+                        VALUES (@@IdCaja, @@Tipo, @@Imagen)
+                    END
+                """
+            cursor.execute(sql, values)
+            return True
+    except Exception as e:
+        error = str(e)
+        InsertaDataError("INSERTA IMAGEN", error)
+        return False  
 
 
 
