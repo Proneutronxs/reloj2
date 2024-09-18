@@ -446,7 +446,8 @@ def actualizaCaja(IdCaja, PesoNeto, PesoBruto, PLU, Observaciones, Deformadas, T
                     SET PesoNeto = %s, PesoBruto = %s, PLU = %s, Observaciones = %s, Deformadas = %s, TamañoIncorrecto = %s, FaltaDeColor = %s, Russeting = %s, Heladas = %s,
                         roceBins = %s, Asoleado = %s, QuemadoPorSol = %s, Fitotoxicidad = %s, Rolado = %s, Golpes = %s, Heridas = %s, HeridasViejas = %s, Cracking = %s,
                         Bitterpit = %s, Granizo = %s, DañoPorInsecto = %s, FaltaDePedunculo = %s, DesvioDeClasificacion = %s, SegundaFlor = %s, Madurez = %s, Deshidratacion = %s,
-                        Decaimiento = %s, MohoHumedo = %s, MohoSeco = %s, Moh Usuario = %s
+                        Decaimiento = %s, MohoHumedo = %s, MohoSeco = %s, MohoAcuoso = %s, Rameado = %s, FirmezaPulpaMax = %s, FirmezaPulpaMin = %s, FirmezaPulpaPromedio = %s, 
+                        faltaDeBoro = %s, Maquina = %s, Usuario = %s
                     WHERE IdCaja = %s
                 """
             cursor.execute(sql, values)
