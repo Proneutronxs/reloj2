@@ -422,41 +422,6 @@ input[type="checkbox"].input-checkbox {
   margin-right: 50px; /* Agrega margen a la derecha del h4 */
 }
 
-.modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
-  z-index: 9999;
-  
-}
-
-.demo-container {
-  width: 280px;
-  height: 80%;
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.progress-bar {
-  height: 5px;
-  background-color: #001327;
-  width: 100%;
-  overflow: hidden;
-}
-
-.progress-bar-value {
-  width: 100%;
-  height: 100%;
-  background-color: #9a98ba;
-  animation: indeterminateAnimation 1s infinite linear;
-  transform-origin: 0% 50%;
-}
 
 @keyframes indeterminateAnimation {
   0% {
@@ -493,7 +458,7 @@ input[type="checkbox"].input-checkbox {
 
 .progress-bar {
   height: 5px;
-  background-color: #3e26a7;
+  background-color: #001327;
   width: 100%;
   overflow: hidden;
 }
@@ -501,7 +466,7 @@ input[type="checkbox"].input-checkbox {
 .progress-bar-value {
   width: 100%;
   height: 100%;
-  background-color: #b67373;
+  background-color: #9a98ba;
   animation: indeterminateAnimation 1s infinite linear;
   transform-origin: 0% 50%;
 }
