@@ -10,7 +10,6 @@ window.addEventListener("load", async () => {
 
 
 document.getElementById('cr-buscar').addEventListener('click', function () {
-    console.log("hola");
     buscarCajas();
 });
 
@@ -271,9 +270,9 @@ function fechaActual() {
     hasta.value = formattedDate;
 }
 
-document.getElementById("closePopup").addEventListener("click", function () {
-    document.getElementById("popup").classList.remove("active");
-});
+// document.getElementById("closePopup").addEventListener("click", function () {
+//     document.getElementById("popup").classList.remove("active");
+// });
 
 function mostrarInfo(Message, Color) {
     document.getElementById("popup").classList.add("active");
