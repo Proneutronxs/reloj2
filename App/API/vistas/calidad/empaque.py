@@ -543,28 +543,26 @@ def decodificaImagen(IdBulto,tipo,imagen):
     return nombre
 
 def updateImagen(IdCaja, Imagen, Tipo):
-    values = [IdCaja, Tipo, Imagen]
+    values = [IdCaja, Tipo, Imagen, Imagen]
     try:
         with connections['ZetoneApp'].cursor() as cursor:
             sql = """
                     DECLARE @@IdCaja INT;
                     DECLARE @@Tipo VARCHAR(3);
-                    DECLARE @@Imagen NTEXT;
 
                     SET @@IdCaja = %s;
                     SET @@Tipo = %s;
-                    SET @@Imagen = %s;
 
                     IF EXISTS (SELECT 1 FROM Imagenes_Cajas_Calidad WHERE IdCaja = @@IdCaja AND Tipo = @@Tipo)
                     BEGIN
                         UPDATE Imagenes_Cajas_Calidad
-                        SET Imagen = @@Imagen
+                        SET Imagen = %s
                         WHERE IdCaja = @@IdCaja AND Tipo = @@Tipo
                     END
                     ELSE
                     BEGIN
                         INSERT INTO Imagenes_Cajas_Calidad (IdCaja, Tipo, Imagen)
-                        VALUES (@@IdCaja, @@Tipo, @@Imagen)
+                        VALUES (@@IdCaja, @@Tipo, %s)
                     END
                 """
             cursor.execute(sql, values)
