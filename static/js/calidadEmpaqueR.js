@@ -192,14 +192,13 @@ const buscarCajas = async () => {
 
 
 
-const modalOverlay = document.getElementById('modal-overlay');
+const modalOverlay = document.querySelector('.modal-overlay');
 function openProgressBar() {
-    modalOverlay.style.display = 'block';
+  modalOverlay.style.display = 'block';
 }
 function closeProgressBar() {
-    modalOverlay.style.display = 'none';
+  modalOverlay.style.display = 'none';
 }
-
 
 
 
