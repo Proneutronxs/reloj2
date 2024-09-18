@@ -1448,7 +1448,6 @@ def extraeImagen(IdBulto, Tipo):
                     return nombre
                 else:
                     nombre = decodificaImagen(IdBulto,Tipo)
-                    actualizanombreImagen(nombre,IdBulto,Tipo)
                     return str(consulta[0])
     except Exception as e:
         error = str(e)

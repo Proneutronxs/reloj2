@@ -506,15 +506,15 @@ def actualizarCaja(request):
             pedunculo, desvio, segunda_flor, madurez, deshidratacion, decaimiento, moho_humedo, moho_seco, moho_acuoso, rameado, 
             firmeza_max, firmeza_min, firmeza_pro, falta_boro, maquina, usuario):
                 imagenes = data['Imagenes']
-                for imagen in imagenes:
-                    imagen_caja = str(imagen['ImagenCaja'])
-                    imagen_plu = str(imagen['ImagenPlu'])
-                    if imagen_caja != "0":
-                        updateImagen(id_caja, imagen_caja, "C")
-                        decodificaImagen(id_caja,"C",imagen_caja)
-                    if imagen_plu != "0":
-                        updateImagen(id_caja, imagen_plu, "P")
-                        decodificaImagen(id_caja,"P",imagen_plu)
+                # for imagen in imagenes:
+                #     imagen_caja = str(imagen['ImagenCaja'])
+                #     imagen_plu = str(imagen['ImagenPlu'])
+                #     if imagen_caja != "0":
+                #         updateImagen(id_caja, imagen_caja, "C")
+                #         decodificaImagen(id_caja,"C",imagen_caja)
+                #     if imagen_plu != "0":
+                #         updateImagen(id_caja, imagen_plu, "P")
+                #         decodificaImagen(id_caja,"P",imagen_plu)
                 return JsonResponse({'Message': 'Success', 'Nota':'La Caja se guardó correctamente.'})
             else:
                 data = "Ocurrió un error al intentar guardar la Caja."
