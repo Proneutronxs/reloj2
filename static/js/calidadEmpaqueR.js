@@ -15,6 +15,7 @@ document.getElementById('cr-buscar').addEventListener('click', function () {
 });
 
 const buscarCajas = async () => {
+    openProgressBar();
     try {
         const formData = new FormData();
         const empaque = document.getElementById("selector_empaque").value;
@@ -33,6 +34,7 @@ const buscarCajas = async () => {
         const response = await fetch("busqueda-cajas/", options);
         const data = await response.json();
         if (data.Message == "Success") {
+            
             let detalles = ``;
             data.DataCaja.forEach((datos) => {
                 console.log(datos.FotoPlu);
@@ -173,13 +175,16 @@ const buscarCajas = async () => {
                             `
             });
             document.getElementById('listadoCajas').innerHTML = detalles;
+            closeProgressBar();
         } else {
+            closeProgressBar();
             document.getElementById('listadoCajas').innerHTML = ``;
             var nota = data.Nota
             var color = "red";
             mostrarInfo(nota, color);
         }
     } catch (error) {
+        closeProgressBar();
         var nota = "Se produjo un error al procesar la solicitud. " + error;
         var color = "red";
         mostrarInfo(nota, color);
@@ -188,7 +193,13 @@ const buscarCajas = async () => {
 
 
 
-
+const modalOverlay = document.querySelector('.modal-overlay');
+function openProgressBar() {
+    modalOverlay.style.display = 'block';
+}
+function closeProgressBar() {
+    modalOverlay.style.display = 'none';
+}
 
 
 
