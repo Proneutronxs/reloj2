@@ -501,11 +501,6 @@ def actualizarCaja(request):
         maquina = str(data['Maquina'])
         usuario = str(data['Usuario'])
 
-        listado = [id_caja, peso_neto, peso_bruto, plu, observaciones, deformadas, tamaño_incorrecto, falta_color, russeting, heladas, 
-            roce_bins, asoleado, quemado_sol, fitotoxicidad, rolado, golpes, heridas, heridas_viejas, cracking, bitterpit, granizo, daño_insecto, 
-            pedunculo, desvio, segunda_flor, madurez, deshidratacion, decaimiento, moho_humedo, moho_seco, moho_acuoso, rameado, 
-            firmeza_max, firmeza_min, firmeza_pro, falta_boro, maquina, usuario]
-        InsertaDataError("DATOS", str(listado))
         try:
             if actualizaCaja(id_caja, peso_neto, peso_bruto, plu, observaciones, deformadas, tamaño_incorrecto, falta_color, russeting, heladas, 
             roce_bins, asoleado, quemado_sol, fitotoxicidad, rolado, golpes, heridas, heridas_viejas, cracking, bitterpit, granizo, daño_insecto, 
