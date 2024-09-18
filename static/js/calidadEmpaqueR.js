@@ -1,6 +1,6 @@
 const desde = document.getElementById('fechaInicio');
 const hasta = document.getElementById('fechaFinal');
-
+const modalOverlay = document.querySelector('.modal-overlay');
 
 
 
@@ -33,7 +33,7 @@ const buscarCajas = async () => {
         const response = await fetch("busqueda-cajas/", options);
         const data = await response.json();
         if (data.Message == "Success") {
-            
+
             let detalles = ``;
             data.DataCaja.forEach((datos) => {
                 console.log(datos.FotoPlu);
@@ -192,68 +192,13 @@ const buscarCajas = async () => {
 
 
 
-const modalOverlay = document.querySelector('.modal-overlay');
+
 function openProgressBar() {
-  modalOverlay.style.display = 'block';
+    modalOverlay.style.display = 'block';
 }
 function closeProgressBar() {
-  modalOverlay.style.display = 'none';
+    modalOverlay.style.display = 'none';
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 function fechaActual() {
@@ -269,9 +214,9 @@ function fechaActual() {
     hasta.value = formattedDate;
 }
 
-// document.getElementById("closePopup").addEventListener("click", function () {
-//     document.getElementById("popup").classList.remove("active");
-// });
+document.getElementById("closePopup").addEventListener("click", function () {
+    document.getElementById("popup").classList.remove("active");
+});
 
 function mostrarInfo(Message, Color) {
     document.getElementById("popup").classList.add("active");

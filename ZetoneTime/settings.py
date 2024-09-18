@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'ZetoneTime.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-# ip = '191.97.47.114'
+#ip = '191.97.47.114'
 ip = '10.32.26.34'
 
 DATABASES = {
