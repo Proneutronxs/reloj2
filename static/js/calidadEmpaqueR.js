@@ -25,6 +25,7 @@ const buscarCajas = async () => {
         const options = {
             method: 'POST',
             headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate'
             },
             body: formData
         };
