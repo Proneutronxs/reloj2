@@ -23,8 +23,9 @@ def guardar_periodo_habilitado(request):
             values = [Empresa,Fecha]
             with connections['ZETONE_9'].cursor() as cursor:
                 cursor.execute('exec sp_usr_periodo %s,%s', values)
-                filas_afectadas = cursor.rowcount
-            if filas_afectadas > 0:
+                cursor.execute("SELECT @@ROWCOUNT AS AffectedRows")
+                affected_rows = cursor.fetchone()[0]
+            if affected_rows > 0:
                 if Accion == 'H':
                     return JsonResponse({'Message': 'success', 'Nota': "El periodo se Habilitó correctamente."})
                 else: 
