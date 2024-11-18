@@ -17,9 +17,10 @@ from django.db import connections
 def guardar_periodo_habilitado(request):
     if request.method == 'POST':
         try:
-            Fecha = str(request.POST.get('Fecha'))
-            Empresa = str(request.POST.get('Empresa'))
-            Accion = str(request.POST.get('Accion'))
+            body = request.body.decode('utf-8')
+            Fecha = str(json.loads(body)['Fecha'])
+            Empresa = str(json.loads(body)['Empresa'])
+            Accion = str(json.loads(body)['Accion'])
             values = [Empresa,Fecha]
             with connections['ZETONE_9'].cursor() as cursor:
                 cursor.execute('exec sp_usr_periodo %s,%s', values)
