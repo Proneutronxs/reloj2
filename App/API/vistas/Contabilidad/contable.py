@@ -26,7 +26,7 @@ def guardar_periodo_habilitado(request):
                 cursor.execute("SELECT @@ROWCOUNT AS AffectedRows")
                 affected_rows = cursor.fetchone()[0]
             if affected_rows > 0:
-                if Accion == 'H':
+                if Accion == "H":
                     return JsonResponse({'Message': 'Success', 'Nota': "El periodo se Habilitó correctamente."})
                 else: 
                     return JsonResponse({'Message': 'Success', 'Nota': "El periodo se Cerró correctamente."})
