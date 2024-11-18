@@ -28,9 +28,9 @@ def guardar_periodo_habilitado(request):
                 affected_rows = cursor.fetchone()[0]
             if affected_rows > 0:
                 if Accion == "H":
-                    return JsonResponse({'Message': 'Success', 'Nota': "El periodo se Habilitó correctamente. " + str(values)})
+                    return JsonResponse({'Message': 'Success', 'Nota': "El periodo se Habilitó correctamente."})
                 else: 
-                    return JsonResponse({'Message': 'Success', 'Nota': "El periodo se Cerró correctamente. " + str(values)})
+                    return JsonResponse({'Message': 'Success', 'Nota': "El periodo se Cerró correctamente."})
             else:
                 return JsonResponse({'Message': 'Error', 'Nota': 'No se pudo realizar la petición.'})
         except Exception as e:
