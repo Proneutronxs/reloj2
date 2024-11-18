@@ -177,7 +177,7 @@ DATABASES = {
         },
     }
     ,
-    'ZETONE-9': {
+    'ZETONE_9': {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'ZETONE',
         'USER': 'sa',

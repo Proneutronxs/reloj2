@@ -21,7 +21,7 @@ def guardar_periodo_habilitado(request):
             Empresa = str(request.POST.get('Empresa'))
             Accion = str(request.POST.get('Accion'))
             values = [Empresa,Fecha]
-            with connections['ZETONEAPP'].cursor() as cursor:
+            with connections['ZETONE_9'].cursor() as cursor:
                 cursor.execute('exec sp_usr_periodo %s,%s', values)
                 filas_afectadas = cursor.rowcount
             if filas_afectadas > 0:
@@ -35,7 +35,7 @@ def guardar_periodo_habilitado(request):
             error = str(e)
             return JsonResponse({'Message': 'Error', 'Nota': error})
         finally:
-            connections['ZETONEAPP'].close()
+            connections['ZETONE_9'].close()
     else:
         data = "No se pudo resolver la Petición"
         return JsonResponse({'Message': 'Error', 'Nota': data})
