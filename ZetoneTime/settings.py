@@ -169,8 +169,20 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'master',
         'USER': 'sa',
-        'HOST': '10.32.26.8',
+        'HOST': '10.32.26.9',
         'PASSWORD': 'Florencia1976',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    }
+    ,
+    'ZETONE-9': {
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'ZETONE',
+        'USER': 'sa',
+        'HOST': '10.32.26.9',
+        'PASSWORD': 'Password1!',
         'PORT': '',
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',

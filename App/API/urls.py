@@ -1,6 +1,7 @@
 from django.urls import path
 from App.API.vistas.calidad import calidad, bascula, empaque
 from App.API.vistas.Rondin import rondin
+from App.API.vistas.Contabilidad import contable
 urlpatterns = [
     ######################### CALIDAD EMPAQUE ###################################
 
@@ -59,6 +60,11 @@ urlpatterns = [
     path('calidad-empaque/busqueda-dia-caja/', empaque.busquedaCajaDia, name='calidad_empaque_busqueda_dia_caja'),
 
     path('calidad-empaque/busqueda-update-caja/', empaque.busquedaCajaUpdate, name='calidad_empaque_busqueda_update_caja'),
+
+
+    ######################## ENDPOINTS CONTABILIDAD ###########################
+
+    path('contabilidad/habilitar-cerrar/', contable.guardar_periodo_habilitado, name='calidad_empaque_busqueda_dia_caja'),
 
 
 ]
