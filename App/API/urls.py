@@ -64,7 +64,7 @@ urlpatterns = [
 
     ######################## ENDPOINTS CONTABILIDAD ###########################
 
-    path('contabilidad/habilitar-cerrar/', contable.guardar_periodo_habilitado, name='calidad_empaque_busqueda_dia_caja'),
+    path('contabilidad/habilitar-cerrar/', contable.guardar_periodo_habilitado, name='guardar_periodo_habilitado'),
 
 
 ]

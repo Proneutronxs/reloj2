@@ -181,7 +181,7 @@ DATABASES = {
         'ENGINE': 'sql_server.pyodbc',
         'NAME': 'ZETONE',
         'USER': 'sa',
-        'HOST': '10.32.26.9',
+        'HOST': '10.32.26.9\SQLEXPRESS',
         'PASSWORD': 'Password1!',
         'PORT': '',
         'OPTIONS': {
