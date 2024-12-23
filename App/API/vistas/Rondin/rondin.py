@@ -85,7 +85,16 @@ def insertaRegistrosRondin(request):
                 ubicacion = item['Ubicacion']
                 punto = item['Sector']
                 fecha = item['FechaAlta']
-                insertaRegistroNuevo(registro,legajo,ubicacion,punto,fecha)
+                try:
+                    Latitud = str(item['Latitud'])
+                except KeyError:
+                    Latitud = "0"
+                try:
+                    Longitud = str(item['Longitud'])
+                except KeyError:
+                    Longitud = "0"
+
+                insertaRegistroNuevo(registro,legajo,ubicacion,punto,fecha,Latitud,Longitud)
             nota = "Los registros se guardaron exitosamente."
             return JsonResponse({'Message': 'Success', 'Nota': nota})
         except Exception as e:
@@ -161,12 +170,12 @@ def devuelveNombreSector(request):
 
     
 
-def insertaRegistroNuevo(idInterno,idLegajo,idUbicacion,idPunto,fechaAlta):
+def insertaRegistroNuevo(idInterno,idLegajo,idUbicacion,idPunto,fechaAlta,latitud,longitud):
 
     try:
         with connections['PsRondin'].cursor() as cursor:
-            sql = "INSERT INTO PS_Registros (RegistroInterno, CodLegajo, CodUbicacion, CodPunto, FechaLectura, FechaAlta) VALUES (%s, %s, %s, %s, %s, GETDATE())"
-            values = (idInterno,idLegajo,idUbicacion,idPunto,fechaAlta)
+            sql = "INSERT INTO PS_Registros (RegistroInterno, CodLegajo, CodUbicacion, CodPunto, FechaLectura, Latitud, Longitud, FechaAlta) VALUES (%s, %s, %s, %s, %s, %s, %s, GETDATE())"
+            values = (idInterno,idLegajo,idUbicacion,idPunto,fechaAlta,latitud,longitud)
             cursor.execute(sql, values)  
     except Exception as e:
         error = str(e)
