@@ -126,7 +126,7 @@ def devuelveLegajoNombre(request):
                             listado = listadoPuntos()
                         else:
                             listado = [{'CodPunto': 'NONE', 'CodNombre': 'NONE'}]
-                        return JsonResponse({'Message': 'Success', 'Legajo': CodLegajo, 'Nombre':CodNombre, 'DataPuntos': listado})
+                        return JsonResponse({'Message': 'Success', 'Legajo': CodLegajo, 'Nombre': CodNombre, 'DataPuntos': listado})
                     else:
                         return JsonResponse({'Message': 'Error', 'Nota': 'No se encontraron datos con ese número de Legajo.'})
             except Exception as e:

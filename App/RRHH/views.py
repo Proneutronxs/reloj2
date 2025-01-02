@@ -17,6 +17,9 @@ def departamentos(request):
 def horarios(request):
     return render (request, 'RRHH/Horarios/horarios.html')
 
+def fichadas(request):
+    return render (request, 'RRHH/Fichadas/fichadas.html')
+
 @csrf_exempt
 def llamaDepartamentos(request):
     if request.method == 'GET':
@@ -179,7 +182,7 @@ def llamaTurnosHorarios(request):
     if request.method == 'GET':
         try:
             with connections['PS_Time'].cursor() as cursor:
-                sql = "SELECT ID_Turnos AS ID, DescripTurno AS DESCRIPCION FROM P_Turnos ORDER BY DescripTurno"
+                sql = """ SELECT ID_Turnos AS ID, DescripTurno AS DESCRIPCION FROM P_Turnos ORDER BY DescripTurno """
                 cursor.execute(sql)
                 consulta = cursor.fetchall()
                 if consulta:
@@ -226,7 +229,36 @@ def guardaFormulario(request):
         data = "No se pudo resolver la Petición"
         return JsonResponse({'Message': 'Error', 'Nota': data})
 
-
+@csrf_exempt
+def cargaDepartamentos(request):
+    if request.method == 'GET':
+        try:
+            with connections['Master'].cursor() as cursor:
+                sql = """ SELECT SJTCLE_CLAEMP AS CODIGO, UPPER(SJTCLE_DESCRP) AS DESCRIPCION
+                        FROM [10.32.26.5].Softland.dbo.SJTCLE
+                        WHERE SJTCLE_DEBAJA = 'N'
+                        ORDER BY SJTCLE_DESCRP """
+                cursor.execute(sql)
+                consulta = cursor.fetchall()
+                print(consulta)
+                if consulta:
+                    data = [{'Codigo':'0', 'Descripcion':'TODOS'}]
+                    for i in consulta:
+                        idDepto = str(i[0])
+                        departamento = str(i[1])
+                        datos = {'Codigo':idDepto, 'Descripcion':departamento}
+                        data.append(datos)
+                    return JsonResponse({'Message': 'Success', 'Datos': data})
+                else:
+                    data = "No se encontraron Departamentos."
+                    return JsonResponse({'Message': 'Error', 'Nota': data})
+        except Exception as e:
+            data = str(e)
+            print(data)
+            return JsonResponse({'Message': 'Error', 'Nota': data})
+    else:
+        data = "No se pudo resolver la Petición"
+        return JsonResponse({'Message': 'Error', 'Nota': data})
 
 
 

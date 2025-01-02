@@ -1,0 +1,107 @@
+<html lang="es">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="{%static 'rrhh/img/PS.ico' %}" rel="icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'rrhh/css/style.css' %}">
+    <link rel="stylesheet" href="{%static 'Librerias/choices.min.css' %}">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <title>PS-TIME</title>
+</head>
+
+<body>
+    <nav class="sidebar">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="{%static 'img/logosf.png' %}" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name"></span>
+                    <span class="profession"> <b>PS-TIME</b> </span>
+                </div>
+            </div>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="{% url 'rrhh' %}">
+                            <i class='bx material-symbols-outlined icon'>home</i>
+                            <span class="text nav-text">Inicio</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="{% url 'logout' %}">
+                        <i class='bx material-symbols-outlined icon'>logout</i>
+                        <span class="text"><b>{{user.username}}</b></span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+    <section class="home">
+        <div class="container">
+            <div class="encabezado" style="background-color: #001327">
+                <div class="text" style="font-size: 20px;">GESTOR DE ASISTENCIA - FICHADAS</div>
+            </div>
+
+            <div class="fc-cards-consola">
+                <div class="fc-header">
+                    <div class="fc-item">
+                        <label class="letras" for="fechaInicio">Desde:</label>
+                        <input type="date" onclick="this.showPicker();" id="fechaInicio" name="fechaInicio"
+                            class="selectores">
+                    </div>
+                    <div class="fc-item">
+                        <label class="letras" for="fechaFinal">Hasta</label>
+                        <input type="date" onclick="this.showPicker();" id="fechaFinal" name="fechaFinal"
+                            class="selectores">
+                    </div>
+                    <div class="fc-item">
+                        <select class="choices_inner vr-select" id="selector_departamentos">
+                        </select>
+                    </div>
+                    <div class="fc-item">
+                        <select class="choices_inner vr-select" id="selector_legajos">
+                        </select>
+                    </div>
+                    <div class="fc-item">
+                        <button id="" class="btn-submit botones" type="button"><b>BUSCAR</b></button>
+                    </div>
+                    <div class="fc-item">
+                        <button id="" class="btn-submit botones" type="button"><b>EXPORTAR</b></button>
+                    </div>
+                </div>
+                <div class="fc-contenido"></div>
+            </div>
+
+        </div>
+    </section>
+    <div class="modal-overlay">
+        <div class="modal-container">
+            <div class="demo-container">
+                <div class="progress-bar">
+                    <div class="progress-bar-value"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="{%static 'Librerias/choices.min.js' %}"></script>
+    <script src="{%static 'Librerias/jquery-3.6.0.min.js' %}"></script>
+    <script src="{%static 'rrhh/js/fichadas.js' %}"></script>
+</body>
+
+</html>
